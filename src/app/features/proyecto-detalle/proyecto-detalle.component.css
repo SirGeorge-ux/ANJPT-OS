@@ -1,0 +1,260 @@
+/* ==========================================================================
+   1. ESTRUCTURA PRINCIPAL (GRID 75/25)
+   ========================================================================== */
+.detalle-container { 
+  padding: 30px; 
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* Forzamos el display grid para que las columnas no se apilen */
+.detalle-grid {
+  display: grid !important;
+  grid-template-columns: 75% 25% !important; /* Proporción 3 a 1 para mayor amplitud */
+  gap: 30px !important;
+  width: 100% !important;
+  min-height: 500px;
+  align-items: start;
+}
+
+.panel {
+  background-color: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  padding: 25px;
+  margin-bottom: 25px;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* ==========================================================================
+   2. TAREAS (ICONOS ESCALADOS Y ALINEACIÓN)
+   ========================================================================== */
+.tarea-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid #2a2a2a;
+  margin-bottom: 12px;
+}
+
+.tarea-info { 
+  display: flex; 
+  align-items: center; 
+  gap: 18px;
+}
+
+/* Tamaño de los iconos de tareas para legibilidad */
+.nav-icon-task {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.tarea-titulo {
+  font-size: 1rem;
+  color: #eee;
+}
+
+/* ==========================================================================
+   3. TECH STACK (CHIPS COMO ETIQUETAS)
+   ========================================================================== */
+.stack-container {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+
+.chip {
+  background: #222;
+  border: 1px solid #444;
+  color: #fff;
+  padding: 6px 14px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border-radius: 20px;
+}
+
+/* ==========================================================================
+   4. EQUIPO (ICONOS Y COLORES NEÓN)
+   ========================================================================== */
+.equipo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.equipo-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.equipo-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Colores Neón para los iconos del equipo */
+.status-terminado { 
+  color: #ccff00; 
+  filter: drop-shadow(0 0 5px rgba(204, 255, 0, 0.4));
+} 
+
+.status-por-hacer { 
+  color: #00e5ff; 
+  filter: drop-shadow(0 0 5px rgba(0, 229, 255, 0.4));
+}
+
+.status-revisar { 
+  color: #ff9500;
+  filter: drop-shadow(0 0 5px rgba(255, 149, 0, 0.4));
+}
+
+/* ==========================================================================
+   5. ESTADOS Y CABECERA
+   ========================================================================== */
+.status-project-box {
+  display: inline-block;
+  padding: 6px 18px;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  border: 1px solid;
+  margin-top: 12px;
+}
+
+.titulo-wrapper {
+  display: flex;             /* Activa el modo de caja flexible */
+  justify-content: space-between; /* Empuja el título a la izquierda y el estado a la derecha */
+  align-items: center;       /* Los centra verticalmente para que queden a la misma altura */
+  width: 75%;               /* Asegura que ocupe todo el ancho disponible */
+}
+
+.status-activo {
+  color: #ccff00 !important;
+  border-color: #ccff00 !important;
+  box-shadow: 0 0 12px rgba(204, 255, 0, 0.25);
+  /* Eliminamos los margin-top/bottom para que align-items: center haga su trabajo perfecto */
+  margin: 0 !important; 
+  padding: 6px 18px;
+  display: inline-block;
+  border: 1px solid;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.status-inactivo {
+  color: #ff3b30 !important;
+  border-color: #ff3b30 !important;
+  box-shadow: 0 0 12px rgba(255, 59, 48, 0.25);
+
+  margin: 0 !important; 
+  padding: 6px 18px;
+  display: inline-block;
+  border: 1px solid;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.btn-volver {
+  color: #ccff00;
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+/* ==========================================================================
+   6. FORMULARIO DE NUEVA TAREA 
+   ========================================================================== */
+.formulario-tarea-box {
+  background-color: #0d0d0d; /* Fondo un poco más oscuro que el panel */
+  border: 1px solid #2a2a2a;
+  padding: 20px;
+  margin-bottom: 25px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  color: #888;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.form-group input, 
+.select-ciberpunk {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 10px;
+  font-family: 'monospace';
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus, 
+.select-ciberpunk:focus {
+  border-color: #ccff00; /* Borde amarillo neón al seleccionar */
+}
+
+/* Botón de Asignar Tarea (Botón grande) */
+.btn-neon {
+  background-color: #ccff00;
+  color: #000;
+  border: none;
+  padding: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: transform 0.1s;
+}
+
+.btn-neon:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 0 15px rgba(204, 255, 0, 0.4);
+}
+
+.btn-neon:active {
+  transform: scale(0.98);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.btn-small-outline {
+  background-color: transparent;
+  border: 1px solid #ccff00;
+  color: #ccff00;
+  padding: 6px 12px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-small-outline:hover {
+  background-color: #ccff00;
+  color: #000;
+} 
+
+.btn-small-outline:active {
+  transform: scale(0.98);
+} 

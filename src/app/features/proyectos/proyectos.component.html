@@ -1,0 +1,56 @@
+<div class="proyectos-container">
+  
+  <div class="page-header">
+    <div class="header-info">
+      <h2>PROYECTOS ACTIVOS</h2>
+      <p>PANEL DE CONTROL GENERAL · ACCESO NIVEL 2+</p>
+    </div>
+    
+    <button class="btn-neon" *ngIf="rolUsuario === 'SENIOR' || rolUsuario === 'ADMIN'" (click)="toggleFormulario()">
+      {{ mostrarFormulario ? 'CANCELAR' : '+ NUEVO PROYECTO' }}
+    </button>
+  </div>
+
+  <div class="formulario-box" *ngIf="mostrarFormulario">
+    <h3>CREAR NUEVO PROYECTO</h3>
+
+    <div class="form-group">
+      <label>Nombre del Proyecto *</label>
+      <input type="text" [(ngModel)]="nuevoProyecto.nombre" placeholder="Ej: App Móvil iOS">
+    </div>
+
+    <div class="form-group">
+      <label>Descripción Corta</label>
+      <textarea [(ngModel)]="nuevoProyecto.descripcion" placeholder="¿De qué trata este proyecto?"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Tech Stack (Separado por comas)</label>
+      <input type="text" [(ngModel)]="nuevoProyecto.stack" placeholder="Ej: Angular 19, Supabase, Tailwind">
+    </div>
+
+    <button class="btn-neon" (click)="guardarProyecto()" [disabled]="!nuevoProyecto.nombre">
+      GUARDAR PROYECTO
+    </button>
+  </div>
+
+  <div class="proyectos-grid">
+    <div class="proyecto-card" *ngFor="let p of proyectos" [routerLink]="['/proyectos', p.id]" style="cursor: pointer;">
+      <div class="card-header">
+        <h3>{{ p.nombre }}</h3>
+        <span class="badge">{{ p.estado }}</span>
+      </div>
+      <div class="card-body">
+        <p class="tareas-info">Tareas pendientes: <strong>{{ p.tareasPendientes || 0 }}</strong></p>
+        <div class="barra-progreso-bg">
+          <div class="barra-progreso-fill" [style.width.%]="p.progreso"></div>
+        </div>
+        <p class="progreso-texto">{{ p.progreso }}% COMPLETADO</p>
+      </div>
+      <div class="card-footer">
+        <button class="btn-outline" *ngIf="rolUsuario === 'SENIOR' || rolUsuario === 'ADMIN'">GESTIONAR TAREAS</button>
+      </div>
+    </div>
+  </div>
+
+</div>

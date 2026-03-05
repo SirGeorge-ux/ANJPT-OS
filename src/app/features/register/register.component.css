@@ -1,0 +1,50 @@
+/* Heredamos la mayoría de estilos del styles.css global, 
+   pero ajustamos detalles específicos del registro */
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--negro-puro);
+}
+
+.login-box {
+  width: 100%;
+  max-width: 450px; /* Un poco más ancho para el registro */
+  padding: 40px;
+  background: var(--negro-panel);
+  border: 1px solid var(--gris-borde);
+}
+
+/* --- SEPARACIÓN CRÍTICA --- */
+.form-group {
+  margin-bottom: 22px; /* Espacio entre cada campo de texto */
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--neon-primario); /* Etiqueta en color neón para resaltar */
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+/* --- FORZAR DISEÑO OSCURO --- */
+.form-control {
+  width: 100%;
+  background-color: #050505 !important;
+  border: 1px solid #222 !important;
+  color: white !important;
+  padding: 12px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.form-control:focus {
+  border-color: var(--neon-primario) !important;
+  box-shadow: 0 0 10px rgba(204, 255, 0, 0.1);
+}

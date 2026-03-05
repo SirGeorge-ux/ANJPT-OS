@@ -1,0 +1,37 @@
+<div class="login-container"> <div class="login-box panel-oscuro">
+    
+    <div class="login-header">
+      <div class="logo-box">A</div>
+      <h1>REGISTRO DE SOCIO</h1>
+      <p>ALTA EN EL SISTEMA // ANJPT OS v1.0</p>
+    </div>
+
+    <form (submit)="onRegister($event)">
+      <div class="form-group">
+        <label>NOMBRE COMPLETO</label>
+        <input type="text" [(ngModel)]="nombre" name="nombre" required placeholder="Ej: Jorge Gálvez" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label>CORREO ELECTRÓNICO CORPORATIVO</label>
+        <input type="email" [(ngModel)]="email" name="email" required placeholder="usuario@anjpt.os" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label>GENERAR CLAVE DE ACCESO</label>
+        <input type="password" [(ngModel)]="password" name="password" required placeholder="••••••••" class="form-control">
+      </div>
+
+      <div class="login-actions">
+        <button type="submit" class="btn-neon" [disabled]="loading">
+          {{ loading ? 'PROCESANDO ALTA...' : 'CREAR CUENTA' }}
+        </button>
+      </div>
+    </form>
+
+    <div class="login-footer">
+      <p>¿Ya tienes cuenta? <a routerLink="/login">Volver al acceso</a></p>
+    </div>
+    
+  </div>
+</div>

@@ -1,1 +1,227 @@
-/* You can add global styles to this file, and also import other style files */
+/* 🛠️ RESET Y FUENTE GLOBAL */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  /* La fuente 'Inter' es la reina de las interfaces modernas */
+  font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  /* Paleta de colores técnica y oscura [cite: 4] */
+  --negro-puro: #000000;      /* Fondo principal */
+  --negro-panel: #0a0a0a;     /* Fondo de tarjetas y paneles */
+  --gris-borde: #1a1a1a;      /* Separadores sutiles */
+  --neon-primario: #ccff00;   /* Verde lima para acciones principales [cite: 4] */
+  --neon-secundario: #00ccff; /* Azul para roles o detalles técnicos [cite: 4] */
+  --texto-principal: #ffffff;
+  --texto-secundario: #a0a0a0;
+  --fuente-monospace: 'Fira Code', 'Courier New', monospace; /* Para IDs o código [cite: 5, 12] */
+}
+
+body {
+  background-color: var(--negro-puro);
+  color: var(--texto-principal);
+  line-height: 1.6; /* Espaciado perfecto para lectura */
+  overflow-x: hidden;
+}
+/* 🖱️ CUSTOM SCROLLBAR */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--negro-puro);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #222;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--neon-primario);
+}
+/* 🔘 BOTONES NEÓN */
+.btn-neon {
+  background-color: var(--neon-primario);
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-neon:hover {
+  box-shadow: 0 0 15px rgba(204, 255, 0, 0.5);
+  transform: translateY(-2px);
+}
+
+/* 🧊 PANELES Y CONTENEDORES */
+.panel-oscuro {
+  background: var(--negro-panel);
+  border: 1px solid var(--gris-borde);
+  padding: 24px;
+  border-radius: 4px; /* Bordes afilados son más "pro" que muy redondeados */
+}
+
+/* 🖋️ TEXTO MONOSPACE (Para IDs o código) */
+.texto-monospace {
+  font-family: var(--fuente-monospace);
+  font-size: 0.85rem;
+  color: var(--neon-secundario);
+}
+/* 🖥️ NAVEGACIÓN LATERAL (SIDEBAR) */
+.sidebar {
+  background-color: var(--negro-puro);
+  border-right: 1px solid var(--gris-borde);
+  padding: 2rem 1rem;
+}
+
+/* Títulos de sección en el menú */
+.sidebar-label {
+  color: var(--texto-secundario);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 2rem 0 0.5rem 1rem;
+  opacity: 0.6;
+}
+
+/* Enlaces del menú */
+.nav-link {
+  display: flex;
+  align-items: center;
+  color: var(--texto-principal);
+  text-decoration: none;
+  padding: 0.8rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  margin-bottom: 4px;
+}
+
+.nav-link:hover {
+  background-color: rgba(204, 255, 0, 0.05); /* Brillo muy sutil */
+  color: var(--neon-primario);
+}
+
+/* Enlace activo (Donde estás ahora) */
+.nav-link.active {
+  background-color: rgba(204, 255, 0, 0.1);
+  color: var(--neon-primario);
+  border-left: 3px solid var(--neon-primario);
+  font-weight: 700;
+}
+
+/* El nombre del Rol debajo del menú */
+.role-display {
+  font-family: var(--fuente-monospace);
+  font-size: 0.75rem;
+  color: var(--neon-secundario);
+  padding: 1rem;
+  border-top: 1px solid var(--gris-borde);
+  margin-top: 2rem;
+}
+/* 📱 ESTRUCTURA DEL SIDEBAR */
+.sidebar {
+  display: flex;
+  flex-direction: column; /* Apila elementos verticalmente [cite: 21] */
+  height: 100vh; /* Ocupa todo el alto de la ventana [cite: 21] */
+  background-color: var(--negro-puro);
+  border-right: 1px solid var(--gris-borde);
+  padding: 1.5rem;
+}
+
+/* Contenedor de enlaces principales (arriba) */
+.nav-menu {
+  flex-grow: 1; /* Empuja todo lo que viene después hacia abajo */
+}
+
+/* 👤 SECCIÓN DE ROL Y SALIDA (abajo) */
+.sidebar-footer {
+  margin-top: auto; /* Refuerza el empuje hacia el fondo */
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--gris-borde);
+}
+
+.rol-tag {
+  font-family: var(--fuente-monospace);
+  font-size: 0.7rem;
+  color: var(--texto-secundario);
+  margin-bottom: 0.5rem;
+  display: block;
+  letter-spacing: 1px;
+}
+
+.rol-valor {
+  color: var(--neon-secundario);
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+/* 🚪 BOTÓN SALIR DINÁMICO */
+.btn-salir {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--texto-secundario);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.btn-salir:hover {
+  color: #ff4444; /* Rojo vibrante */
+}
+
+/* El icono (puedes usar un SVG o un emoji por ahora) */
+.btn-salir::before {
+  content: '󰈆'; /* Representación de icono de salida si usas NerdFonts o un icono similar */
+  font-family: serif; /* O el set de iconos que prefieras */
+}
+
+/* 📐 ICONOS Y ENLACES */
+.nav-icon {
+  width: 18px; /* Tamaño controlado de iconos [cite: 31] */
+  height: 18px;
+  margin-right: 12px; /* Separación del texto [cite: 31] */
+  stroke-width: 2px; /* Grosor del trazo para nitidez [cite: 31] */
+  vertical-align: middle;
+}
+
+.menu-links a {
+  display: flex;
+  align-items: center; /* Alinea verticalmente icono y texto */
+}
+
+.btn-salir {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  color: var(--texto-secundario);
+  padding: 0;
+  cursor: pointer;
+  font-weight: 800;
+  transition: color 0.3s;
+}
+
+.btn-salir:hover {
+  color: #ff4444;
+}

@@ -1,0 +1,172 @@
+/* --- CONTENEDOR PRINCIPAL --- */
+.dashboard-container {
+  padding: 30px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* --- CABECERA --- */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  border-bottom: 1px solid var(--gris-borde);
+  padding-bottom: 20px;
+}
+
+.welcome-text h1 {
+  font-size: 2.2rem;
+  margin: 0 0 10px 0;
+}
+
+/* --- MÉTRICAS (Las 4 tarjetas superiores) --- */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); /* [cite: 30] */
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.metric-card {
+  background: var(--negro-panel);
+  border: 1px solid var(--gris-borde);
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  border-left: 4px solid var(--neon-primario); /* [cite: 31] */
+  transition: transform 0.2s ease;
+}
+
+.metric-card.clickable:hover {
+  transform: translateY(-5px);
+  border-color: var(--neon-primario);
+  box-shadow: 0 5px 15px rgba(204, 255, 0, 0.1);
+}
+
+.metric-card .number {
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 10px 0;
+  line-height: 1;
+}
+
+/* --- CONTENEDOR DE PANELES --- */
+.dashboard-body {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* 70% para tareas, 30% para actividad */
+  gap: 30px;
+  margin-top: 20px;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-body { grid-template-columns: 1fr; }
+}
+
+/* --- PANELES Y LISTA DE TAREAS --- */
+.main-panel, .side-panel {
+  background-color: var(--negro-panel); /* Usamos la variable global */
+  border: 1px solid var(--gris-borde);
+  padding: 25px;
+  border-radius: 4px;
+}
+
+/* Cabecera del panel (Título + Botón) */
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  border-bottom: 1px solid var(--gris-borde);
+  padding-bottom: 15px;
+}
+
+/* --- BOTÓN VER TODAS (Arreglo visual) --- */
+.btn-small {
+  background: transparent;
+  color: var(--neon-primario);
+  border: 1px solid var(--neon-primario);
+  padding: 6px 14px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-small:hover {
+  background: var(--neon-primario);
+  color: #000;
+  box-shadow: 0 0 15px rgba(204, 255, 0, 0.4);
+}
+
+.panel-header h2 {
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  color: #fff;
+  margin: 0;
+}
+
+/* --- LISTA DE TAREAS --- */
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.task-item {
+  background-color: rgba(255, 255, 255, 0.03); /* Fondo sutil */
+  border: 1px solid var(--gris-borde);
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: border-color 0.3s;
+}
+.task-item:hover {
+  border-color: var(--neon-primario);
+}
+.task-item.clickable:hover {
+  border-color: var(--neon-primario);
+}
+
+/* --- FEED DE ACTIVIDAD --- */
+.activity-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid transparent;
+}
+
+.activity-item .dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--neon-primario);
+  border-radius: 50%;
+  margin-right: 15px;
+  box-shadow: 0 0 5px var(--neon-primario);
+}
+/* Contenedor del título para alinear icono y texto */
+.panel-header h2 {
+  display: flex;
+  align-items: center; /* Alineación vertical perfecta */
+  gap: 10px;           /* Espacio entre icono y texto */
+  font-size: 1.5rem;   /* Tamaño del texto del título */
+  color: #fff;
+  margin: 0;
+}
+/* Estilo para el icono */
+.nav-icon {
+  color: var(--neon-primario);
+  width: 0.5em;  /* Ajusta este valor para el tamaño deseado */
+  height: 0.5em; /* Debe ser igual al width */
+  stroke-width: 1.5px; /* Controla el grosor de las líneas del icono */
+  filter: drop-shadow(0 0 5px rgba(204, 255, 0, 0.3)); /* Efecto neón sutil */
+}
+.FileIcon{
+  width: 5px;
+  height: 5px;
+  stroke-width: 1.5px;    /* Ajusta este valor para el tamaño deseado */
+  height: 0.5em;
+}

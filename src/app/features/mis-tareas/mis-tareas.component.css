@@ -1,0 +1,130 @@
+/* Contenedor general */
+.mis-tareas-container {
+  padding: 10px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Cabecera Ciberpunk */
+.kanban-header h2 {
+  font-size: 2rem;
+  font-weight: 900;
+  font-style: italic;
+  color: white;
+  margin: 0 0 5px 0;
+}
+
+.kanban-header p {
+  color: #ccff00; /* Verde neón */
+  font-size: 0.8rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin-bottom: 30px;
+}
+
+/* Tablero con scroll horizontal si hay muchas columnas */
+.tablero-kanban {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 20px;
+  flex-grow: 1;
+  align-items: flex-start;
+}
+
+/* --- DISEÑO DE LAS COLUMNAS --- */
+.columna-kanban {
+  background-color: #121212;
+  border: 1px solid #2a2a2a;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  border-top: 3px solid #ccff00; /* Toque de luz superior */
+}
+
+.columna-kanban h3 {
+  color: #888;
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 15px 20px;
+  margin: 0;
+  border-bottom: 1px solid #2a2a2a;
+  background-color: #0a0a0a;
+}
+
+/* --- ZONA DE TAREAS --- */
+.lista-tareas {
+  padding: 15px;
+  flex-grow: 1;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* --- DISEÑO DE LAS TARJETAS (Ciberpunk) --- */
+.tarea-tarjeta {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  padding: 15px;
+  color: white;
+  font-size: 0.9rem;
+  cursor: grab;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.tarea-tarjeta:hover {
+  border-color: #555;
+  transform: translateX(3px); /* Se mueve un poco a la derecha al pasar el ratón */
+}
+
+/* La rayita lateral que le da el toque tecnológico */
+.tarea-tarjeta::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: #444;
+  transition: background-color 0.2s ease;
+}
+
+.tarea-tarjeta:hover::before {
+  background-color: #ccff00; /* Se ilumina en verde al pasar el ratón */
+}
+
+/* ==========================================================
+   EFECTOS AL ARRASTRAR (Angular CDK Drag & Drop)
+   ========================================================== */
+
+/* 1. La tarjeta que llevas pegada al ratón (efecto neón) */
+.cdk-drag-preview {
+  box-sizing: border-box;
+  background-color: #1a1a1a !important;
+  color: white;
+  border: 1px solid #ccff00 !important;
+  box-shadow: 0 5px 20px rgba(204, 255, 0, 0.15); /* Brillo neón */
+  cursor: grabbing;
+}
+.cdk-drag-preview::before {
+  background-color: #ccff00;
+}
+
+/* 2. El hueco fantasma que deja la tarjeta en la lista */
+.cdk-drag-placeholder {
+  opacity: 0.5;
+  background: transparent !important;
+  border: 2px dashed #ccff00 !important;
+  color: transparent;
+}
+
+/* 3. Animaciones fluidas al soltar */
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+.lista-tareas.cdk-drop-list-dragging .tarea-tarjeta:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}

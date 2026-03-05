@@ -1,17 +1,19 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# ==========================================================================
+# ANJPT OS - GIT IGNORE CONFIG
+# ==========================================================================
 
-# Compiled output
+# Salidas de compilación (Nunca subir el código compilado)
 /dist
 /tmp
 /out-tsc
 /bazel-out
 
-# Node
+# Dependencias de Node (Pesadísimas, se instalan con npm install)
 /node_modules
 npm-debug.log
 yarn-error.log
 
-# IDEs and editors
+# Configuración de IDEs
 .idea/
 .project
 .classpath
@@ -19,8 +21,6 @@ yarn-error.log
 *.launch
 .settings/
 *.sublime-workspace
-
-# Visual Studio Code
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -28,7 +28,7 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
-# Miscellaneous
+# Archivos específicos de Angular
 /.angular/cache
 .sass-cache/
 /connect.lock
@@ -37,6 +37,11 @@ yarn-error.log
 testem.log
 /typings
 
-# System files
+# SEGURIDAD: Credenciales y Variables de Entorno
+.env
+src/environments/environment.ts
+src/environments/environment.development.ts
+
+# Archivos de sistema
 .DS_Store
 Thumbs.db

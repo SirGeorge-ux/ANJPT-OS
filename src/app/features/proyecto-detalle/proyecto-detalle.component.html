@@ -1,0 +1,138 @@
+<div class="detalle-container" *ngIf="proyecto">
+  
+  <a routerLink="/proyectos" class="btn-volver">← VOLVER A PROYECTOS</a>
+
+  <header class="detalle-header">
+    <div class="titulo-wrapper">
+      <h1>{{ proyecto.nombre }}</h1>
+      <span class="status-project-box" 
+            [ngClass]="{
+              'status-activo': proyecto.estado?.toLowerCase() === 'activo',
+              'status-inactivo': proyecto.estado?.toLowerCase() === 'inactivo'
+            }">
+        {{ proyecto.estado }}
+      </span>
+    </div>
+    <button class="btn-participar" 
+            *ngIf="rolUsuario === 'JUNIOR'" 
+            (click)="solicitarParticipacion()">
+      PARTICIPAR EN EL PROYECTO
+    </button>
+  </header>
+
+  <div class="detalle-grid">
+    
+    <div class="col-principal">
+      <section class="panel">
+        <h3>DESCRIPCIÓN</h3>
+        <p>{{ proyecto.descripcion }}</p>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header-flex">
+          <h3>TAREAS DEL PROYECTO</h3>
+          <button class="btn-small-outline" 
+                  *ngIf="rolUsuario === 'SENIOR' || rolUsuario === 'ADMIN'" 
+                  (click)="toggleFormularioTarea()">
+            {{ mostrarFormularioTarea ? 'CANCELAR' : '+ NUEVA TAREA' }}
+          </button>
+        </div>
+
+        <div class="formulario-tarea-box" *ngIf="mostrarFormularioTarea"> 
+          <div class="form-group">
+            <label>¿Qué hay que hacer? *</label> 
+            <input type="text" [(ngModel)]="nuevaTarea.titulo" placeholder="Ej: Configurar los servidores DNS"> 
+          </div>
+
+          <div class="form-group">
+            <label>Asignar a Colaborador *</label> 
+            <select [(ngModel)]="nuevaTarea.asignado_a" class="select-ciberpunk"> 
+              <option value="" disabled selected>Selecciona un colaborador...</option>
+              <option *ngFor="let user of usuarios" [value]="user.id"> 
+                {{ user.nombre }}
+              </option>
+            </select>
+          </div>
+
+            <button class="btn-neon" 
+              (click)="guardarTarea()" 
+              [disabled]="loading || !nuevaTarea.titulo || !nuevaTarea.asignado_a">
+              {{ loading ? 'GUARDANDO...' : 'ASIGNAR TAREA' }} 
+            </button>
+        </div>
+
+        <div class="tareas-list">
+          <div class="tarea-item" *ngFor="let t of tareasDelProyecto"> 
+            <div class="tarea-info">
+              <lucide-icon 
+                [name]="t.estado === 'Por hacer' ? IconPorHacer : 
+                        t.estado === 'Revisar' ? IconRevisar : 
+                        t.estado === 'En progreso' ? IconEnProgreso : IconTerminado"
+                class="nav-icon-task"
+                [style.color]="t.estado === 'Por hacer' ? '#00e5ff' : 
+                               t.estado === 'Revisar' ? '#ff9500' : 
+                               t.estado === 'En progreso' ? '#bf5af2' : '#ccff00'">
+              </lucide-icon>
+              <span class="tarea-titulo">{{ t.titulo }}</span>
+            </div>
+
+            <span class="badge-status" [ngClass]="{
+              'status-por-hacer': t.estado === 'Por hacer',
+              'status-revisar': t.estado === 'Revisar',
+              'status-en-progreso': t.estado === 'En progreso',
+              'status-terminado': t.estado === 'Terminado'
+            }">
+              {{ t.estado }}
+            </span>
+          </div>
+
+          <p *ngIf="tareasDelProyecto.length === 0" class="texto-vacio">
+            No hay tareas registradas en este proyecto.
+          </p>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h3>BACKLOG / WIKI</h3>
+        <pre class="texto-monospace">{{ proyecto.wiki }}</pre>
+      </section>
+    </div>
+
+    <div class="col-lateral">
+      <section class="panel">
+        <h3>EQUIPO</h3>
+        <div class="equipo-list">
+          <div class="equipo-item lider">
+            <lucide-icon [name]="IconLider" class="equipo-icon status-terminado"></lucide-icon>
+            <div class="equipo-text">
+              <span class="rol-label">Líder:</span> {{ proyecto.lider }}
+            </div>
+          </div>
+          
+          <div class="equipo-item" *ngFor="let colab of proyecto.colaboradores">
+            <lucide-icon [name]="IconColab" class="equipo-icon status-por-hacer"></lucide-icon>
+            <div class="equipo-text">
+              <span class="rol-label">Colaborador:</span> {{ colab }}
+            </div>
+          </div>
+
+          <div class="equipo-item" *ngIf="proyecto.mantenedor">
+             <lucide-icon [name]="IconMantenedor" class="equipo-icon status-revisar"></lucide-icon>
+             <div class="equipo-text">
+               <span class="rol-label">Mantenedor:</span> {{ proyecto.mantenedor }}
+             </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h3>TECH STACK</h3>
+        <div class="stack-container">
+          <span class="chip" *ngFor="let tech of proyecto.stack">{{ tech }}</span> 
+        </div>
+      </section>
+    </div>
+
+  </div> 
+</div>
+

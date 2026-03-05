@@ -1,0 +1,105 @@
+/* --- CENTRADO TOTAL EN PANTALLA --- */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--negro-puro);
+  position: fixed; /* Asegura que tape toda la pantalla */
+  top: 0;
+  left: 0;
+}
+
+.login-box {
+  width: 100%;
+  max-width: 400px;
+  padding: 40px;
+  background: var(--negro-panel);
+  border: 1px solid var(--gris-borde);
+  text-align: center;
+}
+
+/* --- CABECERA DEL LOGIN --- */
+.login-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.login-header .logo-box {
+  display: inline-block;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+}
+
+.login-header h1 {
+  font-size: 1.8rem;
+  letter-spacing: 3px;
+  font-weight: 900;
+  margin-bottom: 5px;
+}
+
+.login-header p {
+  font-size: 0.65rem;
+  color: var(--texto-secundario);
+  letter-spacing: 1px;
+}
+
+/* --- ACCIONES Y ENLACES --- */
+.login-actions {
+  margin-top: 30px;
+}
+
+.login-actions .btn-neon {
+  width: 100%; /* Botón ancho total en login */
+}
+
+.login-footer {
+  margin-top: 25px;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.login-footer a {
+  color: var(--neon-primario);
+  text-decoration: none;
+  font-weight: 800;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
+/* --- SEPARACIÓN DE CAMPOS --- */
+.form-group {
+  margin-bottom: 25px; /* Esto crea la separación que falta en tu imagen */
+  text-align: left; /* Las etiquetas alineadas a la izquierda */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--texto-principal);
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+}
+
+/* --- FORZAR INPUTS OSCUROS --- */
+.form-control {
+  width: 100%;
+  background-color: #050505 !important; /* Negro profundo */
+  border: 1px solid #222 !important;
+  color: white !important;
+  padding: 12px;
+  border-radius: 0; /* Estilo cuadrado */
+  outline: none;
+}
+
+.form-control:focus {
+  border-color: var(--neon-primario) !important;
+}
+
+/* --- BOTÓN --- */
+.login-actions .btn-neon {
+  width: 100%;
+  margin-top: 10px;
+}

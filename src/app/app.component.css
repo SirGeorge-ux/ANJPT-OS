@@ -1,0 +1,55 @@
+/* Estilo básico para los enlaces del menú */
+.menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 40px;
+}
+
+.menu-links a {
+  color: #888; /* Gris apagado por defecto */
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 10px 15px;
+  border-left: 4px solid transparent; /* Borde invisible por defecto */
+  transition: all 0.3s ease;
+}
+
+.menu-links a:hover {
+  color: white;
+}
+
+/* 🔥 ESTA ES LA MAGIA DEL ROUTERLINKACTIVE 🔥 */
+.menu-links a.activo {
+  color: #ccff00; /* Verde neón de tu diseño */
+  border-left: 4px solid #ccff00; /* Rayita verde a la izquierda */
+  background-color: rgba(204, 255, 0, 0.05); /* Fondo muy sutil */
+}
+/* app.component.css */
+.app-layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: #0f0f0f; /* El fondo súper oscuro de tu diseño */
+  color: white; 
+  overflow: hidden;
+}
+
+aside {
+  width: 260px;
+  background-color: #141414; /* Un gris un pelín más claro para el menú */
+  padding: 30px 20px;
+  border-right: 1px solid #222;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+/* Ocultar subrayados de los enlaces por ahora */
+a { text-decoration: none; color: inherit; }

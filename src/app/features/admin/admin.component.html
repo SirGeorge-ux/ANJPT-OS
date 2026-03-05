@@ -1,0 +1,21 @@
+<div class="panel-resumen">
+  <h1>¡Hola, {{ name }}! Tu rol es: {{ rol }}</h1>
+  <p>Estás actualmente en el proyecto: <strong>{{ nombresProyectos[0] }}</strong>.</p>
+  
+  <h3>Tus tareas pendientes:</h3>
+  <ul>
+    <li *ngFor="let tarea of tareas">
+      {{ tarea }}
+    </li>
+  </ul>
+</div>
+
+<div class="tablero-kanban" style="display: flex; flex-direction: row; gap: 20px; position: center; justify-content: center; align-items: center">
+  <div *ngFor="let columna of columnas" class="columna" cdkDropList>
+    <h3>{{ columna }}</h3>
+    <div *ngFor="let tarea of tareas" class="tarjeta" cdkDrag>
+        {{ tarea }}
+    </div>
+
+  </div>
+</div>

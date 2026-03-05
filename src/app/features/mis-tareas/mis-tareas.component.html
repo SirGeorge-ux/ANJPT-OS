@@ -1,0 +1,25 @@
+<div class="mis-tareas-container">
+  
+  <div class="kanban-header">
+    <h2>MIS TAREAS</h2>
+    <p>TABLERO ÁGIL · ESTADO DE PROYECTOS</p>
+  </div>
+
+  <div class="tablero-kanban" cdkDropListGroup>
+    
+    <div class="columna-kanban" *ngFor="let columna of tablero">
+      <h3>{{ columna.nombre | uppercase }}</h3>
+
+      <div class="lista-tareas"
+           cdkDropList
+           [cdkDropListData]="columna.tareas"
+           (cdkDropListDropped)="drop($event)">
+        
+        <div class="tarea-tarjeta" *ngFor="let tarea of columna.tareas" cdkDrag>
+          {{ tarea.titulo }}
+        </div>
+
+      </div>
+    </div>
+
+  </div>

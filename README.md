@@ -69,12 +69,6 @@ Accede a `http://localhost:4200` en tu navegador.
 
 ---
 
-## 📸 Vista Previa
-
-_(Aquí puedes arrastrar y soltar la imagen del proyecto una vez subas el README a GitHub para que se vea la captura de pantalla)_
-
----
-
 ## 👤 Autor
 
 Desarrollado por **SirGeorge-ux** - _Full Stack Developer_

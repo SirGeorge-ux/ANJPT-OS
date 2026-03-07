@@ -1,33 +1,42 @@
-<div class="login-container">
-  <div class="login-box panel-oscuro">
+<div class="login-layout">
+  <div class="login-card">
     
     <div class="login-header">
-      <div class="logo-box">A</div>
-      <h1>ANJPT OS</h1>
-      <p>SISTEMA DE GESTIÓN // ACCESO RESTRINGIDO</p>
+      <lucide-icon [name]="IconTerminal" class="header-icon"></lucide-icon>
+      <div class="header-text">
+        <h1>ANJPT OS</h1>
+        <span class="subtitulo">SISTEMA DE GESTIÓN // ACCESO RESTRINGIDO</span>
+      </div>
     </div>
 
-    <form (submit)="onLogin($event)">
+    <form (submit)="onLogin($event)" class="login-form">
+      
       <div class="form-group">
         <label>IDENTIFICACIÓN DE USUARIO (EMAIL)</label>
-        <input type="email" [(ngModel)]="email" name="email" required placeholder="usuario@anjpt.os" class="form-control">
+        <div class="input-with-icon">
+          <lucide-icon [name]="IconMail" class="input-icon"></lucide-icon>
+          <input type="email" [(ngModel)]="email" name="email" placeholder="usuario@anjpt.os" required>
+        </div>
       </div>
 
       <div class="form-group">
         <label>CLAVE DE ACCESO</label>
-        <input type="password" [(ngModel)]="password" name="password" required placeholder="••••••••" class="form-control">
+        <div class="input-with-icon">
+          <lucide-icon [name]="IconKey" class="input-icon"></lucide-icon>
+          <input type="password" [(ngModel)]="password" name="password" placeholder="••••••••" required>
+        </div>
       </div>
 
-      <div class="login-actions">
-        <button type="submit" class="btn-neon" [disabled]="loading">
-          {{ loading ? 'AUTENTICANDO...' : 'INICIAR SESIÓN' }}
-        </button>
-      </div>
+      <button type="submit" class="btn-neon-lime" [disabled]="loading">
+        {{ loading ? 'VERIFICANDO CREDENCIALES...' : 'INICIAR SESIÓN' }}
+      </button>
+
     </form>
 
     <div class="login-footer">
-      <p>¿No tienes acceso? <a routerLink="/register">Solicitar registro</a></p>
+      <span>¿No tienes autorización?</span>
+      <a routerLink="/register" class="link-lime">Solicitar registro oficial</a>
     </div>
-    
+
   </div>
 </div>

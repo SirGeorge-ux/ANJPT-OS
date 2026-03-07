@@ -31,17 +31,15 @@ async logout() {
   return await this.supabase.auth.signOut();
 }
 
-async register(email: string, password: string, nombre: string) {
-  return await this.supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: {
-        nombre: nombre, // Este es el dato que leerá el Trigger
-        rol: 'JUNIOR'
+// Actualizamos para recibir un objeto completo de metadatos
+  async register(email: string, pass: string, metaData: any) {
+    return await this.supabase.auth.signUp({
+      email,
+      password: pass,
+      options: {
+        data: metaData // Guarda todos los campos (nombre, dni, telefono, etc.)
       }
-    }
-  });
-}
+    });
+  }
 
 }

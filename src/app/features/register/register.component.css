@@ -1,50 +1,176 @@
-/* Heredamos la mayoría de estilos del styles.css global, 
-   pero ajustamos detalles específicos del registro */
-
-.login-container {
+/* Layout para centrar la tarjeta en la pantalla */
+.registro-layout {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  width: 100vw;
-  background-color: var(--negro-puro);
+  min-height: 100vh;
+  background-color: #050505;
+  padding: 20px;
 }
 
-.login-box {
-  width: 100%;
-  max-width: 450px; /* Un poco más ancho para el registro */
+/* Tarjeta Principal (La hacemos más ancha para las dos columnas) */
+.registro-card.extra-wide {
+  background-color: #0a0a0a;
+  border: 1px solid #222;
+  border-top: 3px solid #ccff00;
   padding: 40px;
-  background: var(--negro-panel);
-  border: 1px solid var(--gris-borde);
+  width: 100%;
+  max-width: 800px; /* <--- Aumentamos el ancho máximo a 800px */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(204, 255, 0, 0.05);
+}
+/* La magia de las dos columnas */
+.registro-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dos columnas del mismo tamaño */
+  gap: 20px 30px; /* 20px de separación vertical, 30px horizontal */
+  margin-bottom: 20px;
 }
 
-/* --- SEPARACIÓN CRÍTICA --- */
-.form-group {
-  margin-bottom: 22px; /* Espacio entre cada campo de texto */
-  text-align: left;
+/* Si están en un móvil, que se ponga en una sola columna automáticamente */
+@media (max-width: 768px) {
+  .registro-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  color: var(--neon-primario); /* Etiqueta en color neón para resaltar */
-  font-size: 0.7rem;
-  font-weight: 800;
+/* Cabecera */
+.registro-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 35px;
+  border-bottom: 1px solid #222;
+  padding-bottom: 20px;
+}
+
+.header-icon {
+  color: #ccff00;
+  width: 32px;
+  height: 32px;
+}
+
+.header-text h1 {
+  color: #fff;
+  font-size: 1.5rem;
+  margin: 0 0 5px 0;
   letter-spacing: 1px;
 }
 
-/* --- FORZAR DISEÑO OSCURO --- */
-.form-control {
-  width: 100%;
-  background-color: #050505 !important;
-  border: 1px solid #222 !important;
-  color: white !important;
-  padding: 12px;
-  outline: none;
-  transition: border-color 0.3s;
+.subtitulo {
+  color: #ccff00;
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 2px;
 }
 
-.form-control:focus {
-  border-color: var(--neon-primario) !important;
-  box-shadow: 0 0 10px rgba(204, 255, 0, 0.1);
+/* Formulario e Inputs */
+.registro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  color: #ccff00;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  color: #666;
+  width: 18px;
+  height: 18px;
+  transition: color 0.3s;
+}
+
+.input-with-icon input {
+  width: 100%;
+  background-color: #0d0d0d;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 12px 15px 12px 45px; /* Padding izquierdo más grande para el icono */
+  font-family: 'monospace';
+  outline: none;
+  transition: all 0.3s ease;
+}
+/* Forzar el texto negro en los botones lima de SweetAlert */
+::ng-deep .btn-swal-negro {
+  color: #000000 !important;
+  font-weight: 900 !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Efecto focus en el input y su icono */
+.input-with-icon input:focus {
+  border-color: #ccff00;
+  box-shadow: 0 0 10px rgba(204, 255, 0, 0.15);
+}
+
+.input-with-icon input:focus + .input-icon,
+.input-with-icon:focus-within .input-icon {
+  color: #ccff00;
+}
+
+/* Botón Neón Lima */
+.btn-neon-lime {
+  background-color: #ccff00;
+  color: #000;
+  border: none;
+  padding: 15px;
+  font-weight: 900;
+  font-size: 1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.2s ease;
+  letter-spacing: 1px;
+}
+
+.btn-neon-lime:hover:not([disabled]) {
+  box-shadow: 0 0 20px rgba(204, 255, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-neon-lime[disabled] {
+  background-color: #333;
+  color: #666;
+  cursor: not-allowed;
+}
+
+/* Footer / Link al Login */
+.registro-footer {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.link-lime {
+  color: #ccff00;
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: 5px;
+  transition: text-shadow 0.2s;
+}
+
+.link-lime:hover {
+  text-shadow: 0 0 8px rgba(204, 255, 0, 0.6);
+  text-decoration: underline;
 }

@@ -1,105 +1,154 @@
-/* --- CENTRADO TOTAL EN PANTALLA --- */
-.login-container {
+/* Layout para centrar la tarjeta */
+.login-layout {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  width: 100vw;
-  background-color: var(--negro-puro);
-  position: fixed; /* Asegura que tape toda la pantalla */
-  top: 0;
-  left: 0;
+  min-height: 100vh;
+  background-color: #050505;
+  padding: 20px;
 }
 
-.login-box {
-  width: 100%;
-  max-width: 400px;
+/* Tarjeta Principal */
+.login-card {
+  background-color: #0a0a0a;
+  border: 1px solid #222;
+  border-top: 3px solid #ccff00; /* Borde superior neón lima */
   padding: 40px;
-  background: var(--negro-panel);
-  border: 1px solid var(--gris-borde);
-  text-align: center;
+  width: 100%;
+  max-width: 450px; /* Más estrecha que el registro para un look enfocado */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(204, 255, 0, 0.05);
 }
 
-/* --- CABECERA DEL LOGIN --- */
+/* Cabecera */
 .login-header {
-  text-align: center;
-  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 35px;
+  border-bottom: 1px solid #222;
+  padding-bottom: 20px;
 }
 
-.login-header .logo-box {
-  display: inline-block;
-  margin-bottom: 15px;
-  font-size: 1.5rem;
+.header-icon {
+  color: #ccff00;
+  width: 36px;
+  height: 36px;
 }
 
-.login-header h1 {
-  font-size: 1.8rem;
-  letter-spacing: 3px;
-  font-weight: 900;
-  margin-bottom: 5px;
+.header-text h1 {
+  color: #fff;
+  font-size: 2rem;
+  margin: 0 0 5px 0;
+  letter-spacing: 2px;
 }
 
-.login-header p {
-  font-size: 0.65rem;
-  color: var(--texto-secundario);
+.subtitulo {
+  color: #ccff00;
+  font-size: 0.75rem;
+  font-weight: bold;
   letter-spacing: 1px;
 }
 
-/* --- ACCIONES Y ENLACES --- */
-.login-actions {
-  margin-top: 30px;
+/* Formulario e Inputs */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
 
-.login-actions .btn-neon {
-  width: 100%; /* Botón ancho total en login */
-}
-
-.login-footer {
-  margin-top: 25px;
-  text-align: center;
-  font-size: 0.8rem;
-}
-
-.login-footer a {
-  color: var(--neon-primario);
-  text-decoration: none;
-  font-weight: 800;
-}
-
-.login-footer a:hover {
-  text-decoration: underline;
-}
-/* --- SEPARACIÓN DE CAMPOS --- */
 .form-group {
-  margin-bottom: 25px; /* Esto crea la separación que falta en tu imagen */
-  text-align: left; /* Las etiquetas alineadas a la izquierda */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .form-group label {
-  display: block;
-  margin-bottom: 10px;
-  color: var(--texto-principal);
+  color: #ccff00;
   font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
   letter-spacing: 1px;
 }
 
-/* --- FORZAR INPUTS OSCUROS --- */
-.form-control {
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  color: #666;
+  width: 18px;
+  height: 18px;
+  transition: color 0.3s;
+}
+
+.input-with-icon input {
   width: 100%;
-  background-color: #050505 !important; /* Negro profundo */
-  border: 1px solid #222 !important;
-  color: white !important;
-  padding: 12px;
-  border-radius: 0; /* Estilo cuadrado */
+  background-color: #0d0d0d;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 12px 15px 12px 45px;
+  font-family: 'monospace';
   outline: none;
+  transition: all 0.3s ease;
 }
 
-.form-control:focus {
-  border-color: var(--neon-primario) !important;
+.input-with-icon input:focus {
+  border-color: #ccff00;
+  box-shadow: 0 0 10px rgba(204, 255, 0, 0.15);
 }
 
-/* --- BOTÓN --- */
-.login-actions .btn-neon {
-  width: 100%;
+.input-with-icon input:focus + .input-icon,
+.input-with-icon:focus-within .input-icon {
+  color: #ccff00;
+}
+
+/* Botón Neón Lima */
+.btn-neon-lime {
+  background-color: #ccff00;
+  color: #000;
+  border: none;
+  padding: 15px;
+  font-weight: 900;
+  font-size: 1rem;
+  text-transform: uppercase;
+  cursor: pointer;
   margin-top: 10px;
+  transition: all 0.2s ease;
+  letter-spacing: 1px;
+}
+
+.btn-neon-lime:hover:not([disabled]) {
+  box-shadow: 0 0 20px rgba(204, 255, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-neon-lime[disabled] {
+  background-color: #333;
+  color: #666;
+  cursor: not-allowed;
+}
+
+/* Footer / Link al Registro */
+.login-footer {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.link-lime {
+  color: #ccff00;
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: 5px;
+  transition: text-shadow 0.2s;
+}
+
+.link-lime:hover {
+  text-shadow: 0 0 8px rgba(204, 255, 0, 0.6);
+  text-decoration: underline;
 }

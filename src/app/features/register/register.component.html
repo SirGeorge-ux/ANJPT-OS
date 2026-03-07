@@ -1,37 +1,90 @@
-<div class="login-container"> <div class="login-box panel-oscuro">
+<div class="registro-layout">
+  <div class="registro-card extra-wide">
     
-    <div class="login-header">
-      <div class="logo-box">A</div>
-      <h1>REGISTRO DE SOCIO</h1>
-      <p>ALTA EN EL SISTEMA // ANJPT OS v1.0</p>
+    <div class="registro-header">
+      <lucide-icon [name]="IconTerminal" class="header-icon"></lucide-icon>
+      <div class="header-text">
+        <h1>REGISTRO OFICIAL DE SOCIO</h1>
+        <span class="subtitulo">FORMULARIO DE ADMISIÓN // ANJPT OS v1.1</span>
+      </div>
     </div>
 
-    <form (submit)="onRegister($event)">
-      <div class="form-group">
-        <label>NOMBRE COMPLETO</label>
-        <input type="text" [(ngModel)]="nombre" name="nombre" required placeholder="Ej: Jorge Gálvez" class="form-control">
-      </div>
+    <form (submit)="onRegister($event)" class="registro-form">
+      
+      <div class="registro-grid">
+        <div class="form-group">
+          <label>NOMBRE COMPLETO</label>
+          <div class="input-with-icon">
+            <lucide-icon [name]="IconUser" class="input-icon"></lucide-icon>
+            <input type="text" [(ngModel)]="nombre" name="nombre" placeholder="Ej: Linus Torvalds" required>
+          </div>
+        </div>
 
-      <div class="form-group">
-        <label>CORREO ELECTRÓNICO CORPORATIVO</label>
-        <input type="email" [(ngModel)]="email" name="email" required placeholder="usuario@anjpt.os" class="form-control">
-      </div>
+        <div class="form-group">
+          <label>DOCUMENTO (DNI/NIE)</label>
+          <div class="input-with-icon">
+            <lucide-icon [name]="IconDni" class="input-icon"></lucide-icon>
+            <input type="text" [(ngModel)]="dni" name="dni" placeholder="Ej: 12345678X" required>
+          </div>
+        </div>
 
-      <div class="form-group">
-        <label>GENERAR CLAVE DE ACCESO</label>
-        <input type="password" [(ngModel)]="password" name="password" required placeholder="••••••••" class="form-control">
-      </div>
+        <div class="form-group">
+          <label>TELÉFONO DE CONTACTO</label>
+          <div class="input-with-icon">
+            <lucide-icon [name]="IconPhone" class="input-icon"></lucide-icon>
+            <input type="tel" [(ngModel)]="telefono" name="telefono" placeholder="+34 666 666 666" required>
+          </div>
+        </div>
 
-      <div class="login-actions">
-        <button type="submit" class="btn-neon" [disabled]="loading">
-          {{ loading ? 'PROCESANDO ALTA...' : 'CREAR CUENTA' }}
-        </button>
-      </div>
+        <div class="form-group">
+          <label>STACK TÉCNICO</label>
+          <div class="input-with-icon">
+            <lucide-icon [name]="IconCode" class="input-icon"></lucide-icon>
+            <input type="text" [(ngModel)]="stack" name="stack" placeholder="Ej: Angular, Supabase, Javascript, Python" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>DIRECCIÓN COMPLETA</label>
+          <div class="input-with-icon">
+            <lucide-icon [name]="IconMap" class="input-icon"></lucide-icon>
+            <input type="text" [(ngModel)]="direccion" name="direccion" placeholder="Calle, Número, Ciudad" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>PAÍS</label>
+          <div class="input-with-icon">
+            <lucide-icon [name]="IconGlobe" class="input-icon"></lucide-icon>
+            <input type="text" [(ngModel)]="pais" name="pais" placeholder="Ej: España" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>CORREO CORPORATIVO</label>
+          <div class="input-with-icon">
+            <lucide-icon [name]="IconMail" class="input-icon"></lucide-icon>
+            <input type="email" [(ngModel)]="email" name="email" placeholder="usuario@anjpt.os" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>CLAVE DE SEGURIDAD</label>
+          <div class="input-with-icon">
+            <lucide-icon [name]="IconKey" class="input-icon"></lucide-icon>
+            <input type="password" [(ngModel)]="password" name="password" placeholder="Mínimo 6 caracteres" required>
+          </div>
+        </div>
+      </div> <button type="submit" class="btn-neon-lime" [disabled]="loading">
+        {{ loading ? 'ENCRIPTANDO DATOS...' : 'ENVIAR SOLICITUD DE ADMISIÓN' }}
+      </button>
+
     </form>
 
-    <div class="login-footer">
-      <p>¿Ya tienes cuenta? <a routerLink="/login">Volver al acceso</a></p>
+    <div class="registro-footer">
+      <span>¿Ya eres socio activo?</span>
+      <a routerLink="/login" class="link-lime">Acceder al terminal</a>
     </div>
-    
+
   </div>
 </div>

@@ -14,23 +14,25 @@
   <div class="formulario-box" *ngIf="mostrarFormulario">
     <h3>CREAR NUEVO PROYECTO</h3>
 
-    <div class="form-group">
-      <label>Nombre del Proyecto *</label>
-      <input type="text" [(ngModel)]="nuevoProyecto.nombre" placeholder="Ej: App Móvil iOS">
+ <div class="form-group-1">
+  <label>Nombre del proyecto <span class="req">*</span></label>
+  <input type="text" [(ngModel)]="nuevoProyecto.nombre" required placeholder="Ej: App Móvil iOS">
+</div>
+
+    <div class="form-group-1">
+        <label>Descripción corta</label>
+        <textarea [(ngModel)]="nuevoProyecto.descripcion" rows="3" placeholder="¿De qué trata este proyecto?"></textarea>
     </div>
 
-    <div class="form-group">
-      <label>Descripción Corta</label>
-      <textarea [(ngModel)]="nuevoProyecto.descripcion" placeholder="¿De qué trata este proyecto?"></textarea>
+    <div class="form-group-1">
+        <label>Tech Stack (Separado por comas)</label>
+        <input type="text" [(ngModel)]="nuevoProyecto.stack" placeholder="Ej: Angular 19, Supabase, Tailwind">
     </div>
 
-    <div class="form-group">
-      <label>Tech Stack (Separado por comas)</label>
-      <input type="text" [(ngModel)]="nuevoProyecto.stack" placeholder="Ej: Angular 19, Supabase, Tailwind">
-    </div>
-
-    <button class="btn-neon" (click)="guardarProyecto()" [disabled]="!nuevoProyecto.nombre">
-      GUARDAR PROYECTO
+    <button class="btn-neon btn-guardar-proyecto" 
+        [disabled]="!nuevoProyecto.nombre || guardandoProyecto" 
+        (click)="crearProyecto()">
+        {{ guardandoProyecto ? 'GUARDANDO...' : 'GUARDAR PROYECTO' }}
     </button>
   </div>
 

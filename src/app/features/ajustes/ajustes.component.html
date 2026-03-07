@@ -1,1 +1,162 @@
-<p>ajustes works!</p>
+<div class="ajustes-container">
+  
+  <header class="ajustes-header">
+    <div class="titulo-wrapper">
+      <h1>CONFIGURACIÓN DEL SISTEMA</h1>
+      <span class="status-project-box status-activo">TERMINAL ACTIVA</span>
+    </div>
+  </header>
+
+  <div class="loading-box" *ngIf="cargando">
+    <p class="texto-parpadeo">> ACCEDIENDO A LOS ARCHIVOS DEL NÚCLEO...</p>
+  </div>
+
+  <div class="ajustes-grid" *ngIf="!cargando">
+    
+    <div class="col-personal">
+      
+      <section class="panel">
+        <div class="panel-header">
+          <lucide-icon [name]="IconUser" class="header-icon icon-cyan"></lucide-icon>
+          <h3>MI IDENTIDAD</h3>
+        </div>
+        
+        <div class="identidad-info-box">
+          <span class="label-gris">EMAIL VINCULADO:</span>
+          <span class="valor-blanco">{{ miPerfil.email || 'No disponible' }}</span>
+        </div>
+
+        <div class="form-group-1">
+          <label>NOMBRE DE VISUALIZACIÓN</label>
+          <input type="text" [(ngModel)]="miPerfil.nombre" placeholder="Ej: Neo, Trinity...">
+        </div>
+
+        <div class="form-group-1">
+          <label>UBICACIÓN ACTUAL</label>
+          <div class="input-with-icon">
+            <lucide-icon [name]="IconMap" class="input-icon"></lucide-icon>
+            <input type="text" [(ngModel)]="miPerfil.ubicacion" placeholder="Ej: Sector 7, Madrid">
+          </div>
+        </div>
+
+        <div class="form-group-1">
+          <label>BIOGRAFÍA TÉCNICA</label>
+          <textarea [(ngModel)]="miPerfil.bio" rows="3" placeholder="¿Cuáles son tus especialidades?"></textarea>
+        </div>
+
+        <button class="btn-neon" (click)="guardarMiPerfil()" [disabled]="guardando">
+          <lucide-icon [name]="IconSave" class="btn-icon"></lucide-icon>
+          {{ guardando ? 'GUARDANDO...' : 'ACTUALIZAR IDENTIDAD' }}
+        </button>
+      </section>
+
+      <section class="panel panel-seguridad">
+        <div class="panel-header">
+          <lucide-icon [name]="IconShield" class="header-icon icon-yellow"></lucide-icon>
+          <h3>PROTOCOLOS DE SEGURIDAD</h3>
+        </div>
+
+        <div class="form-group-1">
+          <label>NUEVA CONTRASEÑA DE ACCESO</label>
+          <div class="input-with-icon">
+            <lucide-icon [name]="IconKey" class="input-icon"></lucide-icon>
+            <input type="password" [(ngModel)]="nuevaPassword" placeholder="Mínimo 6 caracteres">
+          </div>
+        </div>
+        
+        <div class="botones-seguridad">
+          <button class="btn-outline-yellow" (click)="cambiarContrasena()" [disabled]="guardando || nuevaPassword.length < 6">
+            CAMBIAR CLAVE
+          </button>
+          
+          <button class="btn-peligro" (click)="cerrarSesion()">
+            DESCONECTAR TERMINAL
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-admin" *ngIf="rolUsuario === 'ADMIN'">
+      
+      <section class="panel panel-admin-lista">
+        <div class="panel-header admin-header">
+          <lucide-icon [name]="IconData" class="header-icon icon-red"></lucide-icon>
+          <h3>BASE DE DATOS DE OPERARIOS // ACCESO RESTRINGIDO</h3>
+        </div>
+
+        <div class="lista-usuarios-contenedor">
+          <div class="usuario-row header-row">
+            <span>OPERARIO</span>
+            <span>NIVEL</span>
+            <span>ACCIÓN</span>
+          </div>
+
+          <div class="usuario-row" *ngFor="let user of listaUsuarios">
+            <span class="user-nombre">{{ user.nombre || 'Sin nombre' }}</span>
+            <span class="badge-status" [ngClass]="{
+              'status-por-hacer': user.rol === 'JUNIOR',
+              'status-terminado': user.rol === 'SENIOR',
+              'status-alerta': user.rol === 'ADMIN'
+            }">{{ user.rol }}</span>
+            <button class="btn-small-outline" (click)="abrirExpediente(user)">ABRIR DOSSIER</button>
+          </div>
+        </div>
+      </section>
+      
+    </div>
+  </div>
+</div>
+
+<div class="dossier-backdrop" *ngIf="dossierAbierto">
+  <div class="dossier-panel">
+    
+    <div class="dossier-header">
+      <div class="dossier-title-box">
+        <lucide-icon [name]="IconUser" class="dossier-icon"></lucide-icon>
+        <h2>EXPEDIENTE: {{ dossierAbierto.nombre || 'Desconocido' }}</h2>
+      </div>
+      <lucide-icon [name]="IconClose" class="close-icon" (click)="cerrarExpediente()"></lucide-icon>
+    </div>
+
+    <div class="dossier-content">
+      <div class="dossier-seccion info-publica">
+        <h4>DATOS PÚBLICOS</h4>
+        <p><strong>Ubicación:</strong> {{ dossierAbierto.ubicacion || 'No registrada' }}</p>
+        <p><strong>Bio:</strong> {{ dossierAbierto.bio || 'Sin datos' }}</p>
+        <p><strong>Último acceso:</strong> {{ dossierAbierto.ultimo_acceso ? (dossierAbierto.ultimo_acceso | date:'short') : 'Desconocido' }}</p>
+      </div>
+
+      <div class="dossier-seccion info-clasificada">
+        <h4 class="texto-alerta">MODIFICAR EXPEDIENTE</h4>
+        
+        <div class="form-group-1">
+          <label>NIVEL DE ACCESO (ROL)</label>
+          <select [(ngModel)]="dossierAbierto.rol" class="select-ciberpunk select-rojo">
+            <option value="JUNIOR">JUNIOR (Limitado)</option>
+            <option value="SENIOR">SENIOR (Avanzado)</option>
+            <option value="ADMIN">ADMINISTRADOR (Total)</option>
+          </select>
+        </div>
+
+        <div class="form-group-1">
+          <label class="texto-alerta">NOTAS CLASIFICADAS (Solo Admin)</label>
+          <textarea [(ngModel)]="dossierAbierto.notas_admin" rows="4" class="textarea-rojo" placeholder="Añade apuntes sobre el rendimiento de este operario..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="dossier-footer" style="display: flex; justify-content: space-between; width: 100%;">
+      <button class="btn-peligro" (click)="eliminarOperario()" [disabled]="guardando" *ngIf="dossierAbierto.id !== miIdUsuario">
+        ERRADICAR
+      </button>
+
+      <div style="display: flex; gap: 15px;">
+        <button class="btn-small-outline" (click)="cerrarExpediente()">CANCELAR</button>
+        <button class="btn-neon btn-rojo" (click)="guardarExpediente()" [disabled]="guardando">
+          {{ guardando ? 'ACTUALIZANDO...' : 'GUARDAR EXPEDIENTE' }}
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

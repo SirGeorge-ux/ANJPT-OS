@@ -1,36 +1,44 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../../infra/auth.service';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../infra/auth.service';
 
 @Component({
   selector: 'app-proyectos',
+  standalone: true,
   imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './proyectos.component.html',
   styleUrl: './proyectos.component.css'
 })
-
 export class ProyectosComponent implements OnInit {
-  private authService = inject(AuthService);
+  
+  // 🛰️ Dependencias
+  public readonly authService = inject(AuthService);
 
+  // 📂 Datos
   rolUsuario: string = 'JUNIOR';
   proyectos: any[] = []; 
 
-  // 📝 VARIABLES PARA EL FORMULARIO
+  // 📝 Variables para el Formulario y Estado UI
   mostrarFormulario: boolean = false;
+  guardandoProyecto: boolean = false; // Bloquea el botón para evitar doble clic
+
   nuevoProyecto = {
     nombre: '',
     descripcion: '',
-    stack: '' // Lo pediremos separado por comas y luego lo convertiremos
+    stack: '', 
+    estado: 'Activo' // Por defecto
   };
 
+  // 🏁 Ciclo de vida
   async ngOnInit() {
     const { data: { session } } = await this.authService.getSession();
     this.rolUsuario = session?.user.user_metadata?.['rol'] || 'JUNIOR';
     await this.cargarProyectos();
   }
 
+  // 📊 MÉTODOS DE LECTURA
   async cargarProyectos() {
     const { data, error } = await this.authService.supabase
       .from('proyectos')
@@ -38,32 +46,38 @@ export class ProyectosComponent implements OnInit {
       .order('creado_en', { ascending: false });
 
     if (error) {
-      console.error('Error al descargar:', error);
+      console.error('Error al descargar proyectos:', error);
     } else {
       this.proyectos = data || [];
     }
   }
 
-  // 🛠️ Función para abrir/cerrar el panel del formulario
+  // 🛠️ MÉTODOS DE INTERFAZ
   toggleFormulario() {
     this.mostrarFormulario = !this.mostrarFormulario;
   }
 
-  // 🚀 FUNCIÓN PARA GUARDAR EN SUPABASE
-  async guardarProyecto() {
-    // 1. Convertimos el texto "Angular, Supabase" en un Array real ['Angular', 'Supabase']
+  // 🚀 FUNCIÓN PARA CREAR EN SUPABASE (Conectada con el HTML)
+  async crearProyecto() {
+    if (!this.nuevoProyecto.nombre) {
+      alert("El nombre del proyecto es obligatorio.");
+      return;
+    }
+
+    this.guardandoProyecto = true;
+
+    // 1. Convertimos el texto "Angular, Supabase" en un Array ['Angular', 'Supabase']
     const stackArray = this.nuevoProyecto.stack
-      .split(',')
-      .map(item => item.trim())
-      .filter(item => item.length > 0);
+      ? this.nuevoProyecto.stack.split(',').map(item => item.trim()).filter(item => item.length > 0)
+      : [];
 
     // 2. Preparamos el paquete de datos
     const proyectoAInsertar = {
       nombre: this.nuevoProyecto.nombre,
       descripcion: this.nuevoProyecto.descripcion,
       stack: stackArray,
-      estado: 'PLANIFICACIÓN', // Empieza en planificación por defecto
-      progreso: 0 // Empieza al 0%
+      estado: this.nuevoProyecto.estado,
+      progreso: 0 
     };
 
     // 3. Lo enviamos a la base de datos
@@ -71,14 +85,16 @@ export class ProyectosComponent implements OnInit {
       .from('proyectos')
       .insert([proyectoAInsertar]);
 
+    this.guardandoProyecto = false;
+
     if (error) {
       console.error('Error al guardar:', error);
       alert('Hubo un error al crear el proyecto.');
     } else {
-      // Si hay éxito: Limpiamos el formulario, lo ocultamos y recargamos la lista
-      this.nuevoProyecto = { nombre: '', descripcion: '', stack: '' };
+      // 4. Éxito: Limpiamos, cerramos el formulario y recargamos
+      this.nuevoProyecto = { nombre: '', descripcion: '', stack: '', estado: 'Activo' };
       this.mostrarFormulario = false;
-      await this.cargarProyectos(); // 🔄 Recargamos las tarjetas
+      await this.cargarProyectos(); 
     }
   }
 }

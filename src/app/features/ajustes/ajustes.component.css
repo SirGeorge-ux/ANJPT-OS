@@ -1,0 +1,350 @@
+/* ==========================================================================
+   1. ESTRUCTURA PRINCIPAL Y CABECERA
+   ========================================================================== */
+.ajustes-container {
+  padding: 30px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.ajustes-header {
+  margin-bottom: 35px;
+}
+
+.titulo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.ajustes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 30px;
+  align-items: start;
+}
+
+/* ==========================================================================
+   2. PANELES Y CABECERAS
+   ========================================================================== */
+.panel {
+  background-color: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  padding: 25px;
+  margin-bottom: 25px;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 15px;
+}
+
+.header-icon { width: 24px; height: 24px; }
+.icon-cyan { color: #00e5ff; }
+.icon-yellow { color: #ff9500; }
+.icon-red { color: #ff3b30; }
+
+.identidad-info-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid #333;
+  padding: 15px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.label-gris { color: #888; font-size: 0.75rem; font-weight: bold; margin-bottom: 5px; }
+.valor-blanco { color: #fff; font-size: 1.1rem; font-family: 'monospace'; }
+
+/* ==========================================================================
+   3. FORMULARIOS E INPUTS CON ICONOS
+   ========================================================================== */
+.form-group-1 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.form-group-1 label {
+  color: #888;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.form-group-1 input,
+.form-group-1 textarea,
+.select-ciberpunk {
+  background-color: #0d0d0d;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 12px 15px;
+  font-family: 'monospace';
+  outline: none;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.form-group-1 input:focus,
+.form-group-1 textarea:focus,
+.select-ciberpunk:focus {
+  border-color: #00e5ff; /* Borde cyan en ajustes */
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.15);
+}
+
+/* Envoltorio para meter el icono dentro del input */
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  color: #666;
+  width: 18px;
+  height: 18px;
+}
+
+.input-with-icon input {
+  padding-left: 40px; /* Hacemos hueco para el icono */
+}
+
+/* ==========================================================================
+   4. BOTONES Y ACCIONES
+   ========================================================================== */
+.botones-seguridad {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.btn-neon {
+  background-color: #00e5ff;
+  color: #000;
+  border: none;
+  padding: 12px 20px;
+  font-weight: 900;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s;
+}
+
+.btn-neon:hover {
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-outline-yellow {
+  background: transparent;
+  border: 1px solid #ff9500;
+  color: #ff9500;
+  padding: 10px 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-outline-yellow:hover {
+  background: rgba(255, 149, 0, 0.1);
+  box-shadow: 0 0 10px rgba(255, 149, 0, 0.2);
+}
+
+.btn-peligro {
+  background: rgba(255, 59, 48, 0.1);
+  border: 1px solid #ff3b30;
+  color: #ff3b30;
+  padding: 10px 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-peligro:hover {
+  background: #ff3b30;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(255, 59, 48, 0.4);
+}
+
+/* ==========================================================================
+   5. LISTA DE USUARIOS (PANEL ADMIN)
+   ========================================================================== */
+.lista-usuarios-contenedor {
+  display: flex;
+  flex-direction: column;
+}
+
+.usuario-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.header-row {
+  background: #111;
+  color: #888;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border-bottom: 2px solid #333;
+}
+
+.user-nombre {
+  color: #fff;
+  font-weight: bold;
+  font-family: 'monospace';
+}
+
+/* ==========================================================================
+   6. VENTANA MODAL: DOSSIER CLASIFICADO (FLOTANTE)
+   ========================================================================== */
+.dossier-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(5px); /* Desenfoca el fondo */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Asegura que esté por encima de todo */
+  animation: fadeIn 0.2s ease-out;
+}
+
+.dossier-panel {
+  background-color: #0a0a0a;
+  border: 1px solid #ff3b30;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 0 40px rgba(255, 59, 48, 0.15);
+  animation: slideUp 0.3s ease-out;
+}
+
+.dossier-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 59, 48, 0.1);
+  padding: 15px 20px;
+  border-bottom: 1px solid #ff3b30;
+}
+
+.dossier-title-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dossier-title-box h2 {
+  color: #ff3b30;
+  font-size: 1.2rem;
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.dossier-icon { color: #ff3b30; width: 22px; height: 22px; }
+
+.close-icon {
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close-icon:hover { color: #fff; }
+
+.dossier-content {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.dossier-seccion h4 {
+  color: #fff;
+  border-bottom: 1px solid #333;
+  padding-bottom: 8px;
+  margin-bottom: 15px;
+  font-size: 0.85rem;
+}
+
+.info-publica p {
+  color: #aaa;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.info-publica strong {
+  color: #fff;
+}
+
+/* Estilos específicos para la zona Admin del Dossier */
+.texto-alerta { color: #ff3b30 !important; border-color: #ff3b30 !important; }
+
+.select-rojo:focus, .textarea-rojo:focus {
+  border-color: #ff3b30 !important;
+  box-shadow: 0 0 10px rgba(255, 59, 48, 0.15) !important;
+}
+
+.dossier-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  padding: 20px 25px;
+  background: #111;
+  border-top: 1px solid #2a2a2a;
+}
+
+.btn-rojo {
+  background-color: #ff3b30;
+}
+.btn-rojo:hover {
+  box-shadow: 0 0 15px rgba(255, 59, 48, 0.4);
+}
+
+/* Animaciones para la ventana flotante */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   7. BOTONES DE ACCIÓN SECUNDARIA (Dossier)
+   ========================================================================== */
+.btn-small-outline {
+  background: transparent;
+  border: 1px solid #00e5ff;
+  color: #00e5ff;
+  padding: 8px 16px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-small-outline:hover {
+  background: rgba(0, 229, 255, 0.1);
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+  transform: translateY(-1px);
+}

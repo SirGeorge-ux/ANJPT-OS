@@ -1,4 +1,39 @@
-/* Estilo básico para los enlaces del menú */
+/* ==========================================================================
+   1. LAYOUT PRINCIPAL
+   ========================================================================== */
+.app-layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: #0f0f0f; /* El fondo súper oscuro */
+  color: white; 
+  overflow: hidden;
+}
+
+aside {
+  width: 260px;
+  background-color: #141414; /* Un gris un pelín más claro para el menú */
+  padding: 30px 20px;
+  border-right: 1px solid #222;
+  display: flex;
+  flex-direction: column; /* CRÍTICO: Permite que el footer se vaya al fondo */
+}
+
+main {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+/* Ocultar subrayados de los enlaces globales por ahora */
+a { 
+  text-decoration: none; 
+  color: inherit; 
+}
+
+/* ==========================================================================
+   2. ENLACES DEL MENÚ DE NAVEGACIÓN
+   ========================================================================== */
 .menu-links {
   display: flex;
   flex-direction: column;
@@ -7,6 +42,9 @@
 }
 
 .menu-links a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   color: #888; /* Gris apagado por defecto */
   text-decoration: none;
   font-weight: bold;
@@ -20,36 +58,102 @@
   color: white;
 }
 
-/* 🔥 ESTA ES LA MAGIA DEL ROUTERLINKACTIVE 🔥 */
+/* 🔥 LA MAGIA DEL ROUTERLINKACTIVE 🔥 */
 .menu-links a.activo {
   color: #ccff00; /* Verde neón de tu diseño */
   border-left: 4px solid #ccff00; /* Rayita verde a la izquierda */
   background-color: rgba(204, 255, 0, 0.05); /* Fondo muy sutil */
 }
-/* app.component.css */
-.app-layout {
-  display: flex;
-  height: 100vh;
-  width: 100vw;
-  background-color: #0f0f0f; /* El fondo súper oscuro de tu diseño */
-  color: white; 
-  overflow: hidden;
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
 }
 
-aside {
-  width: 260px;
-  background-color: #141414; /* Un gris un pelín más claro para el menú */
-  padding: 30px 20px;
-  border-right: 1px solid #222;
+/* ==========================================================================
+   3. FOOTER DE LA BARRA LATERAL (ROL Y SALIDA)
+   ========================================================================== */
+.sidebar-footer {
+  margin-top: auto; /* Empuja este bloque al fondo de la pantalla */
   display: flex;
   flex-direction: column;
+  gap: 15px;
+  padding-top: 20px;
+  border-top: 1px solid #222; /* Línea separadora sutil */
 }
 
-main {
-  flex: 1;
-  padding: 40px;
-  overflow-y: auto;
+/* Insignia del Rol */
+.role-badge {
+  padding: 12px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid #333;
+  transition: all 0.3s ease;
 }
 
-/* Ocultar subrayados de los enlaces por ahora */
-a { text-decoration: none; color: inherit; }
+.role-label {
+  font-size: 0.65rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.role-value {
+  font-size: 0.95rem;
+  font-weight: 900;
+  font-family: 'monospace';
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Colores Dinámicos según el Rol */
+.badge-junior {
+  background-color: rgba(0, 229, 255, 0.05);
+  border-color: rgba(0, 229, 255, 0.3);
+}
+.badge-junior .role-value { color: #00e5ff; }
+
+.badge-senior {
+  background-color: rgba(255, 149, 0, 0.05);
+  border-color: rgba(255, 149, 0, 0.3);
+}
+.badge-senior .role-value { color: #ff9500; }
+
+.badge-admin {
+  background-color: rgba(255, 59, 48, 0.05);
+  border-color: rgba(255, 59, 48, 0.3);
+}
+.badge-admin .role-value { color: #ff3b30; }
+
+/* Botón de Salir (Efecto Peligro) */
+.btn-logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: transparent;
+  border: 1px solid #333;
+  color: #aaa;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: bold;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.btn-logout:hover {
+  background: rgba(255, 59, 48, 0.1);
+  border-color: #ff3b30;
+  color: #ff3b30;
+  box-shadow: 0 0 10px rgba(255, 59, 48, 0.2);
+}
+
+.btn-logout .nav-icon {
+  width: 16px;
+  height: 16px;
+}

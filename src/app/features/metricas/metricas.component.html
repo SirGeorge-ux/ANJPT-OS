@@ -1,1 +1,117 @@
-<p>metricas works!</p>
+<div class="metricas-container">
+  
+  <header class="metricas-header">
+    <div class="titulo-wrapper">
+      <h1>SISTEMA DE AUDITORÍA</h1>
+      <span class="status-project-box status-activo">EN LÍNEA</span>
+    </div>
+
+    <div class="admin-search-box" *ngIf="rolUsuario === 'ADMIN'">
+      <label class="terminal-label">> SELECCIONAR OPERARIO PARA AUDITORÍA:</label>
+      <div class="search-input-group">
+        <lucide-icon [name]="IconBuscar" class="search-icon"></lucide-icon>
+        <select [(ngModel)]="usuarioSeleccionadoId" (change)="cambiarUsuarioAuditado()" class="select-ciberpunk select-admin">
+          <option [value]="miIdUsuario">Mi Perfil (Tú)</option>
+          <option *ngFor="let user of listaUsuarios" [value]="user.id">
+            {{ user.nombre }} ({{ user.rol }})
+          </option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <div class="loading-box" *ngIf="cargando">
+    <p class="texto-parpadeo">> RECOPILANDO DATOS DE LA RED...</p>
+  </div>
+
+  <div class="metricas-grid" *ngIf="!cargando">
+    
+    <div class="col-perfil">
+      
+      <section class="panel panel-identidad">
+        <h3>IDENTIFICACIÓN</h3>
+        <div class="identidad-dato">
+          <span class="label-gris">OPERARIO:</span>
+          <span class="valor-blanco">{{ metricasUsuario.nombre }}</span>
+        </div>
+        <div class="identidad-dato">
+          <span class="label-gris">NIVEL AUTORIZADO:</span>
+          <span class="valor-neon-amarillo">NIVEL {{ metricasUsuario.nivel }}</span>
+        </div>
+        
+        <div class="racha-box">
+          <lucide-icon [name]="IconRacha" class="racha-icon"></lucide-icon>
+          <div class="racha-texto">
+            <span class="racha-num">{{ metricasUsuario.rachaDias }} DÍAS</span>
+            <span class="racha-label">RACHA DE PRODUCTIVIDAD</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h3>PERFIL TÉCNICO</h3>
+        <div class="lenguaje-item" *ngFor="let lang of metricasUsuario.lenguajes">
+          <div class="lang-header">
+            <span>{{ lang.nombre }}</span>
+            <span class="lang-pct">{{ lang.porcentaje }}%</span>
+          </div>
+          <div class="barra-fondo">
+            <div class="barra-progreso" [style.width.%]="lang.porcentaje"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-datos">
+      
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <lucide-icon [name]="IconActividad" class="kpi-icon icon-cyan"></lucide-icon>
+          <span class="kpi-valor">{{ metricasUsuario.tasaExito }}%</span>
+          <span class="kpi-label">TASA DE ÉXITO (QA)</span>
+        </div>
+        <div class="kpi-card">
+          <lucide-icon [name]="IconReloj" class="kpi-icon icon-yellow"></lucide-icon>
+          <span class="kpi-valor">{{ metricasUsuario.velocidadMedia }} <small>días</small></span>
+          <span class="kpi-label">VELOCIDAD MEDIA</span>
+        </div>
+        <div class="kpi-card">
+          <lucide-icon [name]="IconCodigo" class="kpi-icon icon-green"></lucide-icon>
+          <span class="kpi-valor">{{ metricasUsuario.tareasCompletadas }}</span>
+          <span class="kpi-label">TAREAS COMPLETADAS</span>
+        </div>
+        <div class="kpi-card">
+          <lucide-icon [name]="IconActividad" class="kpi-icon icon-purple"></lucide-icon>
+          <span class="kpi-valor">{{ metricasUsuario.anchoBanda }}</span>
+          <span class="kpi-label">ANCHO DE BANDA (En progreso)</span>
+        </div>
+      </div>
+
+      <section class="panel panel-clasificado" *ngIf="rolUsuario === 'ADMIN'">
+        <div class="clasificado-header">
+          <lucide-icon [name]="IconAlerta" class="alert-icon"></lucide-icon>
+          <h3>ZONA CLASIFICADA // ACCESO NIVEL ADMIN</h3>
+        </div>
+        
+        <div class="clasificado-grid">
+          <div class="dato-critico">
+            <span class="critico-label">ÚLTIMA CONEXIÓN:</span>
+            <span class="critico-valor">{{ metricasUsuario.ultimaConexion }}</span>
+          </div>
+          <div class="dato-critico">
+            <span class="critico-label">TAREAS CADUCADAS:</span>
+            <span class="critico-valor" [ngClass]="{'alerta-roja': metricasUsuario.tareasCaducadas > 0}">
+              {{ metricasUsuario.tareasCaducadas }}
+            </span>
+          </div>
+        </div>
+
+        <div class="evaluacion-box">
+          <span class="critico-label">> EVALUACIÓN DEL SISTEMA:</span>
+          <p class="texto-terminal">{{ metricasUsuario.evaluacionSistema }}</p>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>

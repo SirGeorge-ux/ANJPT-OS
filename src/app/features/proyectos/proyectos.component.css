@@ -106,7 +106,7 @@
 
 .progreso-texto {
   font-family: var(--fuente-monospace);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   color: var(--texto-secundario);
   text-align: right;
 }
@@ -124,6 +124,80 @@
   margin-bottom: 40px;
   /* Animación suave al aparecer */
   animation: fadeInDown 0.4s ease-out;
+}
+
+/* ==========================================================================
+   FORMULARIO DE CREAR PROYECTO
+   ========================================================================== */
+.form-group-1 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Espacio entre el título y la caja de texto */
+  margin-bottom: 25px; /* Espacio entre cada campo del formulario */
+}
+
+.form-group-1 label {
+  color: #888; /* Gris oscuro para no distraer */
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* El asterisco de campo obligatorio brilla en neón */
+.form-group-1 label .req {
+  color: #ccff00; 
+  margin-left: 4px;
+  font-weight: 900;
+}
+
+/* AÑADIDO: textarea incluido para eliminar el fondo blanco */
+.form-group-1 input, 
+.form-group-1 textarea,
+.select-ciberpunk {
+  background-color: #0d0d0d; /* Fondo negro profundo */
+  border: 1px solid #333; /* Borde gris sutil */
+  color: #888; /* Letras grises (como pediste) */
+  padding: 12px 15px;
+  font-family: 'monospace';
+  outline: none;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  resize: vertical; /* Permite estirar el textarea solo hacia abajo */
+}
+
+/* Efecto visual al hacer clic en el campo para escribir */
+.form-group-1 input:focus, 
+.form-group-1 textarea:focus,
+.select-ciberpunk:focus {
+  border-color: #ccff00;
+  color: #fff; /* Al escribir, el texto se vuelve blanco para leerse mejor */
+  box-shadow: 0 0 12px rgba(204, 255, 0, 0.15);
+}
+
+/* Ajustes para separar el botón del resto del formulario */
+.btn-guardar-proyecto {
+  margin-top: 15px;
+  align-self: flex-start; /* Evita que el botón se estire de lado a lado */
+}
+
+
+
+.btn-outline{
+  background-color: #000;
+  color: #ccff00;
+  border: 1px solid #ccff00;
+  padding: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.btn-outline:hover {
+  transform: scale(0.98);
+  filter: brightness(1.1);
+  box-shadow: 0 0 15px rgba(204, 255, 0, 0.4);
 }
 
 @keyframes fadeInDown {

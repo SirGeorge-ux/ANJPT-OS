@@ -7,34 +7,43 @@
     </div>
 
     <nav class="menu-links">
-    <a routerLink="/home" routerLinkActive="activo">
-      <lucide-icon [name]="HomeIcon" class="nav-icon"></lucide-icon> HOME
-    </a>
-    <a routerLink="/mis-tareas" routerLinkActive="activo">
-      <lucide-icon [name]="TaskIcon" class="nav-icon"></lucide-icon> MIS TAREAS
-    </a>
-    <a routerLink="/proyectos" routerLinkActive="activo">
-      <lucide-icon [name]="ProjectIcon" class="nav-icon"></lucide-icon> PROYECTOS
-    </a>
-    <a routerLink="/metricas" routerLinkActive="activo">
-      <lucide-icon [name]="ChartIcon" class="nav-icon"></lucide-icon> MÉTRICAS
-    </a>
-    <a routerLink="/ajustes" routerLinkActive="activo">
-      <lucide-icon [name]="SettingsIcon" class="nav-icon"></lucide-icon> AJUSTES
-    </a>
-  </nav>
+      <a routerLink="/home" routerLinkActive="activo">
+        <lucide-icon [name]="HomeIcon" class="nav-icon"></lucide-icon> HOME
+      </a>
+      <a routerLink="/mis-tareas" routerLinkActive="activo">
+        <lucide-icon [name]="TaskIcon" class="nav-icon"></lucide-icon> MIS TAREAS
+      </a>
+      <a routerLink="/proyectos" routerLinkActive="activo">
+        <lucide-icon [name]="ProjectIcon" class="nav-icon"></lucide-icon> PROYECTOS
+      </a>
+      <a routerLink="/metricas" routerLinkActive="activo">
+        <lucide-icon [name]="ChartIcon" class="nav-icon"></lucide-icon> MÉTRICAS
+      </a>
+      <a routerLink="/ajustes" routerLinkActive="activo">
+        <lucide-icon [name]="SettingsIcon" class="nav-icon"></lucide-icon> AJUSTES
+      </a>
+    </nav>
 
     <div class="sidebar-footer">
-      <div class="rol-box">
-        <p>SISTEMA // ROL ACTUAL</p>
-        <strong>{{ rolUsuario }}</strong>
+      
+      <div class="role-badge" [ngClass]="{
+        'badge-junior': rolUsuario === 'JUNIOR', 
+        'badge-senior': rolUsuario === 'SENIOR', 
+        'badge-admin': rolUsuario === 'ADMIN'
+      }">
+        <span class="role-label">SISTEMA // ROL ACTUAL</span>
+        <span class="role-value">{{ rolUsuario || 'DESCONOCIDO' }}</span>
       </div>
-      <button class="btn-salir" (click)="logout()">
-      <lucide-icon [name]="LogOutIcon" class="nav-icon"></lucide-icon> SALIR
-    </button>
+
+      <button class="btn-logout" (click)="logout()">
+        <lucide-icon [name]="LogOutIcon" class="nav-icon"></lucide-icon> 
+        <span>DESCONECTAR TERMINAL</span>
+      </button>
+
     </div>
 
   </aside> 
+  
   <main>
     <router-outlet></router-outlet>
   </main>

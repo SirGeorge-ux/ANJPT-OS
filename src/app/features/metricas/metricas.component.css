@@ -1,0 +1,284 @@
+/* ==========================================================================
+   1. ESTRUCTURA PRINCIPAL Y CABECERA
+   ========================================================================== */
+.metricas-container {
+  padding: 30px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.metricas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 35px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.titulo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* ==========================================================================
+   2. BUSCADOR DEL ADMIN (MODO TERMINAL)
+   ========================================================================== */
+.admin-search-box {
+  background: rgba(255, 59, 48, 0.05);
+  border: 1px solid #ff3b30;
+  padding: 15px 20px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 350px;
+}
+
+.terminal-label {
+  color: #ff3b30;
+  font-family: 'monospace';
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.search-input-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.search-icon {
+  color: #ff3b30;
+  width: 20px;
+  height: 20px;
+}
+
+.select-admin {
+  background-color: #000;
+  border: 1px solid #ff3b30;
+  color: #fff;
+  padding: 8px 12px;
+  font-family: 'monospace';
+  width: 100%;
+  outline: none;
+  transition: box-shadow 0.2s;
+}
+
+.select-admin:focus {
+  box-shadow: 0 0 10px rgba(255, 59, 48, 0.4);
+}
+
+/* ==========================================================================
+   3. REJILLA ASIMÉTRICA (30% / 70%)
+   ========================================================================== */
+.metricas-grid {
+  display: grid;
+  grid-template-columns: 3fr 7fr; /* 30% izquierda, 70% derecha */
+  gap: 30px;
+  align-items: start;
+}
+
+.panel {
+  background-color: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  padding: 25px;
+  margin-bottom: 25px;
+}
+
+/* ==========================================================================
+   4. PERFIL Y RACHA (COLUMNA IZQUIERDA)
+   ========================================================================== */
+.identidad-dato {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.label-gris {
+  color: #888;
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.valor-blanco {
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.valor-neon-amarillo {
+  color: #ccff00;
+  font-weight: 900;
+  text-shadow: 0 0 8px rgba(204, 255, 0, 0.3);
+}
+
+.racha-box {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: rgba(255, 149, 0, 0.1);
+  border: 1px solid #ff9500;
+  padding: 15px;
+  margin-top: 25px;
+}
+
+.racha-icon { color: #ff9500; width: 32px; height: 32px; }
+.racha-texto { display: flex; flex-direction: column; }
+.racha-num { color: #ff9500; font-size: 1.5rem; font-weight: 900; }
+.racha-label { color: #888; font-size: 0.7rem; font-weight: bold; }
+
+/* ==========================================================================
+   5. BARRAS DE PROGRESO (TECH STACK)
+   ========================================================================== */
+.lenguaje-item {
+  margin-bottom: 20px;
+}
+
+.lang-header {
+  display: flex;
+  justify-content: space-between;
+  color: #fff;
+  font-family: 'monospace';
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+.lang-pct {
+  color: #00e5ff;
+  font-weight: bold;
+}
+
+.barra-fondo {
+  width: 100%;
+  height: 6px;
+  background-color: #333;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.barra-progreso {
+  height: 100%;
+  background-color: #00e5ff;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
+  transition: width 0.8s ease-out; /* Animación fluida al llenarse */
+}
+
+/* ==========================================================================
+   6. TARJETAS KPI (COLUMNA DERECHA)
+   ========================================================================== */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2x2 en la zona derecha */
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.kpi-card {
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+/* Líneas de color superior para cada KPI */
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: #333;
+}
+
+.kpi-card:nth-child(1)::before { background: #00e5ff; box-shadow: 0 0 10px #00e5ff; }
+.kpi-card:nth-child(2)::before { background: #ff9500; box-shadow: 0 0 10px #ff9500; }
+.kpi-card:nth-child(3)::before { background: #32d74b; box-shadow: 0 0 10px #32d74b; }
+.kpi-card:nth-child(4)::before { background: #bf5af2; box-shadow: 0 0 10px #bf5af2; }
+
+.kpi-icon { width: 28px; height: 28px; margin-bottom: 12px; }
+.icon-cyan { color: #00e5ff; }
+.icon-yellow { color: #ff9500; }
+.icon-green { color: #32d74b; }
+.icon-purple { color: #bf5af2; }
+
+.kpi-valor {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #fff;
+  font-family: 'monospace';
+  margin-bottom: 5px;
+}
+
+.kpi-valor small { font-size: 1rem; color: #888; font-weight: normal; }
+.kpi-label { color: #888; font-size: 0.75rem; font-weight: bold; letter-spacing: 1px; }
+
+/* ==========================================================================
+   7. ZONA CLASIFICADA (ADMIN)
+   ========================================================================== */
+.panel-clasificado {
+  border-color: #ff3b30;
+  background: rgba(255, 59, 48, 0.02);
+}
+
+.clasificado-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #ff3b30;
+  border-bottom: 1px solid rgba(255, 59, 48, 0.2);
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.alert-icon { width: 24px; height: 24px; }
+
+.clasificado-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.critico-label { color: #888; font-family: 'monospace'; font-size: 0.8rem; display: block; margin-bottom: 5px; }
+.critico-valor { color: #fff; font-size: 1.2rem; font-weight: bold; }
+.alerta-roja { color: #ff3b30; text-shadow: 0 0 8px rgba(255, 59, 48, 0.6); }
+
+.evaluacion-box {
+  background: #000;
+  border: 1px solid #333;
+  padding: 15px;
+}
+
+.texto-terminal {
+  color: #32d74b; /* Letras verdes tipo Matrix */
+  font-family: 'monospace';
+  margin-top: 10px;
+}
+
+/* ==========================================================================
+   8. ANIMACIÓN DE CARGA
+   ========================================================================== */
+.loading-box {
+  text-align: center;
+  padding: 100px 0;
+}
+
+.texto-parpadeo {
+  color: #ccff00;
+  font-family: 'monospace';
+  font-size: 1.2rem;
+  animation: blink 1.2s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

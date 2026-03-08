@@ -1,11 +1,6 @@
-### ANJPT-OS
-
-Aquí tienes un diseño de `README.md` con estética ciberpunk que explica el proyecto, las tecnologías y cómo configurarlo. Solo tienes que crear un archivo llamado `README.md` en la raíz de tu proyecto y pegar esto:
-
-````markdown
 # ⚡ ANJPT OS - Sistema de Gestión de Proyectos
 
-**ANJPT OS** es una plataforma de gestión de tareas y proyectos diseñada con una estética _Cyberpunk/High-Tech_. Desarrollada sobre **Angular 19** y **Supabase**, permite administrar flujos de trabajo de ciberseguridad y desarrollo con roles definidos y una interfaz de alto impacto visual.
+**ANJPT OS** es una plataforma de gestión de tareas y proyectos diseñada con una estética _Cyberpunk/High-Tech_. Desarrollada sobre **Angular 19** y **Supabase**, permite administrar flujos de trabajo de desarrollo con roles definidos y una interfaz de alto impacto visual.
 
 ---
 
@@ -35,6 +30,7 @@ Debido a razones de seguridad, las credenciales de la base de datos no están in
    git clone [https://github.com/SirGeorge-ux/ANJPT-OS.git](https://github.com/SirGeorge-ux/ANJPT-OS.git)
    cd anjpt-os
    ```
+
 ````
 
 2. **Instalar dependencias:**
@@ -73,14 +69,5 @@ Accede a `http://localhost:4200` en tu navegador.
 
 Desarrollado por **SirGeorge-ux** - _Full Stack Developer_
 
-```
 
-### ¿Qué hacer ahora?
-1. Guarda el `README.md`.
-2. Haz los comandos de `git remote` que te puse arriba.
-3. Haz un nuevo commit: `git add .` -> `git commit -m "docs: add professional readme"`
-4. Y finalmente: `git push -u origin main`.
-
-¡Con esto tu perfil de GitHub se verá increíble! ¿Te gustaría que añadamos alguna sección extra al README sobre el Log de Actividad o Seguridad?
-
-```
+````

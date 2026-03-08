@@ -35,7 +35,7 @@ Debido a razones de seguridad, las credenciales de la base de datos no están in
 
 2. **Instalar dependencias:**
 
-```bash
+```
 npm install
 
 ```
@@ -46,7 +46,7 @@ npm install
 - Cámbiale el nombre a `environment.ts`.
 - Introduce tu **Supabase URL** y tu **Anon Key**:
 
-```typescript
+```
 export const environment = {
   production: false,
   supabaseUrl: "TU_URL_DE_SUPABASE",
@@ -56,7 +56,7 @@ export const environment = {
 
 4. **Lanzar el servidor de desarrollo:**
 
-```bash
+```
 ng serve
 
 ```

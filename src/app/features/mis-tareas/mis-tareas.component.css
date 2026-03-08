@@ -104,11 +104,23 @@
   margin-top: 5px;
 }
 
+/* El icono base (Apagado y sutil) */
 .icon-chat-mini {
   width: 16px;
   height: 16px;
-  color: #888;
-  transition: color 0.2s;
+  color: #333; /* Gris muy oscuro para que apenas se vea si no hay mensajes */
+  transition: all 0.3s ease;
+}
+
+/* 🔥 Cuando la tarea TIENE comentarios (Encendido permanente) */
+.icon-chat-mini.chat-activo {
+  color: #ccff00;
+  filter: drop-shadow(0 0 4px rgba(204, 255, 0, 0.6)); /* Brillo neón real */
+}
+
+/* Al pasar el ratón por la tarjeta (Iluminación de cortesía) */
+.tarea-tarjeta:hover .icon-chat-mini:not(.chat-activo) {
+  color: #666; /* Si está apagado, se ilumina un poquito al pasar el ratón para indicar que se puede usar */
 }
 
 .tarea-tarjeta:hover .icon-chat-mini {
@@ -361,6 +373,29 @@
 
 .btn-send[disabled] {
   background-color: #333;
+  color: #666;
+  cursor: not-allowed;
+}
+/* --- BOTÓN DE ACCIÓN RÁPIDA (DEVOLVER) --- */
+.btn-devolver {
+  background-color: transparent;
+  color: #ff9500;
+  border: 1px solid #ff9500;
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-devolver:hover:not([disabled]) {
+  background-color: rgba(255, 149, 0, 0.1);
+  box-shadow: 0 0 15px rgba(255, 149, 0, 0.4);
+}
+
+.btn-devolver[disabled] {
+  border-color: #333;
   color: #666;
   cursor: not-allowed;
 }

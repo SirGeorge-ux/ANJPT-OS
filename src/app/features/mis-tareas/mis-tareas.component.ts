@@ -1,11 +1,11 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // Añadido para los inputs del chat
+import { FormsModule } from '@angular/forms'; 
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { AuthService } from '../../../infra/auth.service';
-import { TareasService } from '../../../infra/tareas.service'; // Inyectamos nuestro nuevo servicio
-import { ComentarioTarea } from '../../domain/models/types'; // Importamos la interfaz (ajusta la ruta si es necesario)
-import { LucideAngularModule, MessageSquare, X, Send } from 'lucide-angular'; // Iconos para el UI
+import { TareasService } from '../../../infra/tareas.service'; 
+import { ComentarioTarea } from '../../domain/models/types'; 
+import { LucideAngularModule, MessageSquare, X, Send, RotateCcw } from 'lucide-angular'; 
 
 interface ColumnaKanban {
   nombre: string;
@@ -15,23 +15,21 @@ interface ColumnaKanban {
 @Component({
   selector: 'app-mis-tareas',
   standalone: true,
-  imports: [CommonModule, DragDropModule, FormsModule, LucideAngularModule], // Añadimos FormsModule y Lucide
+  imports: [CommonModule, DragDropModule, FormsModule, LucideAngularModule],
   templateUrl: './mis-tareas.component.html',
   styleUrl: './mis-tareas.component.css'
 })
 export class MisTareasComponent implements OnInit {
-  // Inyección de dependencias limpia
   private authService = inject(AuthService);
   private tareasService = inject(TareasService); 
 
-  // 🎨 Iconos UI
   readonly IconMessage = MessageSquare;
   readonly IconClose = X;
   readonly IconSend = Send;
+  readonly IconDevolver = RotateCcw;
 
   public userId: string = '';
 
-  // 📦 NUESTRO TABLERO REAL
   public tablero: ColumnaKanban[] = [
     { nombre: 'Bandeja de entrada', tareas: [] },
     { nombre: 'Por hacer', tareas: [] },
@@ -40,9 +38,6 @@ export class MisTareasComponent implements OnInit {
     { nombre: 'Terminado', tareas: [] }
   ];
 
-  // ==========================================
-  // 📂 ESTADO DEL EXPEDIENTE (NUEVO)
-  // ==========================================
   public tareaSeleccionada: any | null = null;
   public comentarios: ComentarioTarea[] = [];
   public nuevoComentario: string = '';
@@ -56,12 +51,10 @@ export class MisTareasComponent implements OnInit {
     }
   }
 
-  // 📥 DESCARGAR TAREAS 
   async cargarTareas() {
-    // NOTA TECH LEAD: En el futuro, moveremos esta llamada al TareasService para cumplir SOLID al 100%
     const { data, error } = await this.authService.supabase
       .from('tareas')
-      .select('*')
+      .select('*, comentarios_tareas(id)') 
       .eq('asignado_a', this.userId);
 
     if (error) {
@@ -72,6 +65,7 @@ export class MisTareasComponent implements OnInit {
     this.tablero.forEach(col => col.tareas = []);
     if (data) {
       data.forEach(tarea => {
+        tarea.tieneComentarios = tarea.comentarios_tareas && tarea.comentarios_tareas.length > 0;
         const columnaDestino = this.tablero.find(col => col.nombre === tarea.estado);
         if (columnaDestino) {
           columnaDestino.tareas.push(tarea);
@@ -82,7 +76,6 @@ export class MisTareasComponent implements OnInit {
     }
   }
 
-  // 🔄 ARRASTRAR Y SOLTAR 
   async drop(event: CdkDragDrop<any[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -98,7 +91,7 @@ export class MisTareasComponent implements OnInit {
       const columnaNueva = this.tablero.find(col => col.tareas === event.container.data);
       
       if (columnaNueva) {
-        // NOTA TECH LEAD: En el futuro, moveremos esta llamada al TareasService
+        // Corrección del error 'this.supabase' -> es 'this.authService.supabase'
         const { error } = await this.authService.supabase
           .from('tareas')
           .update({ estado: columnaNueva.nombre })
@@ -112,49 +105,73 @@ export class MisTareasComponent implements OnInit {
     }
   }
 
-  // ==========================================
-  // 🚀 LÓGICA DEL EXPEDIENTE Y CHAT (NUEVO)
-  // ==========================================
-
-  // Abre el panel lateral/inferior y carga el historial
   async abrirDossier(tarea: any) {
     this.tareaSeleccionada = tarea;
     this.cargandoComentarios = true;
-    this.comentarios = []; // Limpiamos residuos de la tarea anterior
+    this.comentarios = [];
 
     try {
       this.comentarios = await this.tareasService.getComentariosDeTarea(tarea.id);
     } catch (error) {
-      console.error('Error al cargar historial de comunicaciones:', error);
+      console.error('Error al cargar historial:', error);
     } finally {
       this.cargandoComentarios = false;
     }
   }
 
-  // Cierra el panel
   cerrarDossier() {
     this.tareaSeleccionada = null;
     this.comentarios = [];
     this.nuevoComentario = '';
   }
 
-  // Enviar mensaje a Supabase
   async enviarComentario() {
-    // Protecciones básicas (Early Return)
     if (!this.nuevoComentario.trim() || !this.tareaSeleccionada) return;
 
     const texto = this.nuevoComentario;
-    this.nuevoComentario = ''; // Vaciamos el input al instante para dar sensación de velocidad (UX)
+    this.nuevoComentario = ''; 
 
     try {
-      // 1. Guardamos en la base de datos
       await this.tareasService.addComentario(this.tareaSeleccionada.id, this.userId, texto);
-      
-      // 2. Recargamos la lista para que aparezca el nuevo mensaje con su fecha y autor
       this.comentarios = await this.tareasService.getComentariosDeTarea(this.tareaSeleccionada.id);
+      this.tareaSeleccionada.tieneComentarios = true;
     } catch (error) {
       console.error('Fallo en la transmisión del mensaje:', error);
-      this.nuevoComentario = texto; // Si falla, le devolvemos el texto al usuario para que no lo pierda
+      this.nuevoComentario = texto; 
+    }
+  }
+
+  async enviarYDevolver() {
+    if (!this.tareaSeleccionada) return;
+
+    const texto = this.nuevoComentario.trim() ? this.nuevoComentario : '[SISTEMA] ⚠️ Tarea devuelta para revisión y corrección.';
+    const nuevoEstado = 'En progreso'; 
+
+    this.cargandoComentarios = true;
+
+    try {
+      await this.tareasService.addComentario(this.tareaSeleccionada.id, this.userId, texto);
+      await this.tareasService.updateEstadoTarea(this.tareaSeleccionada.id, nuevoEstado);
+
+      const columnaAntigua = this.tablero.find(col => col.nombre === this.tareaSeleccionada.estado);
+      if (columnaAntigua) {
+        columnaAntigua.tareas = columnaAntigua.tareas.filter(t => t.id !== this.tareaSeleccionada.id);
+      }
+      
+      const columnaNueva = this.tablero.find(col => col.nombre === nuevoEstado);
+      if (columnaNueva) {
+        this.tareaSeleccionada.estado = nuevoEstado;
+        this.tareaSeleccionada.tieneComentarios = true;
+        columnaNueva.tareas.push(this.tareaSeleccionada);
+      }
+
+      this.cerrarDossier();
+
+    } catch (error) {
+      console.error('Error en la Acción Rápida:', error);
+      alert('Hubo un error al procesar la acción rápida.');
+    } finally {
+      this.cargandoComentarios = false;
     }
   }
 }

@@ -19,7 +19,11 @@
           <span class="tarea-titulo">{{ tarea.titulo }}</span>
           
           <div class="tarea-indicadores">
-            <lucide-icon [name]="IconMessage" class="icon-chat-mini"></lucide-icon>
+            <lucide-icon 
+              [name]="IconMessage" 
+              class="icon-chat-mini"
+              [ngClass]="{'chat-activo': tarea.tieneComentarios}">
+            </lucide-icon>
           </div>
         </div>
 
@@ -78,11 +82,15 @@
         <input 
           type="text" 
           [(ngModel)]="nuevoComentario" 
-          placeholder="Escribir actualización al Lead..." 
+          placeholder="Escribir actualización..." 
           (keyup.enter)="enviarComentario()">
         
-        <button class="btn-send" (click)="enviarComentario()" [disabled]="!nuevoComentario.trim() || cargandoComentarios">
+        <button class="btn-send" (click)="enviarComentario()" [disabled]="!nuevoComentario.trim() || cargandoComentarios" title="Enviar mensaje">
           <lucide-icon [name]="IconSend"></lucide-icon>
+        </button>
+
+        <button class="btn-devolver" (click)="enviarYDevolver()" [disabled]="cargandoComentarios" title="Comentar y DEVOLVER a En Progreso">
+          <lucide-icon [name]="IconDevolver"></lucide-icon>
         </button>
       </div>
 

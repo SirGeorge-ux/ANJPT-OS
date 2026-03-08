@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { AuthService } from '../../../infra/auth.service'; // Asegúrate de que esta ruta sea correcta en tu proyecto
-import { FormsModule } from '@angular/forms'; // Importamos FormsModule para usar [(ngModel)] en la plantilla
-import { DragDropModule } from '@angular/cdk/drag-drop'; // Importamos DragDropModule para usar las funcionalidades de arrastrar y soltar
-import { CommonModule } from '@angular/common'; // Importamos CommonModule para usar directivas comunes como *ngFor y *ngIf
+import { AuthService } from '../../../infra/auth.service';
+import { FormsModule } from '@angular/forms'; 
+import { DragDropModule } from '@angular/cdk/drag-drop'; 
+import { CommonModule } from '@angular/common'; 
 
 @Component({
   selector: 'app-admin',
@@ -17,16 +17,15 @@ export class AdminComponent implements OnInit {
   // 2. Preparamos las variables para la vista
   name = '';
   rol = '';
-  numeroProyectos = 2; // Este número es solo un ejemplo, en una aplicación real lo obtendríamos de la base de datos o del estado de la aplicación
-  numeroColaboradores = 3; // Este número es solo un ejemplo, en una aplicación real lo obtendríamos de la base de datos o del estado de la aplicación
-  nombresProyectos = ['ProyectoAso','Proyecto Alpha','ProyectoCRM']; // Este nombre es solo un ejemplo, en una aplicación real lo obtendríamos de la base de datos o del estado de la aplicación
-  numeroTareas = 5; // Este número es solo un ejemplo, en una aplicación real lo obtendríamos de la base de datos o del estado de la aplicación 
-  tareas = ['Tarea 1', 'Tarea 2', 'Tarea 3', 'Tarea 4', 'Tarea 5']; // Este nombre es solo un ejemplo, en una aplicación real lo obtendríamos de la base de datos o del estado de la aplicación
-  tareasCompletadas = 2; // Este número es solo un ejemplo, en una aplicación real lo obtendríamos de la base de datos o del estado de la aplicación
-  tareasPendientes = 3; // Este número es solo un ejemplo, en una aplicación real lo obtendríamos de la base de datos o del estado de la aplicación 
-  promedioTareas = 2.5; // Este número es solo un ejemplo, en una aplicación real lo obtendríamos de la base de datos o del estado de la aplicación
-  columnas = ['Bandeja de entrada', 'Por hacer', 'En progreso', 'En revisión', 'Terminado']; // Este nombre es solo un ejemplo, en una aplicación real lo obtendríamos de la base de datos o del estado de la aplicación
-
+  numeroProyectos = 2; 
+  numeroColaboradores = 3; 
+  nombresProyectos = ['ProyectoAso','Proyecto Alpha','ProyectoCRM'];  
+  numeroTareas = 5; 
+  tareas = ['Tarea 1', 'Tarea 2', 'Tarea 3', 'Tarea 4', 'Tarea 5'];  
+  tareasCompletadas = 2; 
+  tareasPendientes = 3;
+  promedioTareas = 2.5; 
+  columnas = ['Bandeja de entrada', 'Por hacer', 'En progreso', 'En revisión', 'Terminado']; 
 
   // 3. Cargamos los datos automáticamente al abrir la pantalla
   async ngOnInit() {

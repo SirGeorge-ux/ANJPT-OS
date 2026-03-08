@@ -1,9 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common'; 
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms'; // Añadido para los inputs del chat
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { AuthService } from '../../../infra/auth.service';
+import { TareasService } from '../../../infra/tareas.service'; // Inyectamos nuestro nuevo servicio
+import { ComentarioTarea } from '../../domain/models/types'; // Importamos la interfaz (ajusta la ruta si es necesario)
+import { LucideAngularModule, MessageSquare, X, Send } from 'lucide-angular'; // Iconos para el UI
 
-// Definimos cómo es la estructura de una columna
 interface ColumnaKanban {
   nombre: string;
   tareas: any[];
@@ -11,19 +14,25 @@ interface ColumnaKanban {
 
 @Component({
   selector: 'app-mis-tareas',
-  imports: [CommonModule, DragDropModule],
+  standalone: true,
+  imports: [CommonModule, DragDropModule, FormsModule, LucideAngularModule], // Añadimos FormsModule y Lucide
   templateUrl: './mis-tareas.component.html',
   styleUrl: './mis-tareas.component.css'
 })
-
-export class MisTareasComponent {
+export class MisTareasComponent implements OnInit {
+  // Inyección de dependencias limpia
   private authService = inject(AuthService);
+  private tareasService = inject(TareasService); 
 
-  userId: string = '';
+  // 🎨 Iconos UI
+  readonly IconMessage = MessageSquare;
+  readonly IconClose = X;
+  readonly IconSend = Send;
+
+  public userId: string = '';
 
   // 📦 NUESTRO TABLERO REAL
-  // Cada columna tiene su propio nombre y su propia lista de tareas
-  tablero: ColumnaKanban[] = [
+  public tablero: ColumnaKanban[] = [
     { nombre: 'Bandeja de entrada', tareas: [] },
     { nombre: 'Por hacer', tareas: [] },
     { nombre: 'En progreso', tareas: [] },
@@ -31,51 +40,53 @@ export class MisTareasComponent {
     { nombre: 'Terminado', tareas: [] }
   ];
 
+  // ==========================================
+  // 📂 ESTADO DEL EXPEDIENTE (NUEVO)
+  // ==========================================
+  public tareaSeleccionada: any | null = null;
+  public comentarios: ComentarioTarea[] = [];
+  public nuevoComentario: string = '';
+  public cargandoComentarios: boolean = false;
+
   async ngOnInit() {
-    // 1. Descubrimos quién es el usuario actual
     const { data: { session } } = await this.authService.getSession();
     if (session) {
       this.userId = session.user.id;
-      // 2. Si hay usuario, descargamos sus tareas
       await this.cargarTareas();
     }
   }
 
-  // 📥 DESCARGAR TAREAS DE LA BASE DE DATOS
+  // 📥 DESCARGAR TAREAS 
   async cargarTareas() {
+    // NOTA TECH LEAD: En el futuro, moveremos esta llamada al TareasService para cumplir SOLID al 100%
     const { data, error } = await this.authService.supabase
       .from('tareas')
       .select('*')
-      .eq('asignado_a', this.userId); // Filtro: Solo MIS tareas
+      .eq('asignado_a', this.userId);
 
     if (error) {
       console.error('Error al descargar tareas:', error);
       return;
     }
 
-    // Vaciamos el tablero por si acaso
     this.tablero.forEach(col => col.tareas = []);
-
-    // Repartimos cada tarea en su columna correspondiente
     if (data) {
       data.forEach(tarea => {
         const columnaDestino = this.tablero.find(col => col.nombre === tarea.estado);
         if (columnaDestino) {
           columnaDestino.tareas.push(tarea);
         } else {
-          this.tablero[0].tareas.push(tarea); // Si hay un error de nombre, va a la bandeja de entrada
+          this.tablero[0].tareas.push(tarea); 
         }
       });
     }
   }
 
-  // 🔄 ARRASTRAR Y SOLTAR (Con guardado en la nube)
+  // 🔄 ARRASTRAR Y SOLTAR 
   async drop(event: CdkDragDrop<any[]>) {
     if (event.previousContainer === event.container) {
-      // Solo hemos ordenado dentro de la misma columna
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
-      // ¡HEMOS MOVIDO LA TAREA DE COLUMNA!
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,
@@ -83,24 +94,67 @@ export class MisTareasComponent {
         event.currentIndex,
       );
 
-      // 1. Identificamos qué tarea se ha movido
       const tareaMovida = event.container.data[event.currentIndex];
-      
-      // 2. Averiguamos el nombre de la nueva columna buscando en nuestro tablero
       const columnaNueva = this.tablero.find(col => col.tareas === event.container.data);
-
+      
       if (columnaNueva) {
-        // 3. Guardamos el nuevo estado en Supabase
+        // NOTA TECH LEAD: En el futuro, moveremos esta llamada al TareasService
         const { error } = await this.authService.supabase
           .from('tareas')
           .update({ estado: columnaNueva.nombre })
-          .eq('id', tareaMovida.id); // Usamos el ID de la base de datos para actualizarla
+          .eq('id', tareaMovida.id);
 
         if (error) {
           console.error('Error al guardar el nuevo estado:', error);
           alert('Hubo un error de conexión al mover la tarea.');
         }
       }
+    }
+  }
+
+  // ==========================================
+  // 🚀 LÓGICA DEL EXPEDIENTE Y CHAT (NUEVO)
+  // ==========================================
+
+  // Abre el panel lateral/inferior y carga el historial
+  async abrirDossier(tarea: any) {
+    this.tareaSeleccionada = tarea;
+    this.cargandoComentarios = true;
+    this.comentarios = []; // Limpiamos residuos de la tarea anterior
+
+    try {
+      this.comentarios = await this.tareasService.getComentariosDeTarea(tarea.id);
+    } catch (error) {
+      console.error('Error al cargar historial de comunicaciones:', error);
+    } finally {
+      this.cargandoComentarios = false;
+    }
+  }
+
+  // Cierra el panel
+  cerrarDossier() {
+    this.tareaSeleccionada = null;
+    this.comentarios = [];
+    this.nuevoComentario = '';
+  }
+
+  // Enviar mensaje a Supabase
+  async enviarComentario() {
+    // Protecciones básicas (Early Return)
+    if (!this.nuevoComentario.trim() || !this.tareaSeleccionada) return;
+
+    const texto = this.nuevoComentario;
+    this.nuevoComentario = ''; // Vaciamos el input al instante para dar sensación de velocidad (UX)
+
+    try {
+      // 1. Guardamos en la base de datos
+      await this.tareasService.addComentario(this.tareaSeleccionada.id, this.userId, texto);
+      
+      // 2. Recargamos la lista para que aparezca el nuevo mensaje con su fecha y autor
+      this.comentarios = await this.tareasService.getComentariosDeTarea(this.tareaSeleccionada.id);
+    } catch (error) {
+      console.error('Fallo en la transmisión del mensaje:', error);
+      this.nuevoComentario = texto; // Si falla, le devolvemos el texto al usuario para que no lo pierda
     }
   }
 }

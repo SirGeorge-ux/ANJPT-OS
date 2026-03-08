@@ -1,4 +1,6 @@
-/* Contenedor general */
+/* ==========================================================
+   1. LAYOUT PRINCIPAL KANBAN (TU CÓDIGO ORIGINAL MEJORADO)
+   ========================================================== */
 .mis-tareas-container {
   padding: 10px;
   height: 100%;
@@ -6,7 +8,6 @@
   flex-direction: column;
 }
 
-/* Cabecera Ciberpunk */
 .kanban-header h2 {
   font-size: 2rem;
   font-weight: 900;
@@ -16,14 +17,13 @@
 }
 
 .kanban-header p {
-  color: #ccff00; /* Verde neón */
+  color: #ccff00;
   font-size: 0.8rem;
   font-weight: bold;
   letter-spacing: 2px;
   margin-bottom: 30px;
 }
 
-/* Tablero con scroll horizontal si hay muchas columnas */
 .tablero-kanban {
   display: flex;
   gap: 20px;
@@ -33,14 +33,13 @@
   align-items: flex-start;
 }
 
-/* --- DISEÑO DE LAS COLUMNAS --- */
 .columna-kanban {
   background-color: #121212;
   border: 1px solid #2a2a2a;
   min-width: 300px;
   display: flex;
   flex-direction: column;
-  border-top: 3px solid #ccff00; /* Toque de luz superior */
+  border-top: 3px solid #ccff00;
 }
 
 .columna-kanban h3 {
@@ -53,7 +52,6 @@
   background-color: #0a0a0a;
 }
 
-/* --- ZONA DE TAREAS --- */
 .lista-tareas {
   padding: 15px;
   flex-grow: 1;
@@ -63,24 +61,26 @@
   gap: 12px;
 }
 
-/* --- DISEÑO DE LAS TARJETAS (Ciberpunk) --- */
+/* --- TARJETAS DE TAREAS --- */
 .tarea-tarjeta {
   background-color: #1a1a1a;
   border: 1px solid #333;
   padding: 15px;
   color: white;
   font-size: 0.9rem;
-  cursor: grab;
+  cursor: pointer; /* Cambiado a pointer porque ahora son clicables */
   position: relative;
   transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .tarea-tarjeta:hover {
   border-color: #555;
-  transform: translateX(3px); /* Se mueve un poco a la derecha al pasar el ratón */
+  transform: translateX(3px);
 }
 
-/* La rayita lateral que le da el toque tecnológico */
 .tarea-tarjeta::before {
   content: '';
   position: absolute;
@@ -93,27 +93,41 @@
 }
 
 .tarea-tarjeta:hover::before {
-  background-color: #ccff00; /* Se ilumina en verde al pasar el ratón */
+  background-color: #ccff00;
 }
 
-/* ==========================================================
-   EFECTOS AL ARRASTRAR (Angular CDK Drag & Drop)
-   ========================================================== */
+.tarea-indicadores {
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid #333;
+  padding-top: 8px;
+  margin-top: 5px;
+}
 
-/* 1. La tarjeta que llevas pegada al ratón (efecto neón) */
+.icon-chat-mini {
+  width: 16px;
+  height: 16px;
+  color: #888;
+  transition: color 0.2s;
+}
+
+.tarea-tarjeta:hover .icon-chat-mini {
+  color: #ccff00; /* Se ilumina al pasar el ratón */
+}
+
+/* --- EFECTOS DRAG & DROP --- */
 .cdk-drag-preview {
   box-sizing: border-box;
   background-color: #1a1a1a !important;
   color: white;
   border: 1px solid #ccff00 !important;
-  box-shadow: 0 5px 20px rgba(204, 255, 0, 0.15); /* Brillo neón */
+  box-shadow: 0 5px 20px rgba(204, 255, 0, 0.15);
   cursor: grabbing;
 }
 .cdk-drag-preview::before {
   background-color: #ccff00;
 }
 
-/* 2. El hueco fantasma que deja la tarjeta en la lista */
 .cdk-drag-placeholder {
   opacity: 0.5;
   background: transparent !important;
@@ -121,10 +135,232 @@
   color: transparent;
 }
 
-/* 3. Animaciones fluidas al soltar */
 .cdk-drag-animating {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 .lista-tareas.cdk-drop-list-dragging .tarea-tarjeta:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* ==========================================================
+   2. NUEVO PANEL DE EXPEDIENTE (DOSSIER LATERAL)
+   ========================================================== */
+.dossier-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px); /* Difumina el fondo */
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-end; /* El panel sale desde la derecha */
+}
+
+.dossier-panel {
+  width: 500px;
+  max-width: 100vw;
+  background-color: #0a0a0a;
+  border-left: 2px solid #ccff00; /* Borde neón */
+  display: flex;
+  flex-direction: column;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.9);
+  animation: slideInRight 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+/* --- CABECERA DEL DOSSIER --- */
+.dossier-header {
+  padding: 25px;
+  border-bottom: 1px solid #222;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: #111;
+}
+
+.dossier-label {
+  color: #ccff00;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  font-weight: 800;
+}
+
+.header-titles h2 {
+  color: white;
+  margin: 5px 0 0 0;
+  font-size: 1.4rem;
+}
+
+.btn-close {
+  background: transparent;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  padding: 5px;
+  transition: all 0.2s;
+}
+
+.btn-close:hover {
+  color: #ff3b30;
+  transform: scale(1.1);
+}
+
+/* --- CUERPO DEL DOSSIER --- */
+.dossier-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.info-label {
+  color: #666;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.tarea-info p {
+  background-color: #151515;
+  border: 1px solid #222;
+  padding: 15px;
+  color: #ddd;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+  border-radius: 4px;
+}
+
+/* --- CHAT DE COMUNICACIONES --- */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.mensajes-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mensaje-sistema {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  font-size: 0.85rem;
+  padding: 20px;
+  border: 1px dashed #333;
+}
+
+.parpadeo {
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Mensaje genérico (Revisor o compañero) */
+.mensaje-item {
+  display: flex;
+  flex-direction: column;
+  max-width: 85%;
+  align-self: flex-start;
+}
+
+.mensaje-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  margin-bottom: 5px;
+  color: #888;
+}
+
+.rol-tag {
+  color: #00e5ff; /* Cyan para los revisores */
+}
+
+.mensaje-texto {
+  background-color: #1a1a1a;
+  border-left: 3px solid #00e5ff;
+  padding: 12px 15px;
+  border-radius: 0 8px 8px 8px;
+  color: white;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* Mensaje tuyo (El operario actual) */
+.mensaje-item.mensaje-propio {
+  align-self: flex-end;
+}
+
+.mensaje-item.mensaje-propio .mensaje-meta {
+  flex-direction: row-reverse;
+}
+
+.mensaje-item.mensaje-propio .rol-tag {
+  color: #ccff00; /* Verde para ti */
+}
+
+.mensaje-item.mensaje-propio .mensaje-texto {
+  background-color: rgba(204, 255, 0, 0.05);
+  border-left: none;
+  border-right: 3px solid #ccff00;
+  border-radius: 8px 0 8px 8px;
+}
+
+/* --- FOOTER: CAJA DE INPUT --- */
+.dossier-footer {
+  padding: 20px;
+  background-color: #111;
+  border-top: 1px solid #222;
+  display: flex;
+  gap: 10px;
+}
+
+.dossier-footer input {
+  flex: 1;
+  background-color: #0a0a0a;
+  border: 1px solid #333;
+  color: white;
+  padding: 15px;
+  font-family: 'monospace';
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.dossier-footer input:focus {
+  border-color: #ccff00;
+  box-shadow: 0 0 10px rgba(204, 255, 0, 0.1);
+}
+
+.btn-send {
+  background-color: #ccff00;
+  color: #000;
+  border: none;
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-send:hover:not([disabled]) {
+  box-shadow: 0 0 15px rgba(204, 255, 0, 0.4);
+}
+
+.btn-send[disabled] {
+  background-color: #333;
+  color: #666;
+  cursor: not-allowed;
 }

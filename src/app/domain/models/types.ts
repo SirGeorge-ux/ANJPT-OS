@@ -26,6 +26,20 @@ export enum TaskStatus {
     revision_count: number;
     comments: string[]; // Comentarios de la tarea, solo el master y el junior pueden comentar
  } 
+
+ export interface ComentarioTarea {
+  id?: string;
+  tarea_id: string;
+  usuario_id: string;
+  contenido: string;
+  creado_en?: string;
+  editado_en?: string | null;
+  // Relación con Supabase para traer los datos del autor
+  perfiles?: { 
+    nombre: string;
+    rol: string;
+  };
+  }
  
  export interface User {
     id: string;

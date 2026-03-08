@@ -66,7 +66,3 @@ Accede a `http://localhost:4200` en tu navegador.
 ## 👤 Autor
 
 Desarrollado por **SirGeorge-ux** - _Full Stack Developer_
-
-```
-
-```

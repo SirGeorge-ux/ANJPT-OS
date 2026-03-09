@@ -40,4 +40,26 @@ export class TareasService {
 
     if (error) throw error;
   }
+  // 📥 OBTENER TAREAS DE UN PROYECTO (Para el Backlog y el Gantt)
+  async getTareasPorProyecto(proyectoId: string) {
+    const { data, error } = await this.supabase
+      .from('tareas')
+      .select('*')
+      .eq('proyecto_id', proyectoId)
+      .order('fecha_inicio', { ascending: true }); // Ordenamos cronológicamente
+
+    if (error) throw error;
+    return data;
+  }
+
+  // 📤 CREAR TAREA TEMPORAL EN UN PROYECTO
+  async addTareaAProyecto(tarea: any) {
+    const { data, error } = await this.supabase
+      .from('tareas')
+      .insert([tarea])
+      .select();
+
+    if (error) throw error;
+    return data;
+  }
 }

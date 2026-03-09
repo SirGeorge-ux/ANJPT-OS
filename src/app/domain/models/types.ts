@@ -15,17 +15,20 @@ export enum TaskStatus {
 }
 
 // 3. Definimos la estructura exacta de una Tarea
- export interface Task {
-    id: string;
-    title: string; // titulo de la tarea
-    description: string; //descripcion de la tarea
-    status: TaskStatus; // estado de la tarea, solo podria ser To Do, In Progress, In Review y Done";
-    difficulty: number; // Nivel de dificultad que podria ir de 1 al 3 o del 1 al 5
-    assigneeId: string; // El ID del User, solo podria ser Senior y el administrador en su defecto
-    reviewerId: string; // El ID del User, solo podria ser Junior
-    revision_count: number;
-    comments: string[]; // Comentarios de la tarea, solo el master y el junior pueden comentar
- } 
+export interface Task {
+  id?: string;
+  proyecto_id?: string;
+  asignado_a?: string;
+  
+  // 🚀 VARIABLES BÁSICAS (Las que te pedía el HTML)
+  titulo?: string;
+  descripcion?: string;
+  estado?: string;
+  
+  // ⏱️ MOTORES TEMPORALES (Para el Gantt)
+  fecha_inicio?: string; 
+  fecha_fin?: string;    
+}
 
  export interface ComentarioTarea {
   id?: string;
@@ -46,6 +49,7 @@ export enum TaskStatus {
     name: string;
     role: UserRole;
  }
+
  export interface Proyecto {
   id?: string;
   nombre: string;
@@ -54,9 +58,16 @@ export enum TaskStatus {
   creado_por: string;
   creado_en?: string;
   
-  // 🚀 VARIABLES DE INTERFAZ GRÁFICA (Añadidas para el HTML)
+  // Variables gráficas de lista
   tareasPendientes?: number;
   progreso?: number;
+  
+  // 🚀 VARIABLES NUEVAS PARA EL DETALLE (Las que te pedía el HTML)
+  wiki?: string;
+  lider?: string;
+  colaboradores?: string[];
+  mantenedor?: string;
+  stack?: string[];
   
   perfiles?: {
     nombre: string;

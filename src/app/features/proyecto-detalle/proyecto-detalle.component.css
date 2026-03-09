@@ -1,18 +1,13 @@
 /* ==========================================================================
    1. ESTRUCTURA PRINCIPAL (GRID 75/25)
    ========================================================================== */
-.detalle-container { 
-  padding: 30px; 
-  max-width: 1600px;
-  margin: 0 auto;
-}
+.detalle-container { padding: 30px; max-width: 1600px; margin: 0 auto; color: white; }
 
-/* Forzamos el display grid para que las columnas no se apilen */
 .detalle-grid {
-  display: grid !important;
-  grid-template-columns: 75% 25% !important; /* Proporción 3 a 1 para mayor amplitud */
-  gap: 30px !important;
-  width: 100% !important;
+  display: grid;
+  grid-template-columns: 75% 25%;
+  gap: 30px;
+  width: 100%;
   min-height: 500px;
   align-items: start;
 }
@@ -22,239 +17,152 @@
   border: 1px solid #2a2a2a;
   padding: 25px;
   margin-bottom: 25px;
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
+}
+
+.panel h3 { 
+  color: #00e5ff; /* Turquesa neón restaurado */
+  font-size: 0.8rem; 
+  letter-spacing: 1px; 
+  margin-top: 0; 
+  margin-bottom: 15px; 
+  border-bottom: 1px solid #2a2a2a; 
+  padding-bottom: 10px; 
 }
 
 /* ==========================================================================
-   2. TAREAS (ICONOS ESCALADOS Y ALINEACIÓN)
+   2. TAREAS E ICONOS
    ========================================================================== */
 .tarea-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 18px 20px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid #2a2a2a;
-  margin-bottom: 12px;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 15px 20px; background: #111; border: 1px solid #2a2a2a; margin-bottom: 10px;
 }
+.tarea-info { display: flex; align-items: center; gap: 15px; }
+.nav-icon-task { width: 20px; height: 20px; }
+.tarea-titulo { font-size: 0.95rem; color: #eee; font-weight: bold; }
 
-.tarea-info { 
-  display: flex; 
-  align-items: center; 
-  gap: 18px;
-}
-
-/* Tamaño de los iconos de tareas para legibilidad */
-.nav-icon-task {
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-}
-
-.tarea-titulo {
-  font-size: 1rem;
-  color: #eee;
-}
+.badge-status { padding: 4px 10px; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; border-radius: 2px; }
+.status-por-hacer { background: rgba(0, 229, 255, 0.1); color: #00e5ff; border: 1px solid #00e5ff; }
+.status-revisar { background: rgba(255, 149, 0, 0.1); color: #ff9500; border: 1px solid #ff9500; }
+.status-en-progreso { background: rgba(191, 90, 242, 0.1); color: #bf5af2; border: 1px solid #bf5af2; }
+.status-terminado { background: rgba(204, 255, 0, 0.1); color: #ccff00; border: 1px solid #ccff00; }
 
 /* ==========================================================================
-   3. TECH STACK (CHIPS COMO ETIQUETAS)
+   3. TECH STACK Y EQUIPO
    ========================================================================== */
-.stack-container {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 8px !important;
-}
+.stack-container { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: #222; border: 1px solid #444; color: #fff; padding: 6px 14px; font-size: 0.75rem; font-weight: bold; border-radius: 20px; }
 
-.chip {
-  background: #222;
-  border: 1px solid #444;
-  color: #fff;
-  padding: 6px 14px;
-  font-size: 0.75rem;
-  font-weight: bold;
-  border-radius: 20px;
-}
+.equipo-list { display: flex; flex-direction: column; gap: 20px; }
+.equipo-item { display: flex; align-items: center; gap: 15px; }
+.equipo-icon { width: 24px; height: 24px; }
+.equipo-text { line-height: 1.4; font-size: 0.9rem; }
 
 /* ==========================================================================
-   4. EQUIPO (ICONOS Y COLORES NEÓN)
+   4. ESTADOS Y CABECERA
    ========================================================================== */
-.equipo-list {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
+.detalle-header { margin-bottom: 30px; border-bottom: 2px solid #222; padding-bottom: 20px; }
+.titulo-wrapper h1 { font-size: 2.5rem; margin: 0 0 10px 0; font-style: italic; font-weight: 900; }
 
-.equipo-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.equipo-icon {
-  width: 20px;
-  height: 20px;
-}
-
-/* Colores Neón para los iconos del equipo */
-.status-terminado { 
-  color: #ccff00; 
-  filter: drop-shadow(0 0 5px rgba(204, 255, 0, 0.4));
-} 
-
-.status-por-hacer { 
-  color: #00e5ff; 
-  filter: drop-shadow(0 0 5px rgba(0, 229, 255, 0.4));
-}
-
-.status-revisar { 
-  color: #ff9500;
-  filter: drop-shadow(0 0 5px rgba(255, 149, 0, 0.4));
-}
-
-/* ==========================================================================
-   5. ESTADOS Y CABECERA
-   ========================================================================== */
 .status-project-box {
-  display: inline-block;
-  padding: 6px 18px;
-  font-size: 0.75rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  border: 1px solid;
-  margin-top: 12px;
+  display: inline-block; padding: 6px 18px; font-size: 0.75rem; font-weight: 900;
+  text-transform: uppercase; border: 1px solid;
 }
+.status-activo { color: #ccff00; border-color: #ccff00; box-shadow: 0 0 12px rgba(204, 255, 0, 0.25); background: rgba(204, 255, 0, 0.05); }
+.status-inactivo { color: #ff3b30; border-color: #ff3b30; box-shadow: 0 0 12px rgba(255, 59, 48, 0.25); background: rgba(255, 59, 48, 0.05); }
 
-.titulo-wrapper {
-  display: flex;             /* Activa el modo de caja flexible */
-  justify-content: space-between; /* Empuja el título a la izquierda y el estado a la derecha */
-  align-items: center;       /* Los centra verticalmente para que queden a la misma altura */
-  width: 75%;               /* Asegura que ocupe todo el ancho disponible */
-}
+.btn-volver { color: #ccff00; text-decoration: none; font-weight: bold; display: inline-block; margin-bottom: 20px; transition: text-shadow 0.2s; }
+.btn-volver:hover { text-shadow: 0 0 8px #ccff00; }
 
-.status-activo {
-  color: #ccff00 !important;
-  border-color: #ccff00 !important;
-  box-shadow: 0 0 12px rgba(204, 255, 0, 0.25);
-  /* Eliminamos los margin-top/bottom para que align-items: center haga su trabajo perfecto */
-  margin: 0 !important; 
-  padding: 6px 18px;
-  display: inline-block;
-  border: 1px solid;
-  font-weight: 900;
-  text-transform: uppercase;
-}
-
-.status-inactivo {
-  color: #ff3b30 !important;
-  border-color: #ff3b30 !important;
-  box-shadow: 0 0 12px rgba(255, 59, 48, 0.25);
-
-  margin: 0 !important; 
-  padding: 6px 18px;
-  display: inline-block;
-  border: 1px solid;
-  font-weight: 900;
-  text-transform: uppercase;
-}
-
-.btn-volver {
-  color: #ccff00;
-  text-decoration: none;
-  font-weight: bold;
-  display: inline-block;
-  margin-bottom: 20px;
-}
 /* ==========================================================================
-   6. FORMULARIO DE NUEVA TAREA 
+   5. FORMULARIO Y MOTORES DE TIEMPO
    ========================================================================== */
 .formulario-tarea-box {
-  background-color: #0d0d0d; /* Fondo un poco más oscuro que el panel */
-  border: 1px solid #2a2a2a;
-  padding: 20px;
-  margin-bottom: 25px;
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.form-group label {
-  color: #888;
-  font-size: 0.75rem;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
-.form-group input, 
-.select-ciberpunk {
-  background-color: #1a1a1a;
-  border: 1px solid #333;
-  color: #fff;
-  padding: 10px;
-  font-family: 'monospace';
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.form-group input:focus, 
-.select-ciberpunk:focus {
-  border-color: #ccff00; /* Borde amarillo neón al seleccionar */
-}
-
-/* Botón de Asignar Tarea (Botón grande) */
-.btn-neon {
-  background-color: #ccff00;
-  color: #000;
-  border: none;
-  padding: 12px;
-  font-weight: 900;
-  text-transform: uppercase;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: transform 0.1s;
-}
-
-.btn-neon:hover {
-  filter: brightness(1.1);
-  box-shadow: 0 0 15px rgba(204, 255, 0, 0.4);
-}
-
-.btn-neon:active {
-  transform: scale(0.98);
+  background-color: #0d0d0d; border: 1px dashed #444; padding: 20px; margin-bottom: 25px;
+  display: flex; flex-direction: column; gap: 15px;
+  animation: fadeIn 0.3s ease-out forwards; /* 🔥 Animación corregida */
 }
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  to { opacity: 1; transform: translateY(0); } /* 🔥 Llave de cierre que faltaba */
 }
 
-.btn-small-outline {
-  background-color: transparent;
-  border: 1px solid #ccff00;
-  color: #ccff00;
-  padding: 6px 12px;
-  margin-top: 5px;
-  margin-bottom: 5px;
-  font-size: 0.75rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
+.form-group { display: flex; flex-direction: column; gap: 8px; }
+.form-group label { color: #888; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
+
+.form-group input, .select-ciberpunk {
+  background-color: #111; border: 1px solid #333; color: #fff; padding: 10px;
+  font-family: 'monospace'; outline: none; transition: border-color 0.2s;
+}
+.form-group input:focus, .select-ciberpunk:focus { border-color: #ccff00; }
+
+.btn-neon { background-color: #ccff00; color: #000; border: none; padding: 12px; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+.btn-neon:hover:not([disabled]) { filter: brightness(1.2); box-shadow: 0 0 15px rgba(204, 255, 0, 0.5); }
+.btn-neon[disabled] { background-color: #333; color: #666; cursor: not-allowed; }
+
+.btn-small-outline { background-color: transparent; border: 1px solid #ccff00; color: #ccff00; padding: 6px 12px; font-size: 0.75rem; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+.btn-small-outline:hover { background-color: #ccff00; color: #000; } 
+
+/* --- MOTOR TEMPORAL (FECHAS GANTT) --- */
+.form-row-fechas { display: flex; gap: 15px; margin-top: 5px; }
+.form-group-fecha { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.label-fecha { display: flex; align-items: center; gap: 5px; color: #888; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
+.icon-mini { width: 14px; height: 14px; }
+
+input[type="date"] {
+  background: #111; border: 1px solid #333; color: white; padding: 10px; width: 100%; box-sizing: border-box;
+  font-family: monospace; outline: none; transition: all 0.2s; color-scheme: dark;
+}
+input[type="date"]:focus { border-color: #00e5ff; box-shadow: 0 0 10px rgba(0, 229, 255, 0.2); }
+
+/* ==========================================================================
+   6. DIAGRAMA DE GANTT TÁCTICO
+   ========================================================================== */
+.gantt-wrapper {
+  background: #0a0a0a;
+  border: 1px dashed #333;
+  padding: 20px;
+  overflow-x: auto; /* Permite hacer scroll horizontal si el proyecto dura muchos meses */
+  border-radius: 4px;
 }
 
-.btn-small-outline:hover {
-  background-color: #ccff00;
+.gantt-container {
+  display: grid;
+  gap: 12px 0; /* Espacio vertical entre tareas */
+  min-width: 100%;
+}
+
+.gantt-row {
+  display: contents; /* Magia CSS: Hace que los hijos ignoren este div y usen el grid padre */
+}
+
+.gantt-bar {
+  padding: 8px 12px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s, filter 0.2s;
+  cursor: crosshair;
+}
+
+.gantt-bar:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.2);
+}
+
+.gantt-text {
   color: #000;
-} 
+  font-size: 0.75rem;
+  font-weight: 900;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+}
 
-.btn-small-outline:active {
-  transform: scale(0.98);
-} 
+/* Colores de las barras según el estado táctico */
+.bar-por-hacer { background: linear-gradient(90deg, #00e5ff, #00b3cc); }
+.bar-revisar { background: linear-gradient(90deg, #ff9500, #cc7700); }
+.bar-en-progreso { background: linear-gradient(90deg, #bf5af2, #9948c2); }
+.bar-terminado { background: linear-gradient(90deg, #ccff00, #a3cc00); }

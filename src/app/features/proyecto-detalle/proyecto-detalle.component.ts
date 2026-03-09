@@ -1,8 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../infra/auth.service';
+import { ProyectosService } from '../../../infra/proyectos.service';
+import { TareasService } from '../../../infra/tareas.service';
+import { Proyecto, Task } from '../../domain/models/types';
 import { 
   LucideAngularModule, 
   ChevronsLeftRightEllipsis, 
@@ -13,7 +16,9 @@ import {
   CircleUser,     
   UserRoundSearch, 
   FileInput,       
-  LogOut           
+  LogOut,
+  Calendar, // Añadido para el Gantt
+  AlignLeft // Añadido para el Gantt
 } from 'lucide-angular';
 
 @Component({
@@ -27,9 +32,17 @@ export class ProyectoDetalleComponent implements OnInit {
 
   // 🛰️ Inyecciones de Dependencias
   private readonly route = inject(ActivatedRoute);
-  public readonly authService = inject(AuthService); 
+  public readonly authService = inject(AuthService);
+  private readonly proyectosService = inject(ProyectosService);
+  private readonly tareasService = inject(TareasService);
 
-  // 🎨 Identificadores de Iconos (Para usar en el HTML)
+  // ⏱️ MOTORES DEL GANTT
+  public fechaMinimaGantt: Date = new Date();
+  public totalDiasGantt: number = 30;
+
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  // 🎨 Identificadores de Iconos
   readonly IconPorHacer = ChevronsLeftRightEllipsis;
   readonly IconRevisar = Eye;
   readonly IconEnProgreso = Wrench;
@@ -39,38 +52,40 @@ export class ProyectoDetalleComponent implements OnInit {
   readonly IconMantenedor = UserRoundSearch;
   readonly IconDocumentalista = FileInput;
   readonly IconSalir = LogOut;
+  readonly IconCalendar = Calendar;
+  readonly IconAlign = AlignLeft;
 
   // 📂 Datos del Modelo
-  proyecto: any = null;
-  tareasDelProyecto: any[] = [];
-  usuarios: any[] = []; 
-
+  public proyectoId: string = '';
+  public proyecto: Proyecto | null = null;
+  public tareasDelProyecto: Task[] = [];
+  public usuarios: any[] = [];
+  
   // 🛡️ Estado de Seguridad y UI
-  rolUsuario: string = 'JUNIOR';
-  nivelUsuario: number = 1;
-  mostrarFormularioTarea: boolean = false;
-  loading: boolean = false;
+  public rolUsuario: string = 'JUNIOR';
+  public nivelUsuario: number = 1;
+  public mostrarFormularioTarea: boolean = false;
+  public loading: boolean = false;
 
-  // 📝 Modelo del Formulario
+  // 📝 Modelo del Formulario (Ahora incluye el motor de tiempo)
   public nuevaTarea = {
     titulo: '',
     descripcion: '',
-    asignado_a: '', 
-    proyecto_id: ''
+    asignado_a: '',
+    fecha_inicio: '', // NUEVO
+    fecha_fin: ''     // NUEVO
   };
 
   async ngOnInit(): Promise<void> {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.nuevaTarea.proyecto_id = id;
-      await this.inicializarDatos(id);
+      this.proyectoId = id;
       await this.obtenerUsuarios();
+      await this.inicializarDatos(id);
     }
   }
 
-  /**
-   * Carga colaboradores de la tabla 'perfiles'
-   */
+  // Carga colaboradores de la tabla 'perfiles'
   async obtenerUsuarios() {
     const { data, error } = await this.authService.supabase
       .from('perfiles')
@@ -83,92 +98,139 @@ export class ProyectoDetalleComponent implements OnInit {
     }
   }
 
-  /**
-   * Carga sesión y datos del proyecto
-   */
+  // Carga sesión y datos del proyecto
   private async inicializarDatos(id: string): Promise<void> {
     const { data: { session } } = await this.authService.getSession();
+    
     if (session) {
       this.rolUsuario = session.user.user_metadata?.['rol'] || 'JUNIOR';
       this.nivelUsuario = session.user.user_metadata?.['nivel'] || 1;
     } 
 
-    await Promise.all([
-      this.cargarDetallesProyecto(id),
-      this.cargarTareasDelProyecto(id)
-    ]);
-  }
+    this.loading = true;
+    console.log("🔍 BUSCANDO PROYECTO CON ID:", id);
 
-  // 📊 MÉTODOS DE CONSULTA (Corregidos para la tabla 'proyectos')
+    try {
+      // Descarga paralela usando nuestros Servicios Hexagonales
+      const [proyectoData, tareasData] = await Promise.all([
+        this.proyectosService.getProyectoById(id),
+        this.tareasService.getTareasPorProyecto(id)
+      ]);
 
-  async cargarDetallesProyecto(id: string): Promise<void> {
-    // CAMBIO CLAVE: Se usa 'proyectos' en lugar de 'projects'
-    const { data, error } = await this.authService.supabase
-      .from('proyectos') 
-      .select('*')
-      .eq('id', id)
-      .single();
+      console.log("📦 DATOS DEL PROYECTO RECIBIDOS:", proyectoData); 
+      console.log("📦 DATOS DE TAREAS RECIBIDOS:", tareasData);
 
-    if (error) {
-      console.error('Error cargando proyecto:', error);
-    } else {
-      this.proyecto = data;
-    } 
-  }
+      this.proyecto = proyectoData as Proyecto;
+      this.tareasDelProyecto = tareasData as Task[] || [];
 
-  async cargarTareasDelProyecto(id: string): Promise<void> {
-    const { data, error } = await this.authService.supabase
-      .from('tareas')
-      .select('*')
-      .eq('proyecto_id', id)
-      .order('creado_en', { ascending: false });
+      this.generarGantt();
 
-    if (error) {
-      console.error('Error cargando tareas:', error);
-    } else {
-      this.tareasDelProyecto = data || [];
-    } 
+      this.cdr.detectChanges();
+
+    } catch (error) {
+      console.error('Error al cargar el expediente:', error);
+    } finally {
+      this.loading = false;
+    }
   }
 
   // 🛠️ ACCIONES DE INTERFAZ
-
   toggleFormularioTarea(): void {
     this.mostrarFormularioTarea = !this.mostrarFormularioTarea;
   }
 
   async guardarTarea(): Promise<void> {
-    if (!this.proyecto || !this.nuevaTarea.titulo || !this.nuevaTarea.asignado_a) {
-      alert("Completa todos los campos obligatorios.");
+    // 1. Verificación estricta de datos (incluyendo las nuevas fechas)
+    if (!this.proyecto || !this.nuevaTarea.titulo || !this.nuevaTarea.asignado_a || !this.nuevaTarea.fecha_inicio || !this.nuevaTarea.fecha_fin) {
+      alert("Operación abortada: Título, Operario asignado y Fechas son obligatorios.");
       return; 
     }
 
+    // 2. Control de paradojas temporales
+    if (new Date(this.nuevaTarea.fecha_fin) < new Date(this.nuevaTarea.fecha_inicio)) {
+      alert("Paradoja detectada: La fecha de finalización no puede ser anterior a la de inicio.");
+      return;
+    }
+
     this.loading = true;
-    const { error } = await this.authService.supabase
-      .from('tareas')
-      .insert([{
+    try {
+      // 3. Empaquetado y envío usando el servicio
+      const paqueteTarea = {
         titulo: this.nuevaTarea.titulo,
         descripcion: this.nuevaTarea.descripcion,
         estado: 'Por hacer', 
-        proyecto_id: this.proyecto.id,
-        asignado_a: this.nuevaTarea.asignado_a
-      }]);
+        proyecto_id: this.proyectoId,
+        asignado_a: this.nuevaTarea.asignado_a,
+        fecha_inicio: this.nuevaTarea.fecha_inicio,
+        fecha_fin: this.nuevaTarea.fecha_fin
+      };
 
-    if (error) {
-      console.error('Error al crear tarea:', error);
-    } else {
+      await this.tareasService.addTareaAProyecto(paqueteTarea);
+      
       this.resetearFormulario();
-      await this.cargarTareasDelProyecto(this.proyecto.id); 
+      
+      // Recargamos el backlog para ver la nueva tarea
+      const tareasData = await this.tareasService.getTareasPorProyecto(this.proyectoId);
+      this.tareasDelProyecto = tareasData as Task[] || [];
+
+    } catch (error) {
+      console.error('Error al crear tarea:', error);
+      alert('Error crítico al guardar la tarea en el núcleo.');
+    } finally {
+      this.loading = false;
     }
-    this.loading = false;
   }
 
   private resetearFormulario(): void {
-    this.nuevaTarea.titulo = '';
-    this.nuevaTarea.descripcion = '';
+    this.nuevaTarea = {
+      titulo: '',
+      descripcion: '',
+      asignado_a: '',
+      fecha_inicio: '',
+      fecha_fin: ''
+    };
     this.mostrarFormularioTarea = false;
   }
 
   solicitarParticipacion(): void {
     alert('Solicitud enviada al administrador.'); 
+  }
+  // 📊 MOTOR MATEMÁTICO DEL GANTT
+  generarGantt() {
+    if (!this.tareasDelProyecto || this.tareasDelProyecto.length === 0) return;
+
+    // Filtramos solo las tareas que tienen fechas asignadas
+    const tareasConFechas = this.tareasDelProyecto.filter(t => t.fecha_inicio && t.fecha_fin);
+    if (tareasConFechas.length === 0) return;
+
+    // Buscamos el día que empieza el proyecto (la tarea más antigua)
+    const fechasInicio = tareasConFechas.map(t => new Date(t.fecha_inicio!).getTime());
+    this.fechaMinimaGantt = new Date(Math.min(...fechasInicio));
+
+    // Buscamos el día que acaba el proyecto (la tarea más lejana)
+    const fechasFin = tareasConFechas.map(t => new Date(t.fecha_fin!).getTime());
+    const fechaMaxima = new Date(Math.max(...fechasFin));
+
+    // Calculamos el total de días que dura el proyecto (+2 de margen visual)
+    const milisegundos = Math.abs(fechaMaxima.getTime() - this.fechaMinimaGantt.getTime());
+    this.totalDiasGantt = Math.ceil(milisegundos / (1000 * 60 * 60 * 24)) + 2; 
+  }
+
+  // 🎨 CALCULA LA POSICIÓN DE LA BARRA NEÓN EN LA PANTALLA
+  getGanttStyle(tarea: Task) {
+    if (!tarea.fecha_inicio || !tarea.fecha_fin) return { display: 'none' };
+
+    const inicio = new Date(tarea.fecha_inicio).getTime();
+    const fin = new Date(tarea.fecha_fin).getTime();
+    const min = this.fechaMinimaGantt.getTime();
+
+    // ¿En qué columna empieza?
+    const offset = Math.ceil((inicio - min) / (1000 * 60 * 60 * 24)) + 1; 
+    // ¿Cuántas columnas (días) dura?
+    const duracion = Math.ceil((fin - inicio) / (1000 * 60 * 60 * 24)) + 1;
+
+    return {
+      'grid-column': `${offset} / span ${duracion > 0 ? duracion : 1}`
+    };
   }
 }

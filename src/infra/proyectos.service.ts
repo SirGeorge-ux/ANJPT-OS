@@ -53,4 +53,15 @@ export class ProyectosService {
 
     if (error) throw error;
   }
+  // 📥 OBTENER UN PROYECTO ESPECÍFICO POR SU ID
+  async getProyectoById(id: string) {
+    const { data, error } = await this.supabase
+      .from('proyectos')
+      .select(`*, perfiles ( nombre, rol )`)
+      .eq('id', id)
+      .single();
+
+    if (error) throw error;
+    return data;
+  }
 }

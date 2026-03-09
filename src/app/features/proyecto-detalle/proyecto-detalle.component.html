@@ -1,4 +1,8 @@
-<div class="detalle-container" *ngIf="proyecto">
+<div *ngIf="loading" style="display: flex; justify-content: center; align-items: center; height: 100vh; color: #00e5ff; font-family: monospace;">
+  <h2><lucide-icon [name]="IconEnProgreso" class="icon-mini"></lucide-icon> DESCIFRANDO EXPEDIENTE TÁCTICO...</h2>
+</div>
+
+<div class="detalle-container" *ngIf="proyecto && !loading">
   
   <a routerLink="/proyectos" class="btn-volver">← VOLVER A PROYECTOS</a>
 
@@ -7,10 +11,10 @@
       <h1>{{ proyecto.nombre }}</h1>
       <span class="status-project-box" 
             [ngClass]="{
-              'status-activo': proyecto.estado?.toLowerCase() === 'activo',
-              'status-inactivo': proyecto.estado?.toLowerCase() === 'inactivo'
+              'status-activo': proyecto.estado && proyecto.estado.toLowerCase() === 'activo',
+              'status-inactivo': proyecto.estado && proyecto.estado.toLowerCase() === 'inactivo'
             }">
-        {{ proyecto.estado }}
+        {{ proyecto.estado || 'SIN ESTADO' }}
       </span>
     </div>
     <button class="btn-participar" 
@@ -24,13 +28,13 @@
     
     <div class="col-principal">
       <section class="panel">
-        <h3>DESCRIPCIÓN</h3>
-        <p>{{ proyecto.descripcion }}</p>
+        <h3>DESCRIPCIÓN OPERATIVA</h3>
+        <p>{{ proyecto.descripcion || 'Sin descripción.' }}</p>
       </section>
 
       <section class="panel">
-        <div class="panel-header-flex">
-          <h3>TAREAS DEL PROYECTO</h3>
+        <div class="panel-header-flex" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h3 style="margin: 0;">TAREAS DEL PROYECTO</h3>
           <button class="btn-small-outline" 
                   *ngIf="rolUsuario === 'SENIOR' || rolUsuario === 'ADMIN'" 
                   (click)="toggleFormularioTarea()">
@@ -47,22 +51,37 @@
           <div class="form-group">
             <label>Asignar a Colaborador *</label> 
             <select [(ngModel)]="nuevaTarea.asignado_a" class="select-ciberpunk"> 
-              <option value="" disabled selected>Selecciona un colaborador...</option>
-              <option *ngFor="let user of usuarios" [value]="user.id"> 
+              <option value="" disabled selected>Selecciona un operario...</option>
+              <option *ngFor="let user of usuarios || []" [value]="user.id"> 
                 {{ user.nombre }}
               </option>
             </select>
           </div>
 
-            <button class="btn-neon" 
-              (click)="guardarTarea()" 
-              [disabled]="loading || !nuevaTarea.titulo || !nuevaTarea.asignado_a">
-              {{ loading ? 'GUARDANDO...' : 'ASIGNAR TAREA' }} 
-            </button>
+          <div class="form-row-fechas">
+            <div class="form-group-fecha">
+              <label class="label-fecha">
+                <lucide-icon [name]="IconCalendar" class="icon-mini"></lucide-icon> Inicio Táctico *
+              </label>
+              <input type="date" [(ngModel)]="nuevaTarea.fecha_inicio" required>
+            </div>
+            <div class="form-group-fecha">
+              <label class="label-fecha">
+                <lucide-icon [name]="IconCalendar" class="icon-mini"></lucide-icon> Fin Estimado *
+              </label>
+              <input type="date" [(ngModel)]="nuevaTarea.fecha_fin" required>
+            </div>
+          </div>
+
+          <button class="btn-neon" 
+            (click)="guardarTarea()" 
+            [disabled]="loading || !nuevaTarea.titulo || !nuevaTarea.asignado_a || !nuevaTarea.fecha_inicio || !nuevaTarea.fecha_fin">
+            {{ loading ? 'ENVIANDO...' : 'ASIGNAR TAREA' }} 
+          </button>
         </div>
 
         <div class="tareas-list">
-          <div class="tarea-item" *ngFor="let t of tareasDelProyecto"> 
+          <div class="tarea-item" *ngFor="let t of tareasDelProyecto || []"> 
             <div class="tarea-info">
               <lucide-icon 
                 [name]="t.estado === 'Por hacer' ? IconPorHacer : 
@@ -86,40 +105,63 @@
             </span>
           </div>
 
-          <p *ngIf="tareasDelProyecto.length === 0" class="texto-vacio">
-            No hay tareas registradas en este proyecto.
+          <p *ngIf="(tareasDelProyecto || []).length === 0" style="color: #666; font-style: italic; text-align: center; padding: 20px;">
+            El backlog está vacío. No hay tareas asignadas.
           </p>
         </div>
       </section>
+      <section class="panel" *ngIf="(tareasDelProyecto || []).length > 0">
+        <h3><lucide-icon [name]="IconAlign" class="icon-mini"></lucide-icon> CRONOGRAMA DE OPERACIONES (GANTT)</h3>
+        
+        <div class="gantt-wrapper">
+          <div class="gantt-container" [style.grid-template-columns]="'repeat(' + totalDiasGantt + ', minmax(30px, 1fr))'">
+            
+            <div class="gantt-row" *ngFor="let t of tareasDelProyecto">
+               <div *ngIf="t.fecha_inicio && t.fecha_fin"
+                    class="gantt-bar"
+                    [ngClass]="{
+                      'bar-por-hacer': t.estado === 'Por hacer',
+                      'bar-revisar': t.estado === 'Revisar',
+                      'bar-en-progreso': t.estado === 'En progreso',
+                      'bar-terminado': t.estado === 'Terminado'
+                    }"
+                    [ngStyle]="getGanttStyle(t)"
+                    [title]="t.titulo + ' (' + t.fecha_inicio + ' a ' + t.fecha_fin + ')'">
+                 <span class="gantt-text">{{ t.titulo }}</span>
+               </div>
+            </div>
 
+          </div>
+        </div>
+      </section>
       <section class="panel">
-        <h3>BACKLOG / WIKI</h3>
-        <pre class="texto-monospace">{{ proyecto.wiki }}</pre>
+        <h3>WIKI INTERNA</h3>
+        <pre style="background: #111; padding: 15px; border: 1px dashed #333; color: #aaa; white-space: pre-wrap; font-family: monospace;">{{ proyecto.wiki || 'Sin datos en la Wiki.' }}</pre>
       </section>
     </div>
 
     <div class="col-lateral">
       <section class="panel">
-        <h3>EQUIPO</h3>
+        <h3>EQUIPO TÁCTICO</h3>
         <div class="equipo-list">
           <div class="equipo-item lider">
             <lucide-icon [name]="IconLider" class="equipo-icon status-terminado"></lucide-icon>
             <div class="equipo-text">
-              <span class="rol-label">Líder:</span> {{ proyecto.lider }}
+              <span style="color: #888; font-size: 0.75rem;">Líder:</span> <br> {{ proyecto.lider || 'No asignado' }}
             </div>
           </div>
           
-          <div class="equipo-item" *ngFor="let colab of proyecto.colaboradores">
+          <div class="equipo-item" *ngFor="let colab of proyecto.colaboradores || []">
             <lucide-icon [name]="IconColab" class="equipo-icon status-por-hacer"></lucide-icon>
             <div class="equipo-text">
-              <span class="rol-label">Colaborador:</span> {{ colab }}
+              <span style="color: #888; font-size: 0.75rem;">Colaborador:</span> <br> {{ colab }}
             </div>
           </div>
 
           <div class="equipo-item" *ngIf="proyecto.mantenedor">
              <lucide-icon [name]="IconMantenedor" class="equipo-icon status-revisar"></lucide-icon>
              <div class="equipo-text">
-               <span class="rol-label">Mantenedor:</span> {{ proyecto.mantenedor }}
+               <span style="color: #888; font-size: 0.75rem;">Mantenedor:</span> <br> {{ proyecto.mantenedor }}
              </div>
           </div>
         </div>
@@ -128,11 +170,10 @@
       <section class="panel">
         <h3>TECH STACK</h3>
         <div class="stack-container">
-          <span class="chip" *ngFor="let tech of proyecto.stack">{{ tech }}</span> 
+          <span class="chip" *ngFor="let tech of proyecto.stack || []">{{ tech }}</span> 
         </div>
       </section>
     </div>
 
   </div> 
 </div>
-

@@ -3,55 +3,109 @@
   <div class="page-header">
     <div class="header-info">
       <h2>PROYECTOS ACTIVOS</h2>
-      <p>PANEL DE CONTROL GENERAL · ACCESO NIVEL 2+</p>
+      <p>INICIATIVAS GLOBALES DE LA ASOCIACIÓN</p>
     </div>
     
-    <button class="btn-neon" *ngIf="rolUsuario === 'SENIOR' || rolUsuario === 'ADMIN'" (click)="toggleFormulario()">
-      {{ mostrarFormulario ? 'CANCELAR' : '+ NUEVO PROYECTO' }}
+    <button class="btn-neon" (click)="mostrarModal ? cerrarModal() : abrirModal()">
+      {{ mostrarModal ? 'CANCELAR' : '+ NUEVO PROYECTO' }}
     </button>
   </div>
 
-  <div class="formulario-box" *ngIf="mostrarFormulario">
-    <h3>CREAR NUEVO PROYECTO</h3>
-
- <div class="form-group-1">
-  <label>Nombre del proyecto <span class="req">*</span></label>
-  <input type="text" [(ngModel)]="nuevoProyecto.nombre" required placeholder="Ej: App Móvil iOS">
-</div>
+  <div class="formulario-box" *ngIf="mostrarModal">
+    <h3>CREAR NUEVA INICIATIVA</h3>
 
     <div class="form-group-1">
-        <label>Descripción corta</label>
-        <textarea [(ngModel)]="nuevoProyecto.descripcion" rows="3" placeholder="¿De qué trata este proyecto?"></textarea>
+      <label>Nombre del proyecto <span class="req">*</span></label>
+      <input type="text" [(ngModel)]="nuevoProyecto.nombre" required placeholder="Ej: Operación Fénix">
     </div>
 
     <div class="form-group-1">
-        <label>Tech Stack (Separado por comas)</label>
-        <input type="text" [(ngModel)]="nuevoProyecto.stack" placeholder="Ej: Angular 19, Supabase, Tailwind">
+        <label>Descripción operativa</label>
+        <textarea [(ngModel)]="nuevoProyecto.descripcion" rows="3" placeholder="Detalla los objetivos de esta iniciativa..."></textarea>
     </div>
-
     <button class="btn-neon btn-guardar-proyecto" 
-        [disabled]="!nuevoProyecto.nombre || guardandoProyecto" 
+        [disabled]="!nuevoProyecto.nombre.trim() || enviando" 
         (click)="crearProyecto()">
-        {{ guardandoProyecto ? 'GUARDANDO...' : 'GUARDAR PROYECTO' }}
+        {{ enviando ? 'INICIALIZANDO...' : 'GUARDAR PROYECTO' }}
     </button>
   </div>
 
-  <div class="proyectos-grid">
-    <div class="proyecto-card" *ngFor="let p of proyectos" [routerLink]="['/proyectos', p.id]" style="cursor: pointer;">
+  <div class="mensaje-sistema" *ngIf="cargando">Descargando iniciativas de la red...</div>
+
+  <div class="proyectos-grid" *ngIf="!cargando">
+    
+    <div class="proyecto-card" *ngFor="let p of proyectos" [routerLink]="['/proyectos', p.id]">
+      
       <div class="card-header">
         <h3>{{ p.nombre }}</h3>
-        <span class="badge">{{ p.estado }}</span>
+        <span class="badge">{{ p.estado || 'ACTIVO' }}</span>
       </div>
+
       <div class="card-body">
+        <p class="desc-corta">{{ p.descripcion || 'Sin descripción asignada.' }}</p>
+        
         <p class="tareas-info">Tareas pendientes: <strong>{{ p.tareasPendientes || 0 }}</strong></p>
         <div class="barra-progreso-bg">
-          <div class="barra-progreso-fill" [style.width.%]="p.progreso"></div>
+          <div class="barra-progreso-fill" [style.width.%]="p.progreso || 0"></div>
         </div>
-        <p class="progreso-texto">{{ p.progreso }}% COMPLETADO</p>
+        <p class="progreso-texto">{{ p.progreso || 0 }}% COMPLETADO</p>
       </div>
+
       <div class="card-footer">
-        <button class="btn-outline" *ngIf="rolUsuario === 'SENIOR' || rolUsuario === 'ADMIN'">GESTIONAR TAREAS</button>
+        <div class="creador-info">
+          <span class="label">PROPUESTO POR: </span>
+          <span class="autor">{{ p.perfiles?.nombre || 'Operario Anónimo' }}</span>
+        </div>
+        
+        <div class="acciones-admin">
+          
+          <button class="btn-icon" 
+                  *ngIf="rolUsuario === 'ADMIN' || userId === p.creado_por"
+                  [ngClass]="p.estado === 'ACTIVO' ? 'text-warning' : 'text-success'"
+                  (click)="toggleEstado(p, $event)" 
+                  [title]="p.estado === 'ACTIVO' ? 'Desactivar Proyecto' : 'Reactivar Proyecto'"> 
+                  <lucide-icon [name]="IconPower" class="icon-mini"></lucide-icon>
+          </button>
+
+          <button class="btn-icon text-danger" 
+                  *ngIf="rolUsuario === 'ADMIN'" 
+                  (click)="borrarProyecto(p, $event)" 
+                  title="Purgar Proyecto"> 
+                  <lucide-icon [name]="IconTrash" class="icon-mini"></lucide-icon>
+          </button>
+
+        </div>
       </div>
+
+    </div>
+
+    <div class="mensaje-vacio" *ngIf="proyectos.length === 0">
+      No hay proyectos activos. Sé el primero en proponer una iniciativa.
+    </div>
+
+  </div>
+  <div class="modal-overlay" *ngIf="mostrarModalPurgar" (click)="cancelarPurga()">
+    <div class="modal-panel modal-danger" (click)="$event.stopPropagation()">
+      
+      <div class="modal-header header-danger">
+        <h2>
+          <lucide-icon [name]="IconTrash"></lucide-icon> 
+          ADVERTENCIA DE SISTEMA
+        </h2>
+      </div>
+      
+      <div class="modal-body text-center">
+        <p>¿Estás seguro de que deseas ELIMINAR el proyecto <br>
+          <strong class="texto-resaltado">"{{ proyectoAPurgar?.nombre }}"</strong>?
+        </p>
+        <p class="text-danger-muted">Esta acción es irreversible y los datos serán eliminados permanentemente del núcleo.</p>
+      </div>
+
+      <div class="modal-footer footer-center">
+        <button class="btn-cancel" (click)="cancelarPurga()">CANCELAR</button>
+        <button class="btn-neon-danger" (click)="confirmarPurga()">AUTORIZAR ELIMINACIÓN</button>
+      </div>
+
     </div>
   </div>
 

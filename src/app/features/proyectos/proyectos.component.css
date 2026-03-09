@@ -180,6 +180,63 @@
   margin-top: 15px;
   align-self: flex-start; /* Evita que el botón se estire de lado a lado */
 }
+/* --- ACCIONES TÁCTICAS (ADMIN) --- */
+.acciones-admin {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-icon {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.icon-mini {
+  width: 18px;
+  height: 18px;
+}
+
+/* Colores Dinámicos Neón */
+.text-warning { 
+  color: #ff9500; 
+}
+
+.btn-icon.text-warning:hover { 
+  border-color: #ff9500; 
+  background: rgba(255, 149, 0, 0.1);
+  padding: 10px 10px 15px 5px;
+  border-radius: 4px;
+  box-shadow: 0 0 2rem rgba(255, 149, 0, 0.5);
+}
+
+.text-success { 
+  color: #ccff00; 
+}
+
+.btn-icon.text-success:hover { 
+  border-color: #ccff00; 
+  background: rgba(204, 255, 0, 0.1); 
+  box-shadow: 0 0 10px rgba(204, 255, 0, 0.5);
+}
+
+.text-danger { 
+  color: #ff3b30; 
+}
+.btn-icon.text-danger:hover { 
+  border-color: #ff3b30; 
+  background: rgba(255, 59, 48, 0.1); 
+  box-shadow: 0 0 10px rgba(255, 59, 48, 0.4); 
+  padding: 10px 10px 15px 5px;
+  border-radius: 4px;
+}
 
 
 
@@ -200,10 +257,118 @@
   box-shadow: 0 0 15px rgba(204, 255, 0, 0.4);
 }
 
+
 @keyframes fadeInDown {
   from { opacity: 0; transform: translateY(-20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+/* --- MODAL DE PELIGRO (PURGA) --- */
+.modal-danger {
+  border-color: #ff3b30;
+  box-shadow: 0 0 40px rgba(255, 59, 48, 0.2);
+  padding: 5%;
+}
 
-/* Los estilos de .form-group e input ya se heredan del styles.css global */
-/* Solo añadimos retoques específicos si son necesarios aquí */
+.header-danger h2 {
+  color: #ff3b30;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 10px;
+  padding: 2%;
+}
+
+.text-center { 
+  text-align: center;
+}
+.texto-resaltado { 
+  color: white; 
+  font-size: 1.2rem; 
+  letter-spacing: 1px; 
+}
+.text-danger-muted { 
+  color: #ff3b30; 
+  opacity: 0.8; 
+  font-size: 1rem; 
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.footer-center {
+  justify-content: center;
+  gap: 30px;
+  border-top-color: rgba(255, 59, 48, 0.3);
+}
+
+.btn-neon-danger {
+  background: transparent;
+  border: 1px solid #ff3b30;
+  color: #ff3b30;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-neon-danger:hover {
+  background: rgba(255, 59, 48, 0.1);
+  box-shadow: 0 0 15px rgba(255, 59, 48, 0.5);
+  color: white;
+}
+
+.btn-cancel {
+  background: transparent;
+  border: 1px solid #ccff00;
+  color: #ccff00;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-right: 20px;
+}
+
+.btn-cancel:hover {
+  background: rgba(204, 255, 0, 0.1);
+  box-shadow: 0 0 15px rgba(204, 255, 0, 0.5);
+  color: white;
+}
+/* --- ESCUDO IMPENETRABLE Y CENTRADO ABSOLUTO --- */
+.modal-overlay {
+  position: fixed !important; /* Lo desengancha de la página y lo pega a la pantalla de tu monitor */
+  top: 0;
+  left: 0;
+  width: 100vw; /* Ocupa el 100% del ancho de la pantalla */
+  height: 100vh; /* Ocupa el 100% del alto de la pantalla */
+  background: rgba(0, 0, 0, 0.85); /* Oscurece el fondo */
+  backdrop-filter: blur(6px); /* Difumina lo que hay detrás (toque Ciberpunk) */
+  z-index: 99999 !important; /* Se pone por encima de absolutamente TODO */
+  
+  /* Sistema de centrado perfecto */
+  display: flex;
+  justify-content: center; /* Lo centra horizontalmente */
+  align-items: center; /* Lo centra verticalmente */
+}
+
+/* --- PANEL DEL MODAL --- */
+.modal-panel {
+  background: #0a0a0a;
+  border: 1px solid #ccff00; /* Borde neón por defecto */
+  width: 500px;
+  max-width: 90vw;
+  padding: 30px;
+  margin: 0 !important; /* Forzamos a que no tenga márgenes que lo empujen hacia abajo */
+  box-shadow: 0 0 30px rgba(0, 229, 255, 0.1);
+  animation: modalPop 0.3s ease-out forwards; /* Animación de entrada */
+}
+
+/* Animación de despliegue táctico */
+@keyframes modalPop {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.autor{
+  font-weight: 600;
+  color: var(--neon-primario);
+}

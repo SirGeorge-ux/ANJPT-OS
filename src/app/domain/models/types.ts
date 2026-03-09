@@ -46,3 +46,20 @@ export enum TaskStatus {
     name: string;
     role: UserRole;
  }
+ export interface Proyecto {
+  id?: string;
+  nombre: string;
+  descripcion: string;
+  estado?: string;
+  creado_por: string;
+  creado_en?: string;
+  
+  // 🚀 VARIABLES DE INTERFAZ GRÁFICA (Añadidas para el HTML)
+  tareasPendientes?: number;
+  progreso?: number;
+  
+  perfiles?: {
+    nombre: string;
+    rol: string;
+  };
+}

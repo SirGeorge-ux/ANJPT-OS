@@ -39,6 +39,8 @@ export class ProyectoDetalleComponent implements OnInit {
   // ⏱️ MOTORES DEL GANTT
   public fechaMinimaGantt: Date = new Date();
   public totalDiasGantt: number = 30;
+  public diasGanttArray: number[] = [];
+  public posicionHoy: number = -1;
 
   private readonly cdr = inject(ChangeDetectorRef);
 
@@ -72,8 +74,11 @@ export class ProyectoDetalleComponent implements OnInit {
     titulo: '',
     descripcion: '',
     asignado_a: '',
-    fecha_inicio: '', // NUEVO
-    fecha_fin: ''     // NUEVO
+    fecha_inicio: '', 
+    fecha_fin: '',
+    progreso: 0,
+    es_hito: false,                    
+    depende_de_id: null as number | null     
   };
 
   async ngOnInit(): Promise<void> {
@@ -187,7 +192,10 @@ export class ProyectoDetalleComponent implements OnInit {
       descripcion: '',
       asignado_a: '',
       fecha_inicio: '',
-      fecha_fin: ''
+      fecha_fin: '',
+      progreso: 0,
+      es_hito: false, 
+      depende_de_id: null
     };
     this.mostrarFormularioTarea = false;
   }
@@ -214,6 +222,12 @@ export class ProyectoDetalleComponent implements OnInit {
     // Calculamos el total de días que dura el proyecto (+2 de margen visual)
     const milisegundos = Math.abs(fechaMaxima.getTime() - this.fechaMinimaGantt.getTime());
     this.totalDiasGantt = Math.ceil(milisegundos / (1000 * 60 * 60 * 24)) + 2; 
+    // Creamos un array vacío para que el HTML pueda pintar los números de los días
+    this.diasGanttArray = Array(this.totalDiasGantt).fill(0);
+
+    // Calculamos dónde debe caer el láser de HOY
+    const fechaHoy = new Date().getTime();
+    this.posicionHoy = Math.ceil((fechaHoy - this.fechaMinimaGantt.getTime()) / (1000 * 60 * 60 * 24)) + 1;
   }
 
   // 🎨 CALCULA LA POSICIÓN DE LA BARRA NEÓN EN LA PANTALLA
@@ -232,5 +246,11 @@ export class ProyectoDetalleComponent implements OnInit {
     return {
       'grid-column': `${offset} / span ${duracion > 0 ? duracion : 1}`
     };
+  }
+  // 👤 TRADUCTOR DE ID A NOMBRE DE OPERARIO
+  getNombreOperario(id: string | undefined): string {
+    if (!id) return 'Sin asignar';
+    const user = this.usuarios.find(u => u.id === id);
+    return user ? user.nombre : 'Operario Desconocido';
   }
 }

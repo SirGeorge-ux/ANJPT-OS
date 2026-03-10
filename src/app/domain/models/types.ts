@@ -19,6 +19,7 @@ export interface Task {
   id?: string;
   proyecto_id?: string;
   asignado_a?: string;
+  progreso?: number;
   
   // 🚀 VARIABLES BÁSICAS (Las que te pedía el HTML)
   titulo?: string;
@@ -27,7 +28,9 @@ export interface Task {
   
   // ⏱️ MOTORES TEMPORALES (Para el Gantt)
   fecha_inicio?: string; 
-  fecha_fin?: string;    
+  fecha_fin?: string;  
+  es_hito?: boolean;
+  depende_de_id?: number | null;  
 }
 
  export interface ComentarioTarea {

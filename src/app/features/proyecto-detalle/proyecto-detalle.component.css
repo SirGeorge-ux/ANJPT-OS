@@ -79,12 +79,12 @@
 .formulario-tarea-box {
   background-color: #0d0d0d; border: 1px dashed #444; padding: 20px; margin-bottom: 25px;
   display: flex; flex-direction: column; gap: 15px;
-  animation: fadeIn 0.3s ease-out forwards; /* 🔥 Animación corregida */
+  animation: fadeIn 0.3s ease-out forwards; 
 }
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); } /* 🔥 Llave de cierre que faltaba */
+  to { opacity: 1; transform: translateY(0); } 
 }
 
 .form-group { display: flex; flex-direction: column; gap: 8px; }
@@ -116,34 +116,91 @@ input[type="date"] {
 input[type="date"]:focus { border-color: #00e5ff; box-shadow: 0 0 10px rgba(0, 229, 255, 0.2); }
 
 /* ==========================================================================
-   6. DIAGRAMA DE GANTT TÁCTICO
+   6. DIAGRAMA DE GANTT TÁCTICO (PANTALLA PARTIDA)
    ========================================================================== */
-.gantt-wrapper {
+.gantt-dashboard {
+  display: flex;
   background: #0a0a0a;
-  border: 1px dashed #333;
-  padding: 20px;
-  overflow-x: auto; /* Permite hacer scroll horizontal si el proyecto dura muchos meses */
+  border: 1px solid #333;
   border-radius: 4px;
+  overflow: hidden; /* Corta lo que sobra de las esquinas */
 }
 
-.gantt-container {
-  display: grid;
-  gap: 12px 0; /* Espacio vertical entre tareas */
-  min-width: 100%;
+/* --- Panel Lateral (Fijo) --- */
+.gantt-sidebar {
+  width: 250px;
+  flex-shrink: 0;
+  border-right: 1px solid #333;
+  background: #111;
+  z-index: 10;
 }
 
-.gantt-row {
-  display: contents; /* Magia CSS: Hace que los hijos ignoren este div y usen el grid padre */
+.gantt-cell-header {
+  height: 40px;
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+  font-size: 0.75rem;
+  color: #00e5ff; /* Color de tu sistema */
+  font-weight: bold;
+  border-bottom: 1px solid #333;
+}
+
+.gantt-cell-sidebar {
+  height: 46px; /* Altura exacta para alinear con las barras */
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+  color: #ccc;
+  border-bottom: 1px solid #222;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- Panel Cronológico (Scroll Horizontal) --- */
+.gantt-timeline {
+  flex-grow: 1;
+  overflow-x: auto;
+  position: relative;
+}
+
+/* Regla Superior */
+.gantt-grid-row { display: grid; }
+
+.gantt-ruler {
+  background: #1a1a1a;
+  border-bottom: 1px solid #333;
+}
+
+.gantt-cell-day {
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.7rem;
+  color: #666;
+  border-right: 1px solid #222;
+}
+
+/* Lienzo de las Barras */
+.gantt-rows-container {
+  position: relative;
+}
+
+.gantt-grid-row {
+  height: 46px; /* Sincronizado con el panel lateral */
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
 }
 
 .gantt-bar {
-  padding: 8px 12px;
+  margin: 8px 0; /* Centra la barra en la fila */
   border-radius: 4px;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-  transition: transform 0.2s, filter 0.2s;
+  height: 30px;
   cursor: crosshair;
+  transition: transform 0.2s, filter 0.2s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
 .gantt-bar:hover {
@@ -151,17 +208,100 @@ input[type="date"]:focus { border-color: #00e5ff; box-shadow: 0 0 10px rgba(0, 2
   filter: brightness(1.2);
 }
 
+/* Láser Vertical (Fecha de HOY) */
+.gantt-laser-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  display: grid;
+  pointer-events: none; /* Deja que el ratón atraviese el láser */
+}
+
+.laser-beam {
+  width: 2px;
+  height: 100%;
+  background: #ff3b30;
+  box-shadow: 0 0 12px #ff3b30;
+  margin: 0 auto;
+  z-index: 5;
+}
+
+/* Colores de las barras */
+.bar-por-hacer { background: linear-gradient(90deg, #00e5ff, #00b3cc); }
+.bar-revisar { background: linear-gradient(90deg, #ff9500, #cc7700); }
+.bar-en-progreso { background: linear-gradient(90deg, #bf5af2, #9948c2); }
+.bar-terminado { background: linear-gradient(90deg, #ccff00, #a3cc00); }
+
+/* --- Rediseño de la Barra (Misión 2) --- */
+.gantt-bar-wrapper {
+  margin: 8px 0; /* Centra la barra verticalmente en la fila */
+  height: 30px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* Fechas Flotantes a los lados (Corta el año y muestra MM-DD) */
+.gantt-date-left, .gantt-date-right {
+  position: absolute;
+  font-size: 0.65rem;
+  color: #888;
+  font-weight: bold;
+  font-family: monospace;
+  pointer-events: none;
+}
+.gantt-date-left { right: 100%; margin-right: 8px; }
+.gantt-date-right { left: 100%; margin-left: 8px; }
+
+/* La Barra Base */
+.gantt-bar {
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden; /* Corta la sombra de progreso para que no se salga */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  cursor: crosshair;
+  transition: transform 0.2s, filter 0.2s;
+}
+
+.gantt-bar:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.2);
+  z-index: 10;
+}
+
+/* Sombra de Progreso (Capa superpuesta blanca semitransparente) */
+.gantt-progress-fill {
+  position: absolute;
+  top: 0; left: 0; height: 100%;
+  background: rgba(255, 255, 255, 0.25);
+  border-right: 2px solid rgba(255, 255, 255, 0.6);
+  z-index: 1;
+}
+
+/* Contenido de la Barra (Icono y Nombre) */
+.gantt-bar-content {
+  position: relative;
+  z-index: 2; /* Siempre por encima de la sombra de progreso */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  height: 100%;
+}
+
+.icon-micro { width: 14px; height: 14px; color: #000; }
+
 .gantt-text {
-  color: #000;
-  font-size: 0.75rem;
-  font-weight: 900;
+  color: #000; 
+  font-size: 0.75rem; 
+  font-weight: 900; 
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   text-transform: uppercase;
 }
 
-/* Colores de las barras según el estado táctico */
+/* Colores de las barras */
 .bar-por-hacer { background: linear-gradient(90deg, #00e5ff, #00b3cc); }
 .bar-revisar { background: linear-gradient(90deg, #ff9500, #cc7700); }
 .bar-en-progreso { background: linear-gradient(90deg, #bf5af2, #9948c2); }

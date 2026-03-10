@@ -48,15 +48,13 @@
             <input type="text" [(ngModel)]="nuevaTarea.titulo" placeholder="Ej: Configurar los servidores DNS"> 
           </div>
 
-          <div class="form-group">
-            <label>Asignar a Colaborador *</label> 
-            <select [(ngModel)]="nuevaTarea.asignado_a" class="select-ciberpunk"> 
-              <option value="" disabled selected>Selecciona un operario...</option>
-              <option *ngFor="let user of usuarios || []" [value]="user.id"> 
-                {{ user.nombre }}
-              </option>
-            </select>
-          </div>
+         <div class="form-group" style="flex: 1;">
+              <label>Depende de (Opcional)</label> 
+              <select [(ngModel)]="nuevaTarea.depende_de_id" class="select-ciberpunk"> 
+                <option [ngValue]="null">Ninguna (Independiente)</option>
+                <option *ngFor="let t of tareasDelProyecto" [ngValue]="t.id">{{ t.titulo }}</option>
+              </select>
+            </div>
 
           <div class="form-row-fechas">
             <div class="form-group-fecha">
@@ -110,28 +108,66 @@
           </p>
         </div>
       </section>
+
       <section class="panel" *ngIf="(tareasDelProyecto || []).length > 0">
         <h3><lucide-icon [name]="IconAlign" class="icon-mini"></lucide-icon> CRONOGRAMA DE OPERACIONES (GANTT)</h3>
         
-        <div class="gantt-wrapper">
-          <div class="gantt-container" [style.grid-template-columns]="'repeat(' + totalDiasGantt + ', minmax(30px, 1fr))'">
+        <div class="gantt-dashboard">
+          
+          <div class="gantt-sidebar">
+            <div class="gantt-cell-header">OPERACIÓN TÁCTICA</div>
+            <div class="gantt-cell-sidebar" *ngFor="let t of tareasDelProyecto" [title]="t.titulo">
+              {{ t.titulo }}
+            </div>
+          </div>
+
+          <div class="gantt-timeline">
             
-            <div class="gantt-row" *ngFor="let t of tareasDelProyecto">
-               <div *ngIf="t.fecha_inicio && t.fecha_fin"
-                    class="gantt-bar"
-                    [ngClass]="{
-                      'bar-por-hacer': t.estado === 'Por hacer',
-                      'bar-revisar': t.estado === 'Revisar',
-                      'bar-en-progreso': t.estado === 'En progreso',
-                      'bar-terminado': t.estado === 'Terminado'
-                    }"
-                    [ngStyle]="getGanttStyle(t)"
-                    [title]="t.titulo + ' (' + t.fecha_inicio + ' a ' + t.fecha_fin + ')'">
-                 <span class="gantt-text">{{ t.titulo }}</span>
-               </div>
+            <div class="gantt-grid-row gantt-ruler" [style.grid-template-columns]="'repeat(' + totalDiasGantt + ', 40px)'">
+              <div class="gantt-cell-day" *ngFor="let d of diasGanttArray; let i = index">
+                {{ i + 1 }}
+              </div>
             </div>
 
+            <div class="gantt-rows-container">
+               
+              <div class="gantt-laser-overlay" [style.grid-template-columns]="'repeat(' + totalDiasGantt + ', 40px)'">
+                  <div class="laser-beam" *ngIf="posicionHoy > 0 && posicionHoy <= totalDiasGantt" [style.grid-column]="posicionHoy"></div>
+               </div>
+
+               <div class="gantt-grid-row" *ngFor="let t of tareasDelProyecto" [style.grid-template-columns]="'repeat(' + totalDiasGantt + ', 40px)'">
+                  
+                <div *ngIf="t.fecha_inicio && t.fecha_fin"
+                       class="gantt-bar-wrapper"
+                       [ngStyle]="getGanttStyle(t)">
+                    
+                    <span class="gantt-date-left">{{ t.fecha_inicio | slice:5:10 }}</span>
+
+                    <div class="gantt-bar"
+                         [ngClass]="{
+                          'bar-por-hacer': t.estado === 'Por hacer',
+                          'bar-revisar': t.estado === 'Revisar',
+                          'bar-en-progreso': t.estado === 'En progreso',
+                          'bar-terminado': t.estado === 'Terminado'
+                         }"
+                         [title]="'Progreso: ' + (t.progreso || 0) + '%'">
+                      
+                      <div class="gantt-progress-fill" [style.width.%]="t.progreso || 0"></div>
+
+                      <div class="gantt-bar-content">
+                        <lucide-icon [name]="IconColab" class="icon-micro"></lucide-icon>
+                        <span class="gantt-text">{{ getNombreOperario(t.asignado_a) }}</span>
+                      </div>
+                    </div>
+
+                    <span class="gantt-date-right">{{ t.fecha_fin | slice:5:10 }}</span>
+
+                  </div>
+                </div>
+               
+            </div>
           </div>
+          
         </div>
       </section>
       <section class="panel">

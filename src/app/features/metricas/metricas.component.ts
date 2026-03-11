@@ -2,6 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule, Search, Activity, Clock, Code, AlertTriangle, Flame } from 'lucide-angular';
+// 🔥 EL MOTOR DE CHART.JS
+import Chart from 'chart.js/auto';
 
 // 🔥 IMPORTANTE: Verifica que esta ruta apunta correctamente a tu AuthService
 import { AuthService } from '../../../infra/auth.service';
@@ -17,7 +19,8 @@ export class MetricasComponent implements OnInit { // 🔥 AÑADIDO OnInit
   
   // 🔥 INYECCIÓN DEL SERVICIO DE AUTENTICACIÓN (Esto soluciona tus errores)
   public readonly authService = inject(AuthService);
-
+  // --- MOTOR GRÁFICO ---
+  public chartRendimiento: any; // Guarda la gráfica para poder destruirla y redibujarla si cambias de usuario
   // --- ICONOS ---
   public IconBuscar = Search;
   public IconActividad = Activity;
@@ -133,6 +136,12 @@ export class MetricasComponent implements OnInit { // 🔥 AÑADIDO OnInit
       alert('Se perdió la conexión con la base de datos central.');
     } finally {
       this.cargando = false;
+      
+      // 🔥 EL TRUCO: Esperamos 50 milisegundos para que Angular 
+      // tenga tiempo de quitar el *ngIf="cargando" y colocar el <canvas> en el HTML real.
+      setTimeout(() => {
+        this.renderizarGrafica();
+      }, 50);
     }
   }
 
@@ -151,5 +160,85 @@ export class MetricasComponent implements OnInit { // 🔥 AÑADIDO OnInit
     if (id === this.miIdUsuario) return 'Mi Perfil (Tú)';
     const user = this.listaUsuarios.find(u => u.id === id);
     return user ? user.nombre : 'Operario Desconocido';
+  }
+  // 📊 MOTOR DE RENDERIZADO VISUAL (CHART.JS)
+  private renderizarGrafica() {
+    const canvas = document.getElementById('graficaRendimiento') as HTMLCanvasElement;
+    if (!canvas) {
+      console.warn('Lienzo no encontrado. Abortando renderizado.');
+      return;
+    }
+
+    // Si ya había una gráfica de otro usuario, la destruimos para no sobrecargar la memoria
+    if (this.chartRendimiento) {
+      this.chartRendimiento.destroy();
+    }
+
+    // Datos simulados (Histórico de los últimos 7 días)
+    // En el futuro podríamos calcular esto leyendo las fechas de las tareas
+    const labelsDias = ['Día -6', 'Día -5', 'Día -4', 'Día -3', 'Día -2', 'Ayer', 'Hoy'];
+    const datosCompletadas = [2, 3, 1, 5, 4, 7, this.metricasUsuario.tareasCompletadas || 8];
+    const datosCarga = [5, 4, 6, 4, 5, 3, this.metricasUsuario.anchoBanda || 2];
+
+    this.chartRendimiento = new Chart(canvas, {
+      type: 'line', // Tipo de gráfica (Líneas de tendencia)
+      data: {
+        labels: labelsDias,
+        datasets: [
+          {
+            label: 'Tareas Completadas',
+            data: datosCompletadas,
+            borderColor: '#00e5ff', // Turquesa Neón
+            backgroundColor: 'rgba(0, 229, 255, 0.1)', // Fondo semitransparente
+            borderWidth: 3,
+            tension: 0.4, // Curva suave (0 = líneas rectas)
+            fill: true, // Rellena el área bajo la curva
+            pointBackgroundColor: '#000',
+            pointBorderColor: '#00e5ff',
+            pointBorderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 7
+          },
+          {
+            label: 'Carga de Trabajo',
+            data: datosCarga,
+            borderColor: '#bf5af2', // Morado Neón
+            borderWidth: 2,
+            borderDash: [5, 5], // Línea punteada táctica
+            tension: 0.4,
+            pointRadius: 0 // Sin puntos para que sea más limpia
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false, // Permite que se adapte al alto del div padre
+        interaction: { mode: 'index', intersect: false }, // Tooltip al pasar el ratón por cualquier zona vertical
+        plugins: {
+          legend: {
+            labels: { color: '#ccc', font: { family: 'monospace', size: 11 } }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(10, 10, 10, 0.9)',
+            titleColor: '#00e5ff',
+            bodyColor: '#fff',
+            borderColor: '#333',
+            borderWidth: 1,
+            titleFont: { family: 'monospace' }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: { color: 'rgba(255, 255, 255, 0.05)' }, // Cuadrícula muy sutil
+            ticks: { color: '#888', font: { family: 'monospace' }, stepSize: 2 }
+          },
+          x: {
+            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+            ticks: { color: '#888', font: { family: 'monospace' } }
+          }
+        }
+      }
+    });
   }
 }

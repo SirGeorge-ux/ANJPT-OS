@@ -283,7 +283,7 @@ input[type="date"]:focus { border-color: #00e5ff; box-shadow: 0 0 10px rgba(0, 2
 /* Contenido de la Barra (Icono y Nombre) */
 .gantt-bar-content {
   position: relative;
-  z-index: 2; /* Siempre por encima de la sombra de progreso */
+  z-index: 2;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -291,7 +291,26 @@ input[type="date"]:focus { border-color: #00e5ff; box-shadow: 0 0 10px rgba(0, 2
   height: 100%;
 }
 
-.icon-micro { width: 14px; height: 14px; color: #000; }
+.icon-micro { 
+  width: 14px; 
+  height: 14px; 
+  color: #000; 
+  /* 🔥 Forzamos el centrado interno del SVG */
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+}
+
+.gantt-text {
+  color: #000; 
+  font-size: 0.75rem; 
+  font-weight: 900; 
+  white-space: nowrap;
+  text-transform: uppercase;
+  /* 🔥 Evita que el texto flote por culpa del interlineado */
+  line-height: 1; 
+  margin-top: 1px;
+}
 
 .gantt-text {
   color: #000; 

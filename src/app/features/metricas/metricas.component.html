@@ -27,7 +27,6 @@
   <div class="metricas-grid" *ngIf="!cargando">
     
     <div class="col-perfil">
-      
       <section class="panel panel-identidad">
         <h3>IDENTIFICACIÓN</h3>
         <div class="identidad-dato">
@@ -86,6 +85,13 @@
           <span class="kpi-label">ANCHO DE BANDA (En progreso)</span>
         </div>
       </div>
+
+      <section class="panel">
+        <h3>RENDIMIENTO TEMPORAL DE TAREAS</h3>
+        <div class="canvas-container" style="position: relative; height: 250px; width: 100%;">
+          <canvas id="graficaRendimiento"></canvas>
+        </div>
+      </section>
 
       <section class="panel panel-clasificado" *ngIf="rolUsuario === 'ADMIN'">
         <div class="clasificado-header">

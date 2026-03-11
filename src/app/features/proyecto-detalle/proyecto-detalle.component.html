@@ -124,8 +124,9 @@
           <div class="gantt-timeline">
             
             <div class="gantt-grid-row gantt-ruler" [style.grid-template-columns]="'repeat(' + totalDiasGantt + ', 40px)'">
-              <div class="gantt-cell-day" *ngFor="let d of diasGanttArray; let i = index">
-                {{ i + 1 }}
+              <div class="gantt-cell-day" *ngFor="let f of fechasGantt" style="display: flex; flex-direction: column; justify-content: center; align-items: center; line-height: 1.2;">
+                <strong style="color: #eee; font-size: 0.75rem;">{{ f | date:'dd' }}</strong>
+                <span style="font-size: 0.55rem; color: #888; text-transform: uppercase;">{{ f | date:'MMM' }}</span>
               </div>
             </div>
 

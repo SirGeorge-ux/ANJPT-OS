@@ -17,8 +17,8 @@ import {
   UserRoundSearch, 
   FileInput,       
   LogOut,
-  Calendar, // Añadido para el Gantt
-  AlignLeft // Añadido para el Gantt
+  Calendar, 
+  AlignLeft,
 } from 'lucide-angular';
 
 @Component({
@@ -39,7 +39,7 @@ export class ProyectoDetalleComponent implements OnInit {
   // ⏱️ MOTORES DEL GANTT
   public fechaMinimaGantt: Date = new Date();
   public totalDiasGantt: number = 30;
-  public diasGanttArray: number[] = [];
+  public fechasGantt: Date[] = [];
   public posicionHoy: number = -1;
 
   private readonly cdr = inject(ChangeDetectorRef);
@@ -223,8 +223,12 @@ export class ProyectoDetalleComponent implements OnInit {
     const milisegundos = Math.abs(fechaMaxima.getTime() - this.fechaMinimaGantt.getTime());
     this.totalDiasGantt = Math.ceil(milisegundos / (1000 * 60 * 60 * 24)) + 2; 
     // Creamos un array vacío para que el HTML pueda pintar los números de los días
-    this.diasGanttArray = Array(this.totalDiasGantt).fill(0);
-
+    this.fechasGantt = [];
+    for (let i = 0; i < this.totalDiasGantt; i++) {
+      const dia = new Date(this.fechaMinimaGantt);
+      dia.setDate(dia.getDate() + i);
+      this.fechasGantt.push(dia);
+    }
     // Calculamos dónde debe caer el láser de HOY
     const fechaHoy = new Date().getTime();
     this.posicionHoy = Math.ceil((fechaHoy - this.fechaMinimaGantt.getTime()) / (1000 * 60 * 60 * 24)) + 1;

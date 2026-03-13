@@ -36,6 +36,10 @@ export class MetricasComponent implements OnInit { // 🔥 AÑADIDO OnInit
   public usuarioSeleccionadoId: string = '';
   public listaUsuarios: any[] = [];
 
+  // --- GAMIFICACIÓN Y CONTROL DE VERSIONES ---
+  public rankingOperarios: any[] = [];
+  public feedCommits: any[] = [];
+
   // --- EL OBJETO DE MÉTRICAS ---
   public metricasUsuario = {
     nombre: 'Cargando...',
@@ -71,6 +75,16 @@ export class MetricasComponent implements OnInit { // 🔥 AÑADIDO OnInit
     }
 
     await this.cargarDatosAuditoria(this.usuarioSeleccionadoId);
+
+    if (this.rolUsuario === 'ADMIN') {
+      await this.cargarListaUsuarios();
+    }
+
+    await this.cargarDatosAuditoria(this.usuarioSeleccionadoId);
+    
+    // 🔥 INICIAMOS LOS RADARES DE GOGS
+    await this.cargarRanking();
+    await this.cargarFeed();
   }
 
   async cargarListaUsuarios() {
@@ -240,5 +254,38 @@ export class MetricasComponent implements OnInit { // 🔥 AÑADIDO OnInit
         }
       }
     });
+  }
+  // 🏆 DESCARGA EL RANKING DE XP
+  async cargarRanking() {
+    const { data, error } = await this.authService.supabase
+      .from('perfiles')
+      .select('nombre, rol, puntos_xp')
+      .order('puntos_xp', { ascending: false })
+      .limit(5); // Traemos al Top 5
+    
+    if (!error && data) {
+      this.rankingOperarios = data;
+    }
+  }
+
+  // 📡 DESCARGA EL FEED EN TIEMPO REAL DESDE GOGS
+  async cargarFeed() {
+    // Usamos las relaciones de Supabase para traer el nombre del repositorio y del operario
+    const { data, error } = await this.authService.supabase
+      .from('gogs_commits')
+      .select(`
+        id,
+        message,
+        timestamp,
+        url,
+        gogs_repositories ( name ),
+        perfiles ( nombre )
+      `)
+      .order('timestamp', { ascending: false })
+      .limit(8); // Últimos 8 commits
+    
+    if (!error && data) {
+      this.feedCommits = data;
+    }
   }
 }

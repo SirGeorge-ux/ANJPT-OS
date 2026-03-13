@@ -1,70 +1,557 @@
-.metricas-container { padding: 30px; max-width: 1600px; margin: 0 auto; color: white; animation: fadeIn 0.4s ease-out; }
+.metricas-container {
+    padding: 30px;
+    max-width: 1600px;
+    margin: 0 auto;
+    color: white;
+    animation: fadeIn 0.4s ease-out;
+}
 
 /* CABECERA Y BUSCADOR ADMIN */
-.metricas-header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid #222; padding-bottom: 20px; margin-bottom: 30px; }
-.titulo-wrapper h1 { font-size: 2.2rem; margin: 0 0 10px 0; font-style: italic; font-weight: 900; letter-spacing: 1px; }
-.status-project-box { display: inline-block; padding: 4px 12px; font-size: 0.7rem; font-weight: 900; text-transform: uppercase; border: 1px solid; border-radius: 2px; }
-.status-activo { color: #00e5ff; border-color: #00e5ff; box-shadow: 0 0 10px rgba(0, 229, 255, 0.2); background: rgba(0, 229, 255, 0.05); }
+.metricas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 2px solid #222;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
 
-.admin-search-box { background: #111; padding: 15px; border: 1px dashed #444; border-radius: 4px; }
-.terminal-label { color: #ccff00; font-family: monospace; font-size: 0.8rem; margin-bottom: 8px; display: block; }
-.search-input-group { display: flex; align-items: center; gap: 10px; }
-.search-icon { color: #888; width: 20px; height: 20px; }
-.select-admin { background: #000; color: #fff; border: 1px solid #333; padding: 8px 12px; font-family: monospace; font-size: 0.9rem; outline: none; width: 250px; }
-.select-admin:focus { border-color: #ccff00; }
+.titulo-wrapper h1 {
+    font-size: 2.2rem;
+    margin: 0 0 10px 0;
+    font-style: italic;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.status-project-box {
+    display: inline-block;
+    padding: 4px 12px;
+    font-size: 0.7rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    border: 1px solid;
+    border-radius: 2px;
+}
+
+.status-activo {
+    color: #00e5ff;
+    border-color: #00e5ff;
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+    background: rgba(0, 229, 255, 0.05);
+}
+
+.admin-search-box {
+    background: #111;
+    padding: 15px;
+    border: 1px dashed #444;
+    border-radius: 4px;
+}
+
+.terminal-label {
+    color: #ccff00;
+    font-family: monospace;
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.search-input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-icon {
+    color: #888;
+    width: 20px;
+    height: 20px;
+}
+
+.select-admin {
+    background: #000;
+    color: #fff;
+    border: 1px solid #333;
+    padding: 8px 12px;
+    font-family: monospace;
+    font-size: 0.9rem;
+    outline: none;
+    width: 250px;
+}
+
+.select-admin:focus {
+    border-color: #ccff00;
+}
 
 /* PANTALLA CARGA */
-.loading-box { height: 50vh; display: flex; align-items: center; justify-content: center; }
-.texto-parpadeo { color: #00e5ff; font-family: monospace; font-size: 1.2rem; animation: blink 1s infinite; }
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+.loading-box {
+    height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.texto-parpadeo {
+    color: #00e5ff;
+    font-family: monospace;
+    font-size: 1.2rem;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+}
 
 /* ESTRUCTURA PRINCIPAL */
-.metricas-grid { display: grid; grid-template-columns: 30% 70%; gap: 30px; align-items: start; }
-.panel { background: #111; border: 1px solid #2a2a2a; padding: 25px; margin-bottom: 25px; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-.panel h3 { color: #888; font-size: 0.8rem; letter-spacing: 1px; margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid #2a2a2a; padding-bottom: 10px; }
+.metricas-grid {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    gap: 30px;
+    align-items: start;
+}
+
+.panel {
+    background: #111;
+    border: 1px solid #2a2a2a;
+    padding: 25px;
+    margin-bottom: 25px;
+    border-radius: 4px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.panel h3 {
+    color: #888;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #2a2a2a;
+    padding-bottom: 10px;
+}
 
 /* PERFIL E IDENTIDAD (Columna Izquierda) */
-.panel-identidad { background: linear-gradient(180deg, #1a1a1a, #0a0a0a); border-top: 3px solid #00e5ff; }
-.identidad-dato { display: flex; flex-direction: column; margin-bottom: 15px; }
-.label-gris { color: #666; font-size: 0.7rem; font-weight: bold; }
-.valor-blanco { color: #fff; font-size: 1.2rem; font-weight: 900; text-transform: uppercase; }
-.valor-neon-amarillo { color: #ccff00; font-size: 1rem; font-weight: bold; text-shadow: 0 0 8px rgba(204, 255, 0, 0.4); }
+.panel-identidad {
+    background: linear-gradient(180deg, #1a1a1a, #0a0a0a);
+    border-top: 3px solid #00e5ff;
+}
 
-.racha-box { margin-top: 30px; display: flex; align-items: center; gap: 15px; background: #000; padding: 15px; border-radius: 4px; border: 1px solid #333; }
-.racha-icon { color: #ff9500; width: 32px; height: 32px; filter: drop-shadow(0 0 5px rgba(255, 149, 0, 0.8)); }
-.racha-texto { display: flex; flex-direction: column; }
-.racha-num { color: #ff9500; font-size: 1.5rem; font-weight: 900; }
-.racha-label { color: #888; font-size: 0.65rem; font-weight: bold; }
+.identidad-dato {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.label-gris {
+    color: #666;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+.valor-blanco {
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.valor-neon-amarillo {
+    color: #ccff00;
+    font-size: 1rem;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(204, 255, 0, 0.4);
+}
+
+.racha-box {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #000;
+    padding: 15px;
+    border-radius: 4px;
+    border: 1px solid #333;
+}
+
+.racha-icon {
+    color: #ff9500;
+    width: 32px;
+    height: 32px;
+    filter: drop-shadow(0 0 5px rgba(255, 149, 0, 0.8));
+}
+
+.racha-texto {
+    display: flex;
+    flex-direction: column;
+}
+
+.racha-num {
+    color: #ff9500;
+    font-size: 1.5rem;
+    font-weight: 900;
+}
+
+.racha-label {
+    color: #888;
+    font-size: 0.65rem;
+    font-weight: bold;
+}
 
 /* BARRAS DE LENGUAJE */
-.lenguaje-item { margin-bottom: 15px; }
-.lang-header { display: flex; justify-content: space-between; font-size: 0.8rem; color: #ccc; margin-bottom: 5px; font-weight: bold; }
-.lang-pct { color: #00e5ff; }
-.barra-fondo { width: 100%; height: 6px; background: #222; border-radius: 3px; overflow: hidden; }
-.barra-progreso { height: 100%; background: linear-gradient(90deg, #00e5ff, #00b3cc); transition: width 1s ease-out; }
+.lenguaje-item {
+    margin-bottom: 15px;
+}
+
+.lang-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #ccc;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.lang-pct {
+    color: #00e5ff;
+}
+
+.barra-fondo {
+    width: 100%;
+    height: 6px;
+    background: #222;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.barra-progreso {
+    height: 100%;
+    background: linear-gradient(90deg, #00e5ff, #00b3cc);
+    transition: width 1s ease-out;
+}
 
 /* KPIS GLOBALES (Columna Derecha) */
-.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px; }
-.kpi-card { background: #111; border: 1px solid #2a2a2a; padding: 20px 15px; display: flex; flex-direction: column; align-items: center; text-align: center; border-radius: 4px; transition: transform 0.2s; }
-.kpi-card:hover { transform: translateY(-5px); border-color: #444; }
-.kpi-icon { width: 28px; height: 28px; margin-bottom: 10px; }
-.icon-cyan { color: #00e5ff; } .icon-yellow { color: #ccff00; } .icon-green { color: #34c759; } .icon-purple { color: #bf5af2; }
-.kpi-valor { font-size: 2.2rem; font-weight: 900; font-family: monospace; color: #fff; line-height: 1; margin-bottom: 5px; }
-.kpi-valor small { font-size: 1rem; color: #888; }
-.kpi-label { font-size: 0.65rem; color: #888; font-weight: bold; letter-spacing: 0.5px; }
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.kpi-card {
+    background: #111;
+    border: 1px solid #2a2a2a;
+    padding: 20px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-radius: 4px;
+    transition: transform 0.2s;
+}
+
+.kpi-card:hover {
+    transform: translateY(-5px);
+    border-color: #444;
+}
+
+.kpi-icon {
+    width: 28px;
+    height: 28px;
+    margin-bottom: 10px;
+}
+
+.icon-cyan {
+    color: #00e5ff;
+}
+
+.icon-yellow {
+    color: #ccff00;
+}
+
+.icon-green {
+    color: #34c759;
+}
+
+.icon-purple {
+    color: #bf5af2;
+}
+
+.kpi-valor {
+    font-size: 2.2rem;
+    font-weight: 900;
+    font-family: monospace;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 5px;
+}
+
+.kpi-valor small {
+    font-size: 1rem;
+    color: #888;
+}
+
+.kpi-label {
+    font-size: 0.65rem;
+    color: #888;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
 
 /* ZONA CLASIFICADA (Admin) */
-.panel-clasificado { border: 1px solid #ff3b30; background: rgba(255, 59, 48, 0.02); }
-.clasificado-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 59, 48, 0.3); padding-bottom: 10px; }
-.clasificado-header h3 { color: #ff3b30; margin: 0; border: none; padding: 0; }
-.alert-icon { color: #ff3b30; width: 24px; height: 24px; animation: pulse 2s infinite; }
-@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+.panel-clasificado {
+    border: 1px solid #ff3b30;
+    background: rgba(255, 59, 48, 0.02);
+}
 
-.clasificado-grid { display: flex; gap: 30px; margin-bottom: 20px; }
-.dato-critico { display: flex; flex-direction: column; }
-.critico-label { color: #888; font-size: 0.7rem; font-weight: bold; margin-bottom: 5px; }
-.critico-valor { color: #fff; font-size: 1.2rem; font-family: monospace; }
-.alerta-roja { color: #ff3b30; text-shadow: 0 0 10px rgba(255, 59, 48, 0.5); font-weight: 900; }
+.clasificado-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 59, 48, 0.3);
+    padding-bottom: 10px;
+}
 
-.evaluacion-box { background: #000; border: 1px solid #333; padding: 15px; border-left: 3px solid #ff3b30; }
-.texto-terminal { color: #ccc; font-family: monospace; font-size: 0.9rem; margin: 5px 0 0 0; line-height: 1.4; }
+.clasificado-header h3 {
+    color: #ff3b30;
+    margin: 0;
+    border: none;
+    padding: 0;
+}
+
+.alert-icon {
+    color: #ff3b30;
+    width: 24px;
+    height: 24px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.clasificado-grid {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+.dato-critico {
+    display: flex;
+    flex-direction: column;
+}
+
+.critico-label {
+    color: #888;
+    font-size: 0.7rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.critico-valor {
+    color: #fff;
+    font-size: 1.2rem;
+    font-family: monospace;
+}
+
+.alerta-roja {
+    color: #ff3b30;
+    text-shadow: 0 0 10px rgba(255, 59, 48, 0.5);
+    font-weight: 900;
+}
+
+.evaluacion-box {
+    background: #000;
+    border: 1px solid #333;
+    padding: 15px;
+    border-left: 3px solid #ff3b30;
+}
+
+.texto-terminal {
+    color: #ccc;
+    font-family: monospace;
+    font-size: 0.9rem;
+    margin: 5px 0 0 0;
+    line-height: 1.4;
+}
+
+/* ==========================================================================
+   7. MÓDULO GOGS (RANKING Y TERMINAL)
+   ========================================================================== */
+.gogs-grid {
+    display: grid;
+    grid-template-columns: 35% 65%;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+/* --- RANKING (LEADERBOARD) --- */
+.panel-ranking {
+    border-top: 3px solid #ff9500;
+}
+
+.ranking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ranking-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #000;
+    padding: 10px 15px;
+    border: 1px solid #222;
+    border-radius: 4px;
+}
+
+.ranking-pos {
+    font-family: monospace;
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: #666;
+    width: 30px;
+    text-align: center;
+}
+
+/* Colores de podio */
+.pos-1 {
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* Oro */
+.pos-2 {
+    color: #c0c0c0;
+    text-shadow: 0 0 10px rgba(192, 192, 192, 0.5);
+}
+
+/* Plata */
+.pos-3 {
+    color: #cd7f32;
+    text-shadow: 0 0 10px rgba(205, 127, 50, 0.5);
+}
+
+/* Bronce */
+
+.ranking-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.ranking-nombre {
+    color: #fff;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.ranking-rol {
+    color: #888;
+    font-size: 0.65rem;
+}
+
+.ranking-xp {
+    text-align: right;
+}
+
+.xp-valor {
+    color: #ccff00;
+    font-size: 1.2rem;
+    font-weight: 900;
+    font-family: monospace;
+}
+
+.ranking-xp small {
+    color: #888;
+    font-size: 0.7rem;
+}
+
+/* --- TERMINAL DE COMMITS --- */
+.panel-terminal {
+    border-top: 3px solid #00e5ff;
+    background: #050505;
+}
+
+.terminal-screen {
+    background: #000;
+    border: 1px solid #111;
+    padding: 15px;
+    min-height: 200px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.8rem;
+    border-radius: 2px;
+    box-shadow: inset 0 0 20px rgba(0, 229, 255, 0.05);
+    overflow-y: auto;
+    max-height: 300px;
+}
+
+.commit-line {
+    margin-bottom: 8px;
+    line-height: 1.4;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.commit-time {
+    color: #666;
+}
+
+.commit-repo {
+    color: #bf5af2;
+    font-weight: bold;
+}
+
+.commit-author {
+    color: #00e5ff;
+}
+
+.commit-msg {
+    color: #ccc;
+}
+
+.commit-link {
+    color: #ccff00;
+    text-decoration: none;
+    font-weight: bold;
+    transition: text-shadow 0.2s;
+}
+
+.commit-link:hover {
+    text-shadow: 0 0 8px #ccff00;
+}
+
+.terminal-text-dim {
+    color: #444;
+    font-style: italic;
+    margin-top: 10px;
+}
+
+.terminal-cursor {
+    display: inline-block;
+    width: 10px;
+    height: 15px;
+    background: #00e5ff;
+    animation: blink 1s infinite;
+    margin-top: 10px;
+}

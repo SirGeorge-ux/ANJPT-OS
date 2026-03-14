@@ -215,7 +215,7 @@ export class MetricasComponent implements OnInit, OnDestroy {
         velocidadMedia: 2.5, 
         tareasCompletadas: tareasCompletadas,
         anchoBanda: tareasEnProgreso,
-        rachaDias: this.calcularRachaAleatoria(),
+        rachaDias: await this.calcularRachaReal(userId),
         lenguajes: [
           { nombre: 'Angular 19', porcentaje: 65 },
           { nombre: 'Supabase', porcentaje: 40 },
@@ -326,8 +326,44 @@ export class MetricasComponent implements OnInit, OnDestroy {
     return 'ESTADO NEUTRAL: Operario en parámetros normales de trabajo.';
   }
 
-  private calcularRachaAleatoria(): number {
-    return Math.floor(Math.random() * 15) + 1;
+  async calcularRachaReal(userId: string): Promise<number> {
+    // 1. Descargamos todos los timestamps de los commits de este usuario
+    const { data, error } = await this.authService.supabase
+      .from('gogs_commits')
+      .select('timestamp')
+      .eq('perfil_id', userId)
+      .order('timestamp', { ascending: false });
+
+    if (error || !data || data.length === 0) return 1; // Si no hay historial, mínimo 1
+
+    // 2. Extraemos los días únicos en los que ha trabajado (ignorando la hora)
+    const diasUnicos = [...new Set(data.map((c: any) => new Date(c.timestamp).toDateString()))]
+      .map(d => new Date(d));
+
+    let racha = 1;
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0); // Ajustamos a medianoche para medir días justos
+
+    // 3. ¿El último commit fue hace más de un día? (Racha rota)
+    const diasDesdeUltimo = Math.floor((hoy.getTime() - diasUnicos[0].getTime()) / (1000 * 60 * 60 * 24));
+    if (diasDesdeUltimo > 1) {
+      return 1;
+    }
+
+    // 4. Contamos los días consecutivos hacia atrás
+    for (let i = 0; i < diasUnicos.length - 1; i++) {
+      const actual = diasUnicos[i];
+      const anterior = diasUnicos[i + 1];
+      const diffDias = Math.floor((actual.getTime() - anterior.getTime()) / (1000 * 60 * 60 * 24));
+
+      if (diffDias === 1) {
+        racha++; // Día consecutivo, suma la racha
+      } else {
+        break; // Hueco de más de 24h, rompemos el bucle
+      }
+    }
+    
+    return racha;
   }
 
   private obtenerNombrePorId(id: string): string {

@@ -41,12 +41,9 @@
             <span class="valor-neon-amarillo">NIVEL {{ metricasUsuario.nivel }}</span>
           </div>
 
-          <div class="racha-box">
-            <lucide-icon [name]="IconRacha" class="racha-icon"></lucide-icon>
-            <div class="racha-texto">
-              <span class="racha-num">{{ metricasUsuario.rachaDias }} DÍAS</span>
-              <span class="racha-label">RACHA DE PRODUCTIVIDAD</span>
-            </div>
+          <div class="contenedor-racha">
+            <lucide-icon [name]="IconRacha" class="icono-fuego"></lucide-icon>
+            <span class="texto-fuego">{{ metricasUsuario.rachaDias }} Días</span>
           </div>
         </section>
 
@@ -94,39 +91,13 @@
             <canvas id="graficaRendimiento"></canvas>
           </div>
         </section>
-
-        <section class="panel panel-clasificado" *ngIf="rolUsuario === 'ADMIN'">
-          <div class="clasificado-header">
-            <lucide-icon [name]="IconAlerta" class="alert-icon"></lucide-icon>
-            <h3>ZONA CLASIFICADA // ACCESO NIVEL ADMIN</h3>
-          </div>
-
-          <div class="clasificado-grid">
-            <div class="dato-critico">
-              <span class="critico-label">ÚLTIMA CONEXIÓN:</span>
-              <span class="critico-valor">{{ metricasUsuario.ultimaConexion }}</span>
-            </div>
-            <div class="dato-critico">
-              <span class="critico-label">TAREAS CADUCADAS:</span>
-              <span class="critico-valor" [ngClass]="{'alerta-roja': metricasUsuario.tareasCaducadas > 0}">
-                {{ metricasUsuario.tareasCaducadas }}
-              </span>
-            </div>
-          </div>
-
-          <div class="evaluacion-box">
-            <span class="critico-label">> EVALUACIÓN DEL SISTEMA:</span>
-            <p class="texto-terminal">{{ metricasUsuario.evaluacionSistema }}</p>
-          </div>
-        </section>
       </div>
 
-    </div>
-
-    <div class="gogs-grid">
-
       <section class="panel panel-ranking">
-        <h3><lucide-icon [name]="IconRacha" class="icon-mini"></lucide-icon> CLASIFICACIÓN TÁCTICA (XP)</h3>
+        <h3 class="titulo-flex">
+          <lucide-icon [name]="IconRacha" class="icono-naranja-neon"></lucide-icon>
+          CLASIFICACIÓN TÁCTICA (XP)
+        </h3>
         <div class="ranking-list">
           <div class="ranking-item" *ngFor="let op of rankingOperarios; let i = index">
             <div class="ranking-pos" [ngClass]="{'pos-1': i===0, 'pos-2': i===1, 'pos-3': i===2}">
@@ -137,7 +108,7 @@
               <span class="ranking-rol">{{ op.rol }}</span>
             </div>
             <div class="ranking-xp">
-              <span class="xp-valor">{{ op.puntos_xp || 0 }}</span> <small>XP</small>
+              <span class="xp-valor">{{ op.puntos_xp || 0 }}</span> <small> XP</small>
             </div>
           </div>
           <div *ngIf="rankingOperarios.length === 0" class="terminal-text-dim">Sin datos de operarios en la red.</div>
@@ -148,7 +119,7 @@
         <div
           style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #2a2a2a; margin-bottom: 15px; padding-bottom: 10px;">
           <h3 style="border: none; margin: 0; padding: 0;">> INTERCEPCIÓN DE CÓDIGO (GOGS)</h3>
-          <span class="status-project-box status-activo" style="animation: blink 2s infinite;">ESCUCHANDO</span>
+          <span class="status-project-box status-escuchando" style="animation: blink 2s infinite;">ESCUCHANDO</span>
         </div>
 
         <div class="terminal-screen">
@@ -164,6 +135,31 @@
             > Esperando transmisiones desde el repositorio central...
           </div>
           <div class="terminal-cursor">_</div>
+        </div>
+      </section>
+
+      <section class="panel panel-clasificado" *ngIf="rolUsuario === 'ADMIN'">
+        <div class="clasificado-header">
+          <lucide-icon [name]="IconAlerta" class="alert-icon"></lucide-icon>
+          <h3>ZONA CLASIFICADA // ACCESO NIVEL ADMIN</h3>
+        </div>
+
+        <div class="clasificado-grid">
+          <div class="dato-critico">
+            <span class="critico-label">ÚLTIMA CONEXIÓN:</span>
+            <span class="critico-valor">{{ metricasUsuario.ultimaConexion }}</span>
+          </div>
+          <div class="dato-critico">
+            <span class="critico-label">TAREAS CADUCADAS:</span>
+            <span class="critico-valor" [ngClass]="{'alerta-roja': metricasUsuario.tareasCaducadas > 0}">
+              {{ metricasUsuario.tareasCaducadas }}
+            </span>
+          </div>
+        </div>
+
+        <div class="evaluacion-box">
+          <span class="critico-label">> EVALUACIÓN DEL SISTEMA:</span>
+          <p class="texto-terminal">{{ metricasUsuario.evaluacionSistema }}</p>
         </div>
       </section>
 

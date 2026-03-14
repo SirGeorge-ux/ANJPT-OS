@@ -35,9 +35,16 @@
 }
 
 .status-activo {
+    color: #ccff00;
+    border-color: #ccff00;
+    box-shadow: 0 0 10px rgba(26, 255, 0, 0.342);
+    background: rgba(0, 229, 255, 0.05);
+}
+
+.status-escuchando {
     color: #00e5ff;
     border-color: #00e5ff;
-    box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+    box-shadow: 0 0 10px rgba(0, 238, 255, 0.444);
     background: rgba(0, 229, 255, 0.05);
 }
 
@@ -554,4 +561,72 @@
     background: #00e5ff;
     animation: blink 1s infinite;
     margin-top: 10px;
+}
+
+/* ========================================= */
+/* 🔥 ANIMACIÓN NEÓN NARANJA (RACHA DIARIA)  */
+/* ========================================= */
+
+/* El motor del latido (sube y baja el brillo y tamaño levemente) */
+@keyframes latido-fuego {
+    0% {
+        filter: drop-shadow(0 0 2px #ff5e00) drop-shadow(0 0 5px #ff5e00);
+        transform: scale(1);
+    }
+
+    50% {
+        filter: drop-shadow(0 0 8px #ff5e00) drop-shadow(0 0 15px #ff5e00);
+        transform: scale(1.15);
+        /* Crece un 15% */
+    }
+
+    100% {
+        filter: drop-shadow(0 0 2px #ff5e00) drop-shadow(0 0 5px #ff5e00);
+        transform: scale(1);
+    }
+}
+
+/* El contenedor que alinea el icono y el texto a la perfección */
+.contenedor-racha {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /* Separación exacta entre el fuego y el número */
+}
+
+.icono-fuego {
+    color: #ff5e00;
+    /* Naranja base */
+    animation: latido-fuego 1.8s infinite ease-in-out;
+    /* Animación fluida infinita */
+    display: flex;
+}
+
+.texto-fuego {
+    color: #ff5e00;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(255, 94, 0, 0.7);
+    /* Resplandor en el texto */
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+/* Alineación perfecta entre el icono y el texto */
+.titulo-flex {
+    display: flex;
+    align-items: center;
+    /* Centra verticalmente el icono con las letras */
+    gap: 10px;
+    /* Separación exacta entre el fuego y la C */
+    margin-bottom: 15px;
+    /* Para que no se pegue a la lista de abajo */
+}
+
+/* El resplandor naranja táctico */
+.icono-naranja-neon {
+    color: #ff5e00;
+    /* Naranja base */
+    filter: drop-shadow(0 0 3px #ff5e00) drop-shadow(0 0 8px #ff5e00);
+    /* Brillo Neón */
 }

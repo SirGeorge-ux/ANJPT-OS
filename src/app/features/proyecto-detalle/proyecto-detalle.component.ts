@@ -274,3 +274,4 @@ export class ProyectoDetalleComponent implements OnInit {
     }
   }
 }
+// Radar activo

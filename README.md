@@ -66,3 +66,47 @@ Accede a `http://localhost:4200` en tu navegador.
 ## 👤 Autor
 
 Desarrollado por **SirGeorge-ux** - _Full Stack Developer_
+
+---
+
+## Integracion con la personalizacion del controlador de versiones GOGS
+
+(## Esta parte esta en desarrollo y no esta terminada)
+
+Para personalizar el controlador de versiones GOGS, sigue los siguientes pasos:
+
+1. **Clonar el repositorio:**
+
+```bash
+   git clone [https://github.com/SirGeorge-ux/ANJPT-OS.git](https://github.com/SirGeorge-ux/ANJPT-OS.git)
+   cd anjpt-os
+   ```
+
+2. **Instalar dependencias:**
+
+```bash
+npm install
+```
+
+3. **Configurar variables de entorno:**
+
+- Localiza el archivo `src/environments/environment.example.ts`.
+- Cámbiale el nombre a `environment.ts`.
+- Introduce tu **Supabase URL** y tu **Anon Key**:
+
+```bash
+export const environment = {
+  production: false,
+  supabaseUrl: "TU_URL_DE_SUPABASE",
+  supabaseKey: "TU_KEY_ANON_DE_SUPABASE",
+};
+```
+
+4. **Lanzar el servidor de desarrollo:**
+
+```bash
+ng serve
+
+```
+
+Accede a `http://localhost:4200` en tu navegador.

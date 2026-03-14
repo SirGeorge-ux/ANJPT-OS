@@ -1,5 +1,5 @@
 <div class="ajustes-container">
-  
+
   <header class="ajustes-header">
     <div class="titulo-wrapper">
       <h1>CONFIGURACIÓN DEL SISTEMA</h1>
@@ -12,15 +12,15 @@
   </div>
 
   <div class="ajustes-grid" *ngIf="!cargando">
-    
+
     <div class="col-personal">
-      
+
       <section class="panel">
         <div class="panel-header">
           <lucide-icon [name]="IconUser" class="header-icon icon-cyan"></lucide-icon>
           <h3>MI IDENTIDAD</h3>
         </div>
-        
+
         <div class="identidad-info-box">
           <span class="label-gris">EMAIL VINCULADO:</span>
           <span class="valor-blanco">{{ miPerfil.email || 'No disponible' }}</span>
@@ -30,6 +30,21 @@
           <label>NOMBRE DE VISUALIZACIÓN</label>
           <input type="text" [(ngModel)]="miPerfil.nombre" placeholder="Ej: Neo, Trinity...">
         </div>
+
+        <section class="panel panel-gogs-link">
+          <h3><lucide-icon [name]="IconLink"></lucide-icon> VINCULAR RADAR GOGS</h3>
+          <p class="texto-terminal-dim">Para recibir XP y automatizar tus tareas Kanban, introduce tu nombre de usuario
+            exacto de Gogs.</p>
+
+          <div class="form-group" style="margin-top: 15px;">
+            <label>> USUARIO EN GOGS:</label>
+            <div style="display: flex; gap: 10px;">
+              <input type="text" [(ngModel)]="gogsUsuarioInput" placeholder="Ej: JorgeG" class="input-ciberpunk"
+                style="flex: 1;">
+              <button class="btn-neon-cyan" (click)="vincularCuentaGogs()">VINCULAR</button>
+            </div>
+          </div>
+        </section>
 
         <div class="form-group-1">
           <label>UBICACIÓN ACTUAL</label>
@@ -63,12 +78,13 @@
             <input type="password" [(ngModel)]="nuevaPassword" placeholder="Mínimo 6 caracteres">
           </div>
         </div>
-        
+
         <div class="botones-seguridad">
-          <button class="btn-outline-yellow" (click)="cambiarContrasena()" [disabled]="guardando || nuevaPassword.length < 6">
+          <button class="btn-outline-yellow" (click)="cambiarContrasena()"
+            [disabled]="guardando || nuevaPassword.length < 6">
             CAMBIAR CLAVE
           </button>
-          
+
           <button class="btn-peligro" (click)="cerrarSesion()">
             DESCONECTAR TERMINAL
           </button>
@@ -77,7 +93,7 @@
     </div>
 
     <div class="col-admin" *ngIf="rolUsuario === 'ADMIN'">
-      
+
       <section class="panel panel-admin-lista">
         <div class="panel-header admin-header">
           <lucide-icon [name]="IconData" class="header-icon icon-red"></lucide-icon>
@@ -102,14 +118,14 @@
           </div>
         </div>
       </section>
-      
+
     </div>
   </div>
 </div>
 
 <div class="dossier-backdrop" *ngIf="dossierAbierto">
   <div class="dossier-panel">
-    
+
     <div class="dossier-header">
       <div class="dossier-title-box">
         <lucide-icon [name]="IconUser" class="dossier-icon"></lucide-icon>
@@ -123,12 +139,13 @@
         <h4>DATOS PÚBLICOS</h4>
         <p><strong>Ubicación:</strong> {{ dossierAbierto.ubicacion || 'No registrada' }}</p>
         <p><strong>Bio:</strong> {{ dossierAbierto.bio || 'Sin datos' }}</p>
-        <p><strong>Último acceso:</strong> {{ dossierAbierto.ultimo_acceso ? (dossierAbierto.ultimo_acceso | date:'short') : 'Desconocido' }}</p>
+        <p><strong>Último acceso:</strong> {{ dossierAbierto.ultimo_acceso ? (dossierAbierto.ultimo_acceso |
+          date:'short') : 'Desconocido' }}</p>
       </div>
 
       <div class="dossier-seccion info-clasificada">
         <h4 class="texto-alerta">MODIFICAR EXPEDIENTE</h4>
-        
+
         <div class="form-group-1">
           <label>NIVEL DE ACCESO (ROL)</label>
           <select [(ngModel)]="dossierAbierto.rol" class="select-ciberpunk select-rojo">
@@ -140,13 +157,15 @@
 
         <div class="form-group-1">
           <label class="texto-alerta">NOTAS CLASIFICADAS (Solo Admin)</label>
-          <textarea [(ngModel)]="dossierAbierto.notas_admin" rows="4" class="textarea-rojo" placeholder="Añade apuntes sobre el rendimiento de este operario..."></textarea>
+          <textarea [(ngModel)]="dossierAbierto.notas_admin" rows="4" class="textarea-rojo"
+            placeholder="Añade apuntes sobre el rendimiento de este operario..."></textarea>
         </div>
       </div>
     </div>
 
     <div class="dossier-footer" style="display: flex; justify-content: space-between; width: 100%;">
-      <button class="btn-peligro" (click)="eliminarOperario()" [disabled]="guardando" *ngIf="dossierAbierto.id !== miIdUsuario">
+      <button class="btn-peligro" (click)="eliminarOperario()" [disabled]="guardando"
+        *ngIf="dossierAbierto.id !== miIdUsuario">
         ERRADICAR
       </button>
 

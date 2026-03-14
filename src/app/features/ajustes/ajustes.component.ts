@@ -11,7 +11,8 @@ import {
   Database, 
   Save, 
   XCircle,
-  MapPin
+  MapPin,
+  Link // 🔥 1. AÑADIDO: Importamos el icono Link
 } from 'lucide-angular';
 
 @Component({
@@ -21,7 +22,6 @@ import {
   templateUrl: './ajustes.component.html',
   styleUrls: ['./ajustes.component.css']
 })
-
 export class AjustesComponent implements OnInit {
 
   // 🛰️ Dependencias
@@ -35,6 +35,7 @@ export class AjustesComponent implements OnInit {
   readonly IconSave = Save;
   readonly IconClose = XCircle;
   readonly IconMap = MapPin;
+  readonly IconLink = Link; // 🔥 2. AÑADIDO: Declaramos el icono
 
   // 🛡️ Estado General
   cargando: boolean = true;
@@ -50,14 +51,17 @@ export class AjustesComponent implements OnInit {
     bio: ''
   };
   nuevaPassword: string = '';
+  
+  // 🔥 3. AÑADIDO: Variable para el input de Gogs
+  public gogsUsuarioInput: string = ''; 
 
   // 👥 Gestión de ADMIN (Dossiers)
   listaUsuarios: any[] = [];
-  dossierAbierto: any = null; // Guarda los datos del usuario que el Admin está inspeccionando
+  dossierAbierto: any = null;
 
   async ngOnInit(): Promise<void> {
     const { data: { session } } = await this.authService.getSession();
-    
+
     if (session) {
       this.rolUsuario = session.user.user_metadata?.['rol'] || 'JUNIOR';
       this.miIdUsuario = session.user.id;
@@ -65,7 +69,6 @@ export class AjustesComponent implements OnInit {
       
       await this.cargarMiPerfil();
 
-      // Si soy Admin, descargo la base de datos de todos los operarios
       if (this.rolUsuario === 'ADMIN') {
         await this.cargarListaUsuarios();
       }
@@ -74,12 +77,12 @@ export class AjustesComponent implements OnInit {
   }
 
   // ==========================================================
-  // 1. GESTIÓN DE MI PERFIL (Para todos los usuarios)
+  // 1. GESTIÓN DE MI PERFIL
   // ==========================================================
   async cargarMiPerfil() {
     const { data, error } = await this.authService.supabase
       .from('perfiles')
-      .select('nombre, ubicacion, bio')
+      .select('nombre, ubicacion, bio, gogs_username') // 🔥 AÑADIDO: gogs_username
       .eq('id', this.miIdUsuario)
       .maybeSingle();
 
@@ -87,6 +90,7 @@ export class AjustesComponent implements OnInit {
       this.miPerfil.nombre = data.nombre || '';
       this.miPerfil.ubicacion = data.ubicacion || '';
       this.miPerfil.bio = data.bio || '';
+      this.gogsUsuarioInput = data.gogs_username || ''; // 🔥 AÑADIDO: Cargamos el usuario si existe
     }
   }
 
@@ -110,6 +114,33 @@ export class AjustesComponent implements OnInit {
     }
   }
 
+  // 🔥 4. AÑADIDO: La función para vincular la cuenta
+  async vincularCuentaGogs() {
+    if (!this.gogsUsuarioInput) return;
+    
+    this.guardando = true;
+    const { error } = await this.authService.supabase
+      .from('perfiles')
+      .update({ gogs_username: this.gogsUsuarioInput.trim() })
+      .eq('id', this.miIdUsuario);
+      
+    this.guardando = false;
+
+    if (!error) {
+      Swal.fire({
+        title: 'RADAR VINCULADO',
+        text: 'Tu cuenta de Gogs está conectada al sistema. XP activado.',
+        icon: 'success',
+        background: '#0a0a0a',
+        color: '#ffffff',
+        confirmButtonColor: '#00e5ff',
+        iconColor: '#00e5ff'
+      });
+    } else {
+      console.error('Error al vincular Gogs:', error);
+    }
+  }
+
   async cambiarContrasena() {
     if (!this.nuevaPassword || this.nuevaPassword.length < 6) {
       alert('La contraseña debe tener al menos 6 caracteres.');
@@ -126,16 +157,13 @@ export class AjustesComponent implements OnInit {
       alert('Error al actualizar los protocolos de seguridad.');
     } else {
       alert('SEGURIDAD ACTUALIZADA: Contraseña cambiada con éxito.');
-      this.nuevaPassword = ''; // Limpiamos el campo
+      this.nuevaPassword = '';
     }
   }
 
   async cerrarSesion() {
-    // Llamamos directamente al motor de autenticación de Supabase
     await this.authService.supabase.auth.signOut();
-    
-    // Redirigir al login para expulsar al usuario del sistema
-    window.location.href = '/login'; 
+    window.location.href = '/login';
   }
 
   // ==========================================================
@@ -148,18 +176,14 @@ export class AjustesComponent implements OnInit {
       .order('nombre');
 
     if (error) {
-      console.error('🔴 Error de Supabase al cargar usuarios:', error.message);
-      alert('Error de base de datos. Pulsa F12 y mira la consola.');
+      console.error('🔴 Error de Supabase:', error.message);
     } else {
       this.listaUsuarios = data || [];
-      console.log('🟢 Usuarios cargados:', this.listaUsuarios);
     }
   }
 
-  // Abre la ventana modal/panel lateral con el expediente del usuario
   abrirExpediente(usuario: any) {
-    // Hacemos una copia profunda para no editar la lista original hasta guardar
-    this.dossierAbierto = { ...usuario }; 
+    this.dossierAbierto = { ...usuario };
   }
 
   cerrarExpediente() {
@@ -168,12 +192,11 @@ export class AjustesComponent implements OnInit {
 
   async guardarExpediente() {
     this.guardando = true;
-    
     const { error } = await this.authService.supabase
       .from('perfiles')
       .update({
         rol: this.dossierAbierto.rol,
-        notas_admin: this.dossierAbierto.notas_admin // Guardamos las notas secretas
+        notas_admin: this.dossierAbierto.notas_admin
       })
       .eq('id', this.dossierAbierto.id);
 
@@ -183,41 +206,32 @@ export class AjustesComponent implements OnInit {
       alert('Error al actualizar el expediente clasificado.');
     } else {
       alert('EXPEDIENTE ACTUALIZADO CON ÉXITO.');
-      await this.cargarListaUsuarios(); // Recargamos la lista para ver los cambios
-      this.cerrarExpediente(); // Cerramos el panel
+      await this.cargarListaUsuarios();
+      this.cerrarExpediente();
     }
   }
-  // ☠️ PROTOCOLO DE ERRADICACIÓN (ACTUALIZADO CON SWEETALERT2)
+
   async eliminarOperario() {
-    // 2. Usamos SweetAlert2 para una confirmación con estilos
     Swal.fire({
       title: '⚠️ ADVERTENCIA CRÍTICA',
-      text: `¿Estás seguro de que deseas ELIMINAR DEFINITIVAMENTE al operario ${this.dossierAbierto.nombre}? Esta acción no se puede deshacer.`,
+      text: `¿Estás seguro de que deseas ELIMINAR DEFINITIVAMENTE al operario ${this.dossierAbierto.nombre}?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'SÍ, ERRADICAR',
       cancelButtonText: 'CANCELAR',
-      // Estilos cyberpunk/neón para combinar con tu app
-      confirmButtonColor: '#ff3b30', // Rojo para la confirmación
-      cancelButtonColor: '#333333',   // Gris oscuro para cancelar
-      background: '#0a0a0a',        // Fondo negro profundo
-      color: '#ffffff',             // Texto blanco
-      iconColor: '#ff9500',         // Icono de advertencia naranja
-      // Puedes añadir más estilos de SweetAlert2 aquí, como border, etc.
+      confirmButtonColor: '#ff3b30',
+      cancelButtonColor: '#333333',
+      background: '#0a0a0a',
+      color: '#ffffff',
+      iconColor: '#ff9500',
     }).then(async (result) => {
-      // 3. Manejamos la respuesta de forma asíncrona
       if (result.isConfirmed) {
         this.guardando = true;
-
-        // Disparamos la función SQL que creamos en Supabase
         const { error } = await this.authService.supabase
           .rpc('eliminar_operario', { operario_id: this.dossierAbierto.id });
-
         this.guardando = false;
 
         if (error) {
-          console.error('Error al erradicar operario:', error);
-          // Alerta de error con estilo oscuro y rojo
           Swal.fire({
             title: 'ERROR DEL SISTEMA',
             text: 'No se pudo eliminar al operario.',
@@ -228,15 +242,14 @@ export class AjustesComponent implements OnInit {
             iconColor: '#ff3b30'
           });
         } else {
-          // Alerta de éxito con estilo oscuro y cyan
           Swal.fire({
             title: 'SISTEMA ACTUALIZADO',
             text: 'OPERARIO ERRADICADO DEL SISTEMA.',
             icon: 'success',
             background: '#0a0a0a',
             color: '#ffffff',
-            confirmButtonColor: '#00e5ff', // Botón cyan neón
-            iconColor: '#00e5ff'           // Tick verde/cyan
+            confirmButtonColor: '#00e5ff',
+            iconColor: '#00e5ff'
           });
           this.cerrarExpediente(); 
           await this.cargarListaUsuarios(); 

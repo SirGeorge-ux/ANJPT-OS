@@ -1,24 +1,24 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
+// Importamos Supabase usando el registro NPM oficial (infalible)
+import { createClient } from 'npm:@supabase/supabase-js@2'
 
-serve(async (req: Request) => {
+// Usamos el servidor nativo de Deno (cero descargas necesarias)
+Deno.serve(async (req: Request) => {
+  // 1. Ignorar a los curiosos
   if (req.method !== 'POST') {
-    return new Response('Método no permitido. Solo POST táctico.', { status: 405 })
+    return new Response('Método no permitido.', { status: 405 })
   }
 
   try {
-    const signature = req.headers.get('x-gogs-signature');
     const eventType = req.headers.get('x-gogs-event') || 'unknown';
-    
     const payloadText = await req.text();
     const payloadJson = JSON.parse(payloadText);
 
-    // Conectamos con el Núcleo de Supabase usando los permisos de "Dios" (Service Role)
+    // 2. Conectar al Núcleo de Supabase
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Inyectamos el evento bruto en nuestra bóveda (gogs_events)
+    // 3. Inyectar en la Bóveda
     const { error } = await supabase
       .from('gogs_events')
       .insert([
@@ -31,6 +31,7 @@ serve(async (req: Request) => {
 
     if (error) throw error;
 
+    // 4. Confirmación a Gogs
     return new Response(JSON.stringify({ success: true, message: 'Interceptado y asegurado en ANJPT OS' }), {
       headers: { 'Content-Type': 'application/json' },
       status: 200,

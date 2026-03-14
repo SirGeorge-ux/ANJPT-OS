@@ -1,27 +1,25 @@
 <div class="mis-tareas-container">
-  
+
   <div class="kanban-header">
     <h2>MIS TAREAS</h2>
     <p>TABLERO ÁGIL · ESTADO DE PROYECTOS</p>
   </div>
 
   <div class="tablero-kanban" cdkDropListGroup>
-    
+
     <div class="columna-kanban" *ngFor="let columna of tablero">
       <h3>{{ columna.nombre | uppercase }}</h3>
 
-      <div class="lista-tareas"
-           cdkDropList
-           [cdkDropListData]="columna.tareas"
-           (cdkDropListDropped)="drop($event)">
-        
+      <div class="lista-tareas" cdkDropList [cdkDropListData]="columna.tareas" (cdkDropListDropped)="drop($event)">
+
         <div class="tarea-tarjeta" *ngFor="let tarea of columna.tareas" cdkDrag (click)="abrirDossier(tarea)">
-          <span class="tarea-titulo">{{ tarea.titulo }}</span>
-          
+          <span style="color: #00e5ff; font-weight: bold; margin-right: 5px;">
+            #{{ tarea.numero }}
+          </span>
+          {{ tarea.titulo }}
+
           <div class="tarea-indicadores">
-            <lucide-icon 
-              [name]="IconMessage" 
-              class="icon-chat-mini"
+            <lucide-icon [name]="IconMessage" class="icon-chat-mini"
               [ngClass]="{'chat-activo': tarea.tieneComentarios}">
             </lucide-icon>
           </div>
@@ -33,9 +31,9 @@
   </div>
 
   <div class="dossier-overlay" *ngIf="tareaSeleccionada" (click)="cerrarDossier()">
-    
+
     <div class="dossier-panel" (click)="$event.stopPropagation()">
-      
+
       <div class="dossier-header">
         <div class="header-titles">
           <span class="dossier-label">EXPEDIENTE DE TAREA // {{ tareaSeleccionada.estado | uppercase }}</span>
@@ -47,7 +45,7 @@
       </div>
 
       <div class="dossier-body">
-        
+
         <div class="tarea-info">
           <span class="info-label">DESCRIPCIÓN OPERATIVA</span>
           <p>{{ tareaSeleccionada.descripcion || 'No hay descripción asignada a esta tarea.' }}</p>
@@ -55,9 +53,9 @@
 
         <div class="chat-container">
           <span class="info-label">REGISTRO DE COMUNICACIONES</span>
-          
+
           <div class="mensajes-lista">
-            
+
             <div class="mensaje-sistema" *ngIf="cargandoComentarios">
               <span class="parpadeo">Desencriptando comunicaciones...</span>
             </div>
@@ -66,9 +64,11 @@
               No hay registros de comunicación en este expediente.
             </div>
 
-            <div class="mensaje-item" *ngFor="let msg of comentarios" [ngClass]="{'mensaje-propio': msg.usuario_id === userId}">
+            <div class="mensaje-item" *ngFor="let msg of comentarios"
+              [ngClass]="{'mensaje-propio': msg.usuario_id === userId}">
               <div class="mensaje-meta">
-                <span class="msg-autor">{{ msg.perfiles?.nombre || 'Operario' }} <span class="rol-tag">[{{ msg.perfiles?.rol || '???' }}]</span></span>
+                <span class="msg-autor">{{ msg.perfiles?.nombre || 'Operario' }} <span class="rol-tag">[{{
+                    msg.perfiles?.rol || '???' }}]</span></span>
                 <span class="msg-fecha">{{ msg.creado_en | date:'dd/MM/yy HH:mm' }}</span>
               </div>
               <div class="mensaje-texto">{{ msg.contenido }}</div>
@@ -79,17 +79,16 @@
       </div>
 
       <div class="dossier-footer">
-        <input 
-          type="text" 
-          [(ngModel)]="nuevoComentario" 
-          placeholder="Escribir actualización..." 
+        <input type="text" [(ngModel)]="nuevoComentario" placeholder="Escribir actualización..."
           (keyup.enter)="enviarComentario()">
-        
-        <button class="btn-send" (click)="enviarComentario()" [disabled]="!nuevoComentario.trim() || cargandoComentarios" title="Enviar mensaje">
+
+        <button class="btn-send" (click)="enviarComentario()"
+          [disabled]="!nuevoComentario.trim() || cargandoComentarios" title="Enviar mensaje">
           <lucide-icon [name]="IconSend"></lucide-icon>
         </button>
 
-        <button class="btn-devolver" (click)="enviarYDevolver()" [disabled]="cargandoComentarios" title="Comentar y DEVOLVER a En Progreso">
+        <button class="btn-devolver" (click)="enviarYDevolver()" [disabled]="cargandoComentarios"
+          title="Comentar y DEVOLVER a En Progreso">
           <lucide-icon [name]="IconDevolver"></lucide-icon>
         </button>
       </div>

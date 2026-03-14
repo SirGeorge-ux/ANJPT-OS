@@ -258,4 +258,3 @@ export class AjustesComponent implements OnInit {
     });
   }
 }
-// Prueba de Kanba

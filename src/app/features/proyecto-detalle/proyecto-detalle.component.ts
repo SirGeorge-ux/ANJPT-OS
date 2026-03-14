@@ -69,6 +69,9 @@ export class ProyectoDetalleComponent implements OnInit {
   public mostrarFormularioTarea: boolean = false;
   public loading: boolean = false;
 
+  // --- LISTA DE OPERARIOS PARA EL DESPLEGABLE ---
+  public listaUsuarios: any[] = [];
+
   // 📝 Modelo del Formulario (Ahora incluye el motor de tiempo)
   public nuevaTarea = {
     titulo: '',
@@ -87,6 +90,7 @@ export class ProyectoDetalleComponent implements OnInit {
       this.proyectoId = id;
       await this.obtenerUsuarios();
       await this.inicializarDatos(id);
+      await this.cargarListaUsuarios();
     }
   }
 
@@ -256,5 +260,17 @@ export class ProyectoDetalleComponent implements OnInit {
     if (!id) return 'Sin asignar';
     const user = this.usuarios.find(u => u.id === id);
     return user ? user.nombre : 'Operario Desconocido';
+  }
+  // 📡 DESCARGA LOS OPERARIOS PARA PODER ASIGNAR TAREAS
+  async cargarListaUsuarios() {
+    const { data, error } = await this.authService.supabase
+      .from('perfiles')
+      .select('id, nombre, rol');
+      
+    if (!error && data) {
+      this.listaUsuarios = data;
+    } else {
+      console.error('Error cargando usuarios:', error);
+    }
   }
 }

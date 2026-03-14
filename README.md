@@ -1,9 +1,9 @@
-```markdown
+
 # ⚡ ANJPT OS - Sistema de Gestión de Proyectos
 
 **ANJPT OS** es una plataforma de gestión de tareas y proyectos diseñada con una estética _Cyberpunk/High-Tech_. Desarrollada sobre **Angular 19** y **Supabase**, permite administrar flujos de trabajo de desarrollo con roles definidos y una interfaz de alto impacto visual.
 
----
+
 
 ## 🚀 Características Principales
 

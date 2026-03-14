@@ -36,14 +36,14 @@ Debido a razones de seguridad, las credenciales de la base de datos no están in
    ```bash
    git clone [https://github.com/SirGeorge-ux/ANJPT-OS.git](https://github.com/SirGeorge-ux/ANJPT-OS.git)
    cd anjpt-os
-
-```
+   ```
 
 2. **Instalar dependencias:**
-```bash
-npm install
 
-```
+   ```bash
+   npm install
+
+   ```
 
 
 3. **Configurar variables de entorno:**
@@ -94,5 +94,3 @@ ANJPT OS actúa como un centro de mando interceptando la actividad de los reposi
 
 Desarrollado por **SirGeorge-ux** - *Full Stack Developer*.
 Con la asistencia técnica y arquitectura de datos de **Gemini (IA)**.
-
-```
